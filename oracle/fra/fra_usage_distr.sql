@@ -35,7 +35,7 @@ col name format a10
 
 
 SELECT
-	name,
+    name,
     space_limit/1024/1024        AS "Space Limit MBs",
     space_used/1024/1024         AS "Space Used MBs", 
     space_reclaimable/1024/1024  AS "Space Usable MBs",
