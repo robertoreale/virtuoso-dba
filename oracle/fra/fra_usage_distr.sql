@@ -31,15 +31,20 @@
 --------------------------------------------------------------------------------
 
 
-col name format a10
+CLEAR COLUMN
+
+COL name FORMAT a10
+COL limit        HEADING "Limit (MiB)"
+COL used         HEADING "Used (MiB)"
+COL reclaimable  HEADING "Usable (MiB)"
 
 
 SELECT
-    name,
-    space_limit/1024/1024        AS "Space Limit MBs",
-    space_used/1024/1024         AS "Space Used MBs", 
-    space_reclaimable/1024/1024  AS "Space Usable MBs",
-    number_of_files              AS files
+    name                       AS name,
+    space_limit/1048576        AS limit,
+    space_used/1048576         AS used,
+    space_reclaimable/1048576  AS reclaimable,
+    number_of_files            AS files
 FROM
     v$recovery_file_dest;
 
