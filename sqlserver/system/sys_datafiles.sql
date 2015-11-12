@@ -35,10 +35,17 @@ USE master
 GO
 
 SELECT
-    DB_NAME(database_id)    [Database],
-    name                    [Logical Name],
-    physical_name           [Physical Name],
-    state_desc              [Online State]
-FROM sys.master_files;
+    DB_NAME(database_id)                          [Database],
+    name                                          [Logical Name],
+    physical_name                                 [Physical Name],
+    CAST((size) / 8192.0 AS DECIMAL(18,2))        [Size (MiB)],
+    CASE
+        WHEN type_desc = 'ROWS' THEN 'Data File(s)'
+        WHEN Type_Desc = 'LOG'  THEN 'Log File(s)'
+        ELSE Type_Desc
+    END                                           [Type],
+    state_desc                                    [Online State]
+FROM
+    sys.master_files;
 
 --  ex: ts=4 sw=4 et filetype=sql
