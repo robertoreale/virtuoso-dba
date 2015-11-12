@@ -35,8 +35,8 @@ USE master
 GO
 
 SELECT
-	cpu_count / hyperthread_ratio   [Physical CPUs],
-	cpu_count                       [Logical CPUs]
+    cpu_count / hyperthread_ratio   [Physical CPUs],
+    cpu_count                       [Logical CPUs]
 FROM sys.dm_os_sys_info;
 
 --  ex: ts=4 sw=4 et filetype=sql
