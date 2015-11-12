@@ -4,7 +4,7 @@
 -- 
 --  Philum:    SQL Server
 --  Module:    system
---  Submodule: cpus
+--  Submodule: sys_cpus
 --  Purpose:   how may physical and logical cpus are available on the system
 --  Tested:    2012
 --
@@ -31,9 +31,12 @@
 --------------------------------------------------------------------------------
 
 
+USE master
+GO
+
 SELECT
-	cpu_count / hyperthread_ratio  AS PhysicalCPUs,
-	cpu_count                      AS LogicalCPUs
+	cpu_count / hyperthread_ratio   [Physical CPUs],
+	cpu_count                       [Logical CPUs]
 FROM sys.dm_os_sys_info;
 
 --  ex: ts=4 sw=4 et filetype=sql
