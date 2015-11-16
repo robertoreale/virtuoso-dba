@@ -1,64 +1,98 @@
+--------------------------------------------------------------------------------
 --
---  Log file switches, day by day, hour by hour
+--  The SQL Diaries
+-- 
+--  Philum:    Oracle
+--  Module:    logs
+--  Submodule: log_switches_by_hour
+--  Purpose:   counts log file switches, day by day, hour by hour
+--  Tested:    10g, 11g
 --
---  Tested on: 10g
---
+--  Copyright (c) 2014-5 Roberto Reale
+--  
+--  Permission is hereby granted, free of charge, to any person obtaining a
+--  copy of this software and associated documentation files (the "Software"),
+--  to deal in the Software without restriction, including without limitation
+--  the rights to use, copy, modify, merge, publish, distribute, sublicense,
+--  and/or sell copies of the Software, and to permit persons to whom the
+--  Software is furnished to do so, subject to the following conditions:
+--  
+--  The above copyright notice and this permission notice shall be included in
+--  all copies or substantial portions of the Software.
+--  
+--  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+--  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+--  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+--  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+--  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+--  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+--  DEALINGS IN THE SOFTWARE.
+-- 
+--------------------------------------------------------------------------------
 
 
-col day format a12
-col "00" format a4
-col "01" format a4
-col "02" format a4
-col "03" format a4
-col "04" format a4
-col "05" format a4
-col "06" format a4
-col "07" format a4
-col "08" format a4
-col "09" format a4
-col "10" format a4
-col "11" format a4
-col "12" format a4
-col "13" format a4
-col "14" format a4
-col "15" format a4
-col "16" format a4
-col "17" format a4
-col "18" format a4
-col "19" format a4
-col "20" format a4
-col "21" format a4
-col "22" format a4
-col "23" format a4
-set lines 130
-set pages 100
+CLEAR COLUMN
+SET LINE 200
+
+COL "00" FORMAT a4
+COL "01" FORMAT a4
+COL "02" FORMAT a4
+COL "03" FORMAT a4
+COL "04" FORMAT a4
+COL "05" FORMAT a4
+COL "06" FORMAT a4
+COL "07" FORMAT a4
+COL "08" FORMAT a4
+COL "09" FORMAT a4
+COL "10" FORMAT a4
+COL "11" FORMAT a4
+COL "12" FORMAT a4
+COL "13" FORMAT a4
+COL "14" FORMAT a4
+COL "15" FORMAT a4
+COL "16" FORMAT a4
+COL "17" FORMAT a4
+COL "18" FORMAT a4
+COL "19" FORMAT a4
+COL "20" FORMAT a4
+COL "21" FORMAT a4
+COL "22" FORMAT a4
+COL "23" FORMAT a4
+
+
+ALTER SESSION SET nls_date_format = 'YYYY-MM-DD';
 
 SELECT
-	to_char(first_time,'YYYY-MM-DD') day,
-	to_char(sum(decode(to_char(first_time,'HH24'),'00',1,0)),'999') "00",
-	to_char(sum(decode(to_char(first_time,'HH24'),'01',1,0)),'999') "01",
-	to_char(sum(decode(to_char(first_time,'HH24'),'02',1,0)),'999') "02",
-	to_char(sum(decode(to_char(first_time,'HH24'),'03',1,0)),'999') "03",
-	to_char(sum(decode(to_char(first_time,'HH24'),'04',1,0)),'999') "04",
-	to_char(sum(decode(to_char(first_time,'HH24'),'05',1,0)),'999') "05",
-	to_char(sum(decode(to_char(first_time,'HH24'),'06',1,0)),'999') "06",
-	to_char(sum(decode(to_char(first_time,'HH24'),'07',1,0)),'999') "07",
-	to_char(sum(decode(to_char(first_time,'HH24'),'08',1,0)),'999') "08",
-	to_char(sum(decode(to_char(first_time,'HH24'),'09',1,0)),'999') "09",
-	to_char(sum(decode(to_char(first_time,'HH24'),'10',1,0)),'999') "10",
-	to_char(sum(decode(to_char(first_time,'HH24'),'11',1,0)),'999') "11",
-	to_char(sum(decode(to_char(first_time,'HH24'),'12',1,0)),'999') "12",
-	to_char(sum(decode(to_char(first_time,'HH24'),'13',1,0)),'999') "13",
-	to_char(sum(decode(to_char(first_time,'HH24'),'14',1,0)),'999') "14",
-	to_char(sum(decode(to_char(first_time,'HH24'),'15',1,0)),'999') "15",
-	to_char(sum(decode(to_char(first_time,'HH24'),'16',1,0)),'999') "16",
-	to_char(sum(decode(to_char(first_time,'HH24'),'17',1,0)),'999') "17",
-	to_char(sum(decode(to_char(first_time,'HH24'),'18',1,0)),'999') "18",
-	to_char(sum(decode(to_char(first_time,'HH24'),'19',1,0)),'999') "19",
-	to_char(sum(decode(to_char(first_time,'HH24'),'20',1,0)),'999') "20",
-	to_char(sum(decode(to_char(first_time,'HH24'),'21',1,0)),'999') "21",
-	to_char(sum(decode(to_char(first_time,'HH24'),'22',1,0)),'999') "22",
-	to_char(sum(decode(to_char(first_time,'HH24'),'23',1,0)),'999') "23"
-FROM v$log_history
-GROUP BY to_char(first_time,'YYYY-MM-DD')
-ORDER BY to_char(first_time,'YYYY-MM-DD');
+    TO_CHAR(first_time, 'YYYY-MM-DD')                                       AS DAY,
+    TO_CHAR(SUM(DECODE(TO_CHAR(first_time, 'HH24'), '00', 1, 0)), '999')    AS "00",
+    TO_CHAR(SUM(DECODE(TO_CHAR(first_time, 'HH24'), '01', 1, 0)), '999')    AS "01",
+    TO_CHAR(SUM(DECODE(TO_CHAR(first_time, 'HH24'), '02', 1, 0)), '999')    AS "02",
+    TO_CHAR(SUM(DECODE(TO_CHAR(first_time, 'HH24'), '03', 1, 0)), '999')    AS "03",
+    TO_CHAR(SUM(DECODE(TO_CHAR(first_time, 'HH24'), '04', 1, 0)), '999')    AS "04",
+    TO_CHAR(SUM(DECODE(TO_CHAR(first_time, 'HH24'), '05', 1, 0)), '999')    AS "05",
+    TO_CHAR(SUM(DECODE(TO_CHAR(first_time, 'HH24'), '06', 1, 0)), '999')    AS "06",
+    TO_CHAR(SUM(DECODE(TO_CHAR(first_time, 'HH24'), '07', 1, 0)), '999')    AS "07",
+    TO_CHAR(SUM(DECODE(TO_CHAR(first_time, 'HH24'), '08', 1, 0)), '999')    AS "08",
+    TO_CHAR(SUM(DECODE(TO_CHAR(first_time, 'HH24'), '09', 1, 0)), '999')    AS "09",
+    TO_CHAR(SUM(DECODE(TO_CHAR(first_time, 'HH24'), '10', 1, 0)), '999')    AS "10",
+    TO_CHAR(SUM(DECODE(TO_CHAR(first_time, 'HH24'), '11', 1, 0)), '999')    AS "11",
+    TO_CHAR(SUM(DECODE(TO_CHAR(first_time, 'HH24'), '12', 1, 0)), '999')    AS "12",
+    TO_CHAR(SUM(DECODE(TO_CHAR(first_time, 'HH24'), '13', 1, 0)), '999')    AS "13",
+    TO_CHAR(SUM(DECODE(TO_CHAR(first_time, 'HH24'), '14', 1, 0)), '999')    AS "14",
+    TO_CHAR(SUM(DECODE(TO_CHAR(first_time, 'HH24'), '15', 1, 0)), '999')    AS "15",
+    TO_CHAR(SUM(DECODE(TO_CHAR(first_time, 'HH24'), '16', 1, 0)), '999')    AS "16",
+    TO_CHAR(SUM(DECODE(TO_CHAR(first_time, 'HH24'), '17', 1, 0)), '999')    AS "17",
+    TO_CHAR(SUM(DECODE(TO_CHAR(first_time, 'HH24'), '18', 1, 0)), '999')    AS "18",
+    TO_CHAR(SUM(DECODE(TO_CHAR(first_time, 'HH24'), '19', 1, 0)), '999')    AS "19",
+    TO_CHAR(SUM(DECODE(TO_CHAR(first_time, 'HH24'), '20', 1, 0)), '999')    AS "20",
+    TO_CHAR(SUM(DECODE(TO_CHAR(first_time, 'HH24'), '21', 1, 0)), '999')    AS "21",
+    TO_CHAR(SUM(DECODE(TO_CHAR(first_time, 'HH24'), '22', 1, 0)), '999')    AS "22",
+    TO_CHAR(SUM(DECODE(TO_CHAR(first_time, 'HH24'), '23', 1, 0)), '999')    AS "23"
+FROM
+    v$log_history
+GROUP BY
+    TO_CHAR(first_time, 'YYYY-MM-DD')
+ORDER BY
+    TO_CHAR(first_time, 'YYYY-MM-DD');
+
+--  ex: ts=4 sw=4 et filetype=sql
