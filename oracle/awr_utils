@@ -1,19 +1,4 @@
 -
-- executing report
--
-@?/rdbms/admin/awrrpt.sql
--
-- where "?" = $ORACLE_HOME variable
-
--
-- Create a snapshot NOW
--
-EXEC DBMS_WORKLOAD_REPOSITORY.create_snapshot;
-
-
-
-
--
 - View config
 -
 col dbid format 999999999999999
