@@ -3,9 +3,9 @@
 --  The SQL Diaries
 -- 
 --  Philum:    Oracle
---  Module:    instances
---  Submodule: inst_name
---  Purpose:   shows the instance name
+--  Module:    sessions
+--  Submodule: sess_instance_name
+--  Purpose:   shows the instance name relative to the current session
 --  Tested:    10g, 11g
 --
 --  Copyright (c) 2014-5 Roberto Reale
