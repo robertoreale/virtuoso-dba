@@ -44,7 +44,7 @@ WITH constraints AS
         SELECT
             *
         FROM
-            dba_constraints
+            all_constraints
         WHERE
             status = 'ENABLED' AND constraint_type IN ('P','R')
     )
