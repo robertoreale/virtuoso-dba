@@ -2,7 +2,7 @@
 --
 --  The SQL Diaries
 -- 
---  Philum:    Oracle
+--  Phylum:    Oracle
 --  Module:    logs
 --  Submodule: log_files_info
 --  Purpose:   shows basic info about log files

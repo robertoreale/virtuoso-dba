@@ -2,7 +2,7 @@
 --
 --  The SQL Diaries
 -- 
---  Philum:    MySQL
+--  Phylum:    MySQL
 --  Module:    schemata
 --  Submodule: sch_size
 --  Purpose:   aggregated size per schema per engine

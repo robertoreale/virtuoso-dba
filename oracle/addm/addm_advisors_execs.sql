@@ -2,7 +2,7 @@
 --
 --  The SQL Diaries
 -- 
---  Philum:    Oracle
+--  Phylum:    Oracle
 --  Module:    addm
 --  Submodule: addm_advisors_execs
 --  Purpose:   shows statistics about the advisors' usage

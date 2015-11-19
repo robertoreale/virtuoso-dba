@@ -2,7 +2,7 @@
 --
 --  The SQL Diaries
 -- 
---  Philum:    MySQL
+--  Phylum:    MySQL
 --  Module:    indexes
 --  Submodule: idx_size_per_table
 --  Purpose:   aggregated index size per table

@@ -2,7 +2,7 @@
 --
 --  The SQL Diaries
 -- 
---  Philum:    Oracle
+--  Phylum:    Oracle
 --  Module:    logs
 --  Submodule: log_count_and_average_size
 --  Purpose:   computes count of archived logs and their average size

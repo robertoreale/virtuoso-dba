@@ -2,7 +2,7 @@
 --
 --  The SQL Diaries
 -- 
---  Philum:    SQL Server
+--  Phylum:    SQL Server
 --  Module:    sessions
 --  Submodule: sess_last_queries
 --  Purpose:   last executed queries by session

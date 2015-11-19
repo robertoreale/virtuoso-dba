@@ -2,7 +2,7 @@
 --
 --  The SQL Diaries
 -- 
---  Philum:    Oracle
+--  Phylum:    Oracle
 --  Module:    sessions
 --  Submodule: sess_myself
 --  Purpose:   returns the schema or the database user name by which the

@@ -2,7 +2,7 @@
 --
 --  The SQL Diaries
 -- 
---  Philum:    Oracle
+--  Phylum:    Oracle
 --  Module:    awr
 --  Submodule: awr_snapshot_extremes
 --  Purpose:   lists the oldest and the newest snapshots 

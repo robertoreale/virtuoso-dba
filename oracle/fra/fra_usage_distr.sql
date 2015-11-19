@@ -2,7 +2,7 @@
 --
 --  The SQL Diaries
 -- 
---  Philum:    Oracle
+--  Phylum:    Oracle
 --  Module:    fra
 --  Submodule: fra_usage_distr
 --  Purpose:   distribution of usage in recovery destinations

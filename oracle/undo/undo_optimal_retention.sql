@@ -2,7 +2,7 @@
 --
 --  The SQL Diaries
 -- 
---  Philum:    Oracle
+--  Phylum:    Oracle
 --  Module:    undo
 --  Submodule: undo_optimal_retention
 --  Purpose:   compute optimal UNDO retention by the formula

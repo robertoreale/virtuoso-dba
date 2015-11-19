@@ -2,7 +2,7 @@
 --
 --  The SQL Diaries
 -- 
---  Philum:    Oracle
+--  Phylum:    Oracle
 --  Module:    undo
 --  Submodule: undo_blks_per_sec
 --  Purpose:   shows undo blocks per second

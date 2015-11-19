@@ -2,7 +2,7 @@
 --
 --  The SQL Diaries
 -- 
---  Philum:    SQL Server
+--  Phylum:    SQL Server
 --  Module:    system
 --  Submodule: sys_cpus
 --  Purpose:   how may physical and logical cpus are available on the system

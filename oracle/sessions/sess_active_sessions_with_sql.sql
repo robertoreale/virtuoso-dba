@@ -2,7 +2,7 @@
 --
 --  The SQL Diaries
 -- 
---  Philum:    Oracle
+--  Phylum:    Oracle
 --  Module:    sessions
 --  Submodule: sess_active_sessions_with_sql
 --  Purpose:   shows active sessions with SQL text

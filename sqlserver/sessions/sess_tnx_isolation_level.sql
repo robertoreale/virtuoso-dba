@@ -2,7 +2,7 @@
 --
 --  The SQL Diaries
 -- 
---  Philum:    SQL Server
+--  Phylum:    SQL Server
 --  Module:    sessions
 --  Submodule: sess_tnx_isolation_level
 --  Purpose:   show transaction isolation level for each session

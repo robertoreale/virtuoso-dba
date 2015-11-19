@@ -2,7 +2,7 @@
 --
 --  The SQL Diaries
 -- 
---  Philum:    Oracle
+--  Phylum:    Oracle
 --  Module:    sessions
 --  Submodule: sess_blocking_pairs
 --  Purpose:   blocking and blocked sessions

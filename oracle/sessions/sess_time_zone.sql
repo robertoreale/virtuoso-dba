@@ -2,7 +2,7 @@
 --
 --  The SQL Diaries
 -- 
---  Philum:    Oracle
+--  Phylum:    Oracle
 --  Module:    sessions
 --  Submodule: sess_time_zone
 --  Purpose:   returns the time zone of the current session

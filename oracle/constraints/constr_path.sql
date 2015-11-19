@@ -2,7 +2,7 @@
 --
 --  The SQL Diaries
 -- 
---  Philum:    Oracle
+--  Phylum:    Oracle
 --  Module:    constraints
 --  Submodule: constr_path
 --  Purpose:   displays reference graph between tables

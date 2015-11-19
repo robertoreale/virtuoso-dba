@@ -2,7 +2,7 @@
 --
 --  The SQL Diaries
 -- 
---  Philum:    Oracle
+--  Phylum:    Oracle
 --  Module:    tablespaces
 --  Submodule: tblsp_sizes
 --  Purpose:   gets the total, used and free sizes of tablespaces

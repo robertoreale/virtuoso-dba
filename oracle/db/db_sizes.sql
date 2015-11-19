@@ -2,7 +2,7 @@
 --
 --  The SQL Diaries
 -- 
---  Philum:    Oracle
+--  Phylum:    Oracle
 --  Module:    db
 --  Submodule: db_sizes
 --  Purpose:   total and used space on the database

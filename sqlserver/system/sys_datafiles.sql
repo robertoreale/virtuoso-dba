@@ -2,7 +2,7 @@
 --
 --  The SQL Diaries
 -- 
---  Philum:    SQL Server
+--  Phylum:    SQL Server
 --  Module:    system
 --  Submodule: sys_datafiles
 --  Purpose:   database files as stored in the master database

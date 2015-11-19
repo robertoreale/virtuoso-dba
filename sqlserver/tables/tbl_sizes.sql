@@ -2,7 +2,7 @@
 --
 --  The SQL Diaries
 -- 
---  Philum:    SQL Server
+--  Phylum:    SQL Server
 --  Module:    tables
 --  Submodule: tbl_sizes
 --  Purpose:   sizes of tables

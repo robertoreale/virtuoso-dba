@@ -2,7 +2,7 @@
 --
 --  The SQL Diaries
 -- 
---  Philum:    SQL Server
+--  Phylum:    SQL Server
 --  Module:    queries
 --  Submodule: qry_last_exec_time
 --  Purpose:   last execution time of all queries

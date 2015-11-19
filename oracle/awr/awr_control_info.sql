@@ -2,7 +2,7 @@
 --
 --  The SQL Diaries
 -- 
---  Philum:    Oracle
+--  Phylum:    Oracle
 --  Module:    awr
 --  Submodule: awr_control_info
 --  Purpose:   displays the control information for the Workload Repository

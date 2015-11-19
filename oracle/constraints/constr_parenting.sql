@@ -2,7 +2,7 @@
 --
 --  The SQL Diaries
 -- 
---  Philum:    Oracle
+--  Phylum:    Oracle
 --  Module:    constraints
 --  Submodule: constr_parenting
 --  Purpose:   parent-child pairs between tables, based on reference constraints

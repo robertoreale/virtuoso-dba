@@ -2,7 +2,7 @@
 --
 --  The SQL Diaries
 -- 
---  Philum:    Oracle
+--  Phylum:    Oracle
 --  Module:    segments
 --  Submodule: segm_sort_cumulative_size
 --  Purpose:   cumulative size of sort segments

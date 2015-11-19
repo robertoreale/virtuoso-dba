@@ -2,7 +2,7 @@
 --
 --  The SQL Diaries
 -- 
---  Philum:    Oracle
+--  Phylum:    Oracle
 --  Module:    addm
 --  Submodule: addm_task_params
 --  Purpose:   shows the parameters that are configured for each ADDM task

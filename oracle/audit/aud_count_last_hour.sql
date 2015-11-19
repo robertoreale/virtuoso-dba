@@ -2,7 +2,7 @@
 --
 --  The SQL Diaries
 -- 
---  Philum:    Oracle
+--  Phylum:    Oracle
 --  Module:    audit
 --  Submodule: aud_count_last_hour
 --  Purpose:   count audit records for the last hour

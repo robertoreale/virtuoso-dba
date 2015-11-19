@@ -2,7 +2,7 @@
 --
 --  The SQL Diaries
 -- 
---  Philum:    Oracle
+--  Phylum:    Oracle
 --  Module:    undo
 --  Submodule: undo_needed_size
 --  Purpose:   compute needed UNDO size by the formula undo_size =

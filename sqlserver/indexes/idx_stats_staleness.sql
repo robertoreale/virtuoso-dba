@@ -2,7 +2,7 @@
 --
 --  The SQL Diaries
 -- 
---  Philum:    SQL Server
+--  Phylum:    SQL Server
 --  Module:    indexes
 --  Submodule: idx_stats_staleness
 --  Purpose:   staleness of index statistics

@@ -2,7 +2,7 @@
 --
 --  The SQL Diaries
 -- 
---  Philum:    SQL Server
+--  Phylum:    SQL Server
 --  Module:    backups
 --  Submodule: bck_last_restores
 --  Purpose:   shows info about the last restore operation, for each database

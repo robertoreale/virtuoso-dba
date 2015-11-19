@@ -2,7 +2,7 @@
 --
 --  The SQL Diaries
 -- 
---  Philum:    Oracle
+--  Phylum:    Oracle
 --  Module:    indexes
 --  Submodule: idx_last_rebuild
 --  Purpose:   last rebuild time for indexes

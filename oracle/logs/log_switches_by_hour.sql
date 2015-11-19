@@ -2,7 +2,7 @@
 --
 --  The SQL Diaries
 -- 
---  Philum:    Oracle
+--  Phylum:    Oracle
 --  Module:    logs
 --  Submodule: log_switches_by_hour
 --  Purpose:   counts log file switches, day by day, hour by hour

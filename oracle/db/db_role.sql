@@ -2,7 +2,7 @@
 --
 --  The SQL Diaries
 -- 
---  Philum:    Oracle
+--  Phylum:    Oracle
 --  Module:    db
 --  Submodule: db_role
 --  Purpose:   database role (primary, standby, etc.)

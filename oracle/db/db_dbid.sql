@@ -2,7 +2,7 @@
 --
 --  The SQL Diaries
 -- 
---  Philum:    Oracle
+--  Phylum:    Oracle
 --  Module:    db
 --  Submodule: db_dbid
 --  Purpose:   shows the database identifier, which is calculated when the

@@ -2,7 +2,7 @@
 --
 --  The SQL Diaries
 -- 
---  Philum:    Oracle
+--  Phylum:    Oracle
 --  Module:    tempfiles
 --  Submodule: tmp_file_size
 --  Purpose:   show the size of all the temporary files in the database

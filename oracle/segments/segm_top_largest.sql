@@ -2,7 +2,7 @@
 --
 --  The SQL Diaries
 -- 
---  Philum:    Oracle
+--  Phylum:    Oracle
 --  Module:    segments
 --  Submodule: segm_top_largest
 --  Purpose:   top-n largest segments

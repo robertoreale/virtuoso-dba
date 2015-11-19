@@ -2,7 +2,7 @@
 --
 --  The SQL Diaries
 -- 
---  Philum:    Oracle
+--  Phylum:    Oracle
 --  Module:    undo
 --  Submodule: undo_actual_size
 --  Purpose:   shows actual undo size

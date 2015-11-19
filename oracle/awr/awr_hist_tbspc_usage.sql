@@ -2,7 +2,7 @@
 --
 --  The SQL Diaries
 -- 
---  Philum:    Oracle
+--  Phylum:    Oracle
 --  Module:    awr
 --  Submodule: awr_hist_tbspc_usage
 --  Purpose:   displays historical tablespace usage statistics

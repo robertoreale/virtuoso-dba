@@ -2,7 +2,7 @@
 --
 --  The SQL Diaries
 -- 
---  Philum:    Oracle
+--  Phylum:    Oracle
 --  Module:    addm
 --  Submodule: addm_advisor_findings
 --  Purpose:   displays the findings discovered by all advisors in the database

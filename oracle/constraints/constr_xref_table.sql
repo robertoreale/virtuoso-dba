@@ -2,7 +2,7 @@
 --
 --  The SQL Diaries
 -- 
---  Philum:    Oracle
+--  Phylum:    Oracle
 --  Module:    constraints
 --  Submodule: constr_xref_table
 --  Purpose:   list foreign constraints associated to their reference columns

@@ -2,7 +2,7 @@
 --
 --  The SQL Diaries
 -- 
---  Philum:    Oracle
+--  Phylum:    Oracle
 --  Module:    db
 --  Submodule: db_block_size
 --  Purpose:   shows database block size
