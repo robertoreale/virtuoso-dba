@@ -75,17 +75,6 @@ where  rn <= 5
 
 
 
-SELECT to_char (s.sid, '999999') SID, to_char (s.serial#, '999999') serial#, 
-to_char (p.spid, '99999') as "OS PID",
-s.osuser, s.module, to_char (st.value/100, '999,999.9999') as "CPU sec"
-FROM v$sesstat st, v$statname sn, v$session s, v$process p
-WHERE sn.name = 'CPU used by this session' -- CPU
-AND st.statistic# = sn.statistic#
-AND st.sid = s.sid
-AND s.paddr = p.addr
-AND s.last_call_et < 1800 -- active within last 1/2 hour
-AND s.logon_time > (SYSDATE - 240/1440) -- sessions logged on within 4 hours
-ORDER BY st.value desc;
 
 
 
