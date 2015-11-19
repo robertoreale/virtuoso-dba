@@ -55,6 +55,7 @@ WHERE
     sn.name = 'CPU used by this session'     -- CPU
     AND s.last_call_et < 1800                -- active within last 1/2 hour
     AND s.logon_time > (SYSDATE - 240/1440)  -- sessions logged on within 4 hours
-ORDER BY st.value DESC;
+ORDER BY
+    st.value DESC;
 
 --  ex: ts=4 sw=4 et filetype=sql
