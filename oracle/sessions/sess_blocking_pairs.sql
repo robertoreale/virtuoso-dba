@@ -1,26 +1,44 @@
+--------------------------------------------------------------------------------
 --
---  Blocking sessions
+--  The SQL Diaries
+-- 
+--  Philum:    Oracle
+--  Module:    sessions
+--  Submodule: sess_blocking_pairs
+--  Purpose:   blocking and blocked sessions
+--  Tested:    10g, 11g
 --
---  @tested on: 10g, 11g, 12g
---
+--  Copyright (c) 2014-5 Roberto Reale
+--  
+--  Permission is hereby granted, free of charge, to any person obtaining a
+--  copy of this software and associated documentation files (the "Software"),
+--  to deal in the Software without restriction, including without limitation
+--  the rights to use, copy, modify, merge, publish, distribute, sublicense,
+--  and/or sell copies of the Software, and to permit persons to whom the
+--  Software is furnished to do so, subject to the following conditions:
+--  
+--  The above copyright notice and this permission notice shall be included in
+--  all copies or substantial portions of the Software.
+--  
+--  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+--  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+--  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+--  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+--  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+--  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+--  DEALINGS IN THE SOFTWARE.
+-- 
+--------------------------------------------------------------------------------
 
---  query 1
-
-select l1.sid, ' IS BLOCKING ', l2.sid
-from v$lock l1, v$lock l2
-where l1.block =1 and l2.request > 0
-and l1.id1=l2.id1
-and l1.id2=l2.id2;
+CLEAR COLUMN
 
 
---  query 2
+SELECT
+    l1.sid AS blocking,
+    l2.sid AS blocked
+FROM
+    v$lock l1 JOIN v$lock l2 USING (id1, id2)
+WHERE
+    l1.block = 1 AND l2.request > 0;
 
-select s1.username || '@' || s1.machine
-|| ' ( SID=' || s1.sid || ' )  is blocking '
-|| s2.username || '@' || s2.machine || ' ( SID=' || s2.sid || ' ) ' AS
-blocking_status
-from v$lock l1, v$session s1, v$lock l2, v$session s2
-where s1.sid=l1.sid and s2.sid=l2.sid
-and l1.BLOCK=1 and l2.request > 0
-and l1.id1 = l2.id1
-and l2.id2 = l2.id2;
+--  ex: ts=4 sw=4 et filetype=sql
