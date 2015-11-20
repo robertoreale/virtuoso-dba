@@ -38,7 +38,7 @@ COL user_roles_and_privileges FORMAT a80 HEADING "User's roles and privileges"
 
 
 SELECT
-    lpad(' ', 2*level) || granted_role    AS user_roles_and_privileges
+    LPAD(' ', 2 * LEVEL) || granted_role    AS user_roles_and_privileges
 FROM 
     (
         SELECT
