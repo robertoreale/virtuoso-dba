@@ -4,7 +4,7 @@
 -- 
 --  Phylum:    Oracle
 --  Module:    security
---  Submodule: sec_hierarc_user_role_privs
+--  Submodule: sec_hierarc_user_roles_privs
 --  Purpose:   shows the hierarchical relationship between system privileges,
 --             roles and users
 --  Reference: http://www.adp-gmbh.ch/ora/misc/recursively_list_privilege.html
