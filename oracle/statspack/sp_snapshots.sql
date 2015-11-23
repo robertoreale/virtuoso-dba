@@ -33,8 +33,8 @@
 CLEAR COLUMN
 SET LINE 120
 
-COL start_time FORMAT a10;
-COL stop_time  FORMAT a10;
+COL start_time FORMAT a10
+COL stop_time  FORMAT a10
 
 
 SELECT
