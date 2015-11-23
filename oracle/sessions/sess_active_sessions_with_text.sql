@@ -4,7 +4,7 @@
 -- 
 --  Phylum:    Oracle
 --  Module:    sessions
---  Submodule: sess_active_sessions_with_sql
+--  Submodule: sess_active_sessions_with_text
 --  Purpose:   shows active sessions with SQL text
 --  Tested:    10g, 11g
 --
