@@ -4,7 +4,7 @@
 -- 
 --  Phylum:    Oracle
 --  Module:    sessions
---  Submodule: sess_io_info
+--  Submodule: sess_io_stats
 --  Purpose:   lists some basic I/O statistics for each user session
 --  Tested:    10g, 11g
 --
