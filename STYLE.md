@@ -12,6 +12,8 @@ TODO
 
 * Avoid old style JOINs.
 
+TODO
+
 
 ## SQL Server
 
