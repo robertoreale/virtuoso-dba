@@ -33,7 +33,6 @@
 CLEAR COLUMN
 SET LINE 120
 
-COL snap_time  FORMAT a10;
 COL start_time FORMAT a10;
 COL stop_time  FORMAT a10;
 
