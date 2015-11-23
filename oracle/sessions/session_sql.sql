@@ -19,20 +19,20 @@ SELECT nvl(ses.username,'ORACLE PROC')||' ('||ses.sid||')' USERNAME,
 -- second query
 SET LINESIZE 20000
 
-select session.sid
-      ,session.serial#
-      ,session.username
-      ,session.sql_id
-      ,session.sql_child_number
+select s.sid
+      ,s.serial#
+      ,s.username
+      ,s.sql_id
+      ,s.sql_child_number
       ,optimizer_mode
       ,hash_value
       ,address
       ,sql_text
 from   v$sqlarea sqlarea
-      ,v$session session
-where  session.sql_hash_value = sqlarea.hash_value
-and    session.sql_address    = sqlarea.address
-and    session.username       is not null;
+      ,v$session s
+where  s.sql_hash_value = sqlarea.hash_value
+and    s.sql_address    = sqlarea.address
+and    s.username       is not null;
 
 
 
