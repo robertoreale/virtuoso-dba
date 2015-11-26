@@ -4,7 +4,7 @@
 -- 
 --  Phylum:    Oracle
 --  Module:    asm
---  Submodule: asm_file_alias_au_count
+--  Submodule: asm_file_au_count_sys_created
 --  Purpose:   displays the count of allocation units per ASM file by file alias
 --  Reference: MOS Doc ID 351117.1
 --  Tested:    10g, 11g
