@@ -41,6 +41,6 @@ SELECT
 FROM
     sys.dm_exec_query_stats stats
 CROSS APPLY
-    sys.dm_exec_sql_text(stats.sql_handle) sql
+    sys.dm_exec_sql_text(stats.sql_handle) sql;
 
 --  ex: ts=4 sw=4 et filetype=sql
