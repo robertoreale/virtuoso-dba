@@ -37,6 +37,7 @@ CLEAR COLUMN
 SELECT
     group_kfdat                                       AS group#,
     number_kfdat                                      AS disk#,
+    --  emulate the PIVOT functions which is missing in 10g
     SUM(CASE WHEN v_kfdat = 'V' THEN 1 ELSE 0 END)    AS alloc_au,
     SUM(CASE WHEN v_kfdat = 'F' THEN 1 ELSE 0 END)    AS free_au
 FROM
