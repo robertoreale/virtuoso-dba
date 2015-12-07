@@ -36,6 +36,7 @@ COL username FORMAT a15 TRUNC
 COL machine  FORMAT a15 TRUNC
 COL sql_text FORMAT a80 WORD_WRAPPED
 COL elapsed  FORMAT a8
+COL SID FORMAT 999
 
 SET LINE 200
 BREAK ON sid ON serial# ON sql_id ON status ON username ON machine ON elapsed
