@@ -5,8 +5,7 @@
 --  Phylum:    Oracle
 --  Module:    dg
 --  Submodule: dg_applied_logs_detail
---  Purpose:   basic info about applied logs at the standby site
---  Reference: https://mdinh.wordpress.com/2015/02/20/oracle-manual-standby-applying-log/
+--  Purpose:   Detailed info about applied log on standby: "YES", "IN-MEMORY"
 --  Tested:    10g, 11g
 --
 --  Copyright (c) 2014-5 Matias Monteverde-Giannini
