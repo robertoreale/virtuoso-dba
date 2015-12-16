@@ -1,13 +1,14 @@
 --------------------------------------------------------------------------------
 --
---  The SQL Diaries --
+--  The SQL Diaries
 -- 
 --  Phylum:    Oracle
 --  Module:    dg
---  Submodule: dg_applied_logs_detail
---  Purpose:   Detailed info about applied log on standby: "YES", "IN-MEMORY"
+--  Submodule: dg_standby_logs_basic_info
+--  Purpose:   basic info about log files at the standby site
 --  Tested:    10g, 11g
 --
+--  Copyright (c) 2015   Roberto Reale
 --  Copyright (c) 2014-5 Matias Monteverde-Giannini
 --  
 --  Permission is hereby granted, free of charge, to any person obtaining a
@@ -30,9 +31,23 @@
 -- 
 --------------------------------------------------------------------------------
 
--- Run it from standby node
-
 CLEAR COLUMN
 
+COL first_time FORMAT a10
+COL next_time  FORMAT a10
+COL applied    FORMAT a10
 
-SELECT sequence#, thread#, first_time, next_time, applied FROM v$archived_log ORDER BY thread#,sequence#
+
+SELECT
+    sequence#,
+    thread#,
+    first_time,
+    next_time,
+    applied
+FROM
+    v$archived_log
+ORDER BY
+    thread#,
+    sequence#;
+
+--  ex: ts=4 sw=4 et filetype=sql
