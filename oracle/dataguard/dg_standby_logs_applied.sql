@@ -4,7 +4,7 @@
 -- 
 --  Phylum:    Oracle
 --  Module:    dg
---  Submodule: dg_applied_logs
+--  Submodule: dg_standby_logs_applied
 --  Purpose:   basic info about applied logs at the standby site
 --  Reference: https://mdinh.wordpress.com/2015/02/20/oracle-manual-standby-applying-log/
 --  Tested:    10g, 11g
