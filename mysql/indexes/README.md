@@ -1,2 +1,5 @@
-MySQL & MariaDB
+MySQL and MariaDB
 ===
+
+Indexes
+---

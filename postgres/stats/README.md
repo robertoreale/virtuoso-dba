@@ -1,2 +1,5 @@
 PostgreSQL
 ===
+
+Statistics
+---

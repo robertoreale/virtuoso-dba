@@ -1,2 +1,2 @@
-MySQL & MariaDB
+MySQL and MariaDB
 ===
