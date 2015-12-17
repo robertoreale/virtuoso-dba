@@ -36,9 +36,6 @@ CLEAR COLUMN
 COL last_day_curr_month FORMAT a21 HEADING "Last day of the month"
 
 
-SELECT
-    TRUNC(LAST_DAY(SYSDATE)) AS last_day_curr_month
-FROM
-    dual;
+SELECT TRUNC(LAST_DAY(SYSDATE)) AS last_day_curr_month FROM dual;
 
 --  ex: ts=4 sw=4 et filetype=sql

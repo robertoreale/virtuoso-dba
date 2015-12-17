@@ -36,9 +36,6 @@ CLEAR COLUMN
 COL first_day_curr_month FORMAT a22 HEADING "First day of the month"
 
 
-SELECT
-    TRUNC(SYSDATE, 'MONTH') first_day_curr_month
-FROM
-    dual;
+SELECT TRUNC(SYSDATE, 'MONTH') first_day_curr_month FROM dual;
 
 --  ex: ts=4 sw=4 et filetype=sql
