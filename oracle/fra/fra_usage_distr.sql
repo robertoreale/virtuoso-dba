@@ -40,11 +40,11 @@ COL reclaimable  HEADING "Usable (MiB)"
 
 
 SELECT
-    name                       AS name,
-    space_limit/1048576        AS limit,
-    space_used/1048576         AS used,
-    space_reclaimable/1048576  AS reclaimable,
-    number_of_files            AS files
+    name                           AS name,
+    space_limit       / 1048576    AS limit,
+    space_used        / 1048576    AS used,
+    space_reclaimable / 1048576    AS reclaimable,
+    number_of_files                AS files
 FROM
     v$recovery_file_dest;
 
