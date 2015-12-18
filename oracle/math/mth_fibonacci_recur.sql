@@ -4,7 +4,7 @@
 -- 
 --  Phylum:    Oracle
 --  Module:    math
---  Submodule: math_fibonacci_recur
+--  Submodule: mth_fibonacci_recur
 --  Purpose:   generate Fibonacci sequence (OEIS A000045), recursive version
 --  Reference: http://www.codeproject.com/Tips/815840/Fibonacci-sequence-in-Oracle-using-sinqle-SQL-stat
 --  Note:      at least 11g R2 is required for the recursive CTE to work

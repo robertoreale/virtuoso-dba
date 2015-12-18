@@ -4,7 +4,7 @@
 -- 
 --  Phylum:    Oracle
 --  Module:    math
---  Submodule: math_fibonacci_binet
+--  Submodule: mth_fibonacci_binet
 --  Purpose:   generate Fibonacci sequence (OEIS A000045) by Binet's formula
 --  Reference: http://www.codeproject.com/Tips/815840/Fibonacci-sequence-in-Oracle-using-sinqle-SQL-stat
 --  Tested:    10g, 11g
