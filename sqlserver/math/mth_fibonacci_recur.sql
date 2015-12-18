@@ -4,7 +4,7 @@
 -- 
 --  Phylum:    SQL Server
 --  Module:    math
---  Submodule: math_fibonacci_recur
+--  Submodule: mth_fibonacci_recur
 --  Purpose:   generate Fibonacci sequence (OEIS A000045), recursive version
 --  Reference: http://stackoverflow.com/questions/21746100/
 --  Tested:    2012
