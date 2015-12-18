@@ -31,10 +31,10 @@
 -- 
 --------------------------------------------------------------------------------
 
-
 CLEAR COLUMN
+COL session_user FORMAT a30
 
 
-SELECT SYS_CONTEXT('USERENV', 'SESSION_USER') FROM dual;
+SELECT SYS_CONTEXT('USERENV', 'SESSION_USER') AS session_user FROM dual;
 
 --  ex: ts=4 sw=4 et filetype=sql
