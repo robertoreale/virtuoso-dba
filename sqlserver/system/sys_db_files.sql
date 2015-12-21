@@ -4,7 +4,7 @@
 -- 
 --  Phylum:    SQL Server
 --  Module:    system
---  Submodule: sys_datafiles
+--  Submodule: sys_db_files
 --  Purpose:   database files as stored in the master database
 --  Tested:    2012
 --
