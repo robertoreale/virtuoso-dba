@@ -41,8 +41,8 @@ SELECT
     CAST((size) / 8192.0 AS DECIMAL(18,2))        [Size (MiB)],
     CASE
         WHEN type_desc = 'ROWS' THEN 'Data File(s)'
-        WHEN Type_Desc = 'LOG'  THEN 'Log File(s)'
-        ELSE Type_Desc
+        WHEN type_desc = 'LOG'  THEN 'Log File(s)'
+        ELSE type_desc
     END                                           [Type],
     state_desc                                    [Online State]
 FROM
