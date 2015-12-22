@@ -134,7 +134,7 @@ t7 AS
         t6
 )
 SELECT
-    year,
+    year                  AS year,
     easter_sunday - 52    AS jeudi_gras,
     easter_sunday - 48    AS carnival_monday,
     easter_sunday - 47    AS mardi_gras,
