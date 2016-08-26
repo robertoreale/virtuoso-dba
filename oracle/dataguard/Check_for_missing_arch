@@ -4,12 +4,12 @@
 -- 
 --  Phylum:    Oracle
 --  Module:    dg
---  Submodule: dg_standby_logs_applied
---  Purpose:   basic info about applied logs at the standby site
---  Reference: https://mdinh.wordpress.com/2015/02/20/oracle-manual-standby-applying-log/
+--  Submodule: dg_standby_logs_not_applied_gap
+--  Purpose:   basic info about sequence archive log not sent
+--  Reference: mmonteverde@faberbits.com / matias.monteverde@gmail.com
 --  Tested:    10g, 11g
 --
---  Copyright (c) 2014-5 Roberto Reale
+--  Copyright (c) 2014-5 Matias Monteverde Giannini
 --  
 --  Permission is hereby granted, free of charge, to any person obtaining a
 --  copy of this software and associated documentation files (the "Software"),
