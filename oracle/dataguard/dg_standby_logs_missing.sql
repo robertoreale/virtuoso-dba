@@ -4,9 +4,8 @@
 -- 
 --  Phylum:    Oracle
 --  Module:    dg
---  Submodule: dg_standby_logs_not_applied_gap
---  Purpose:   basic info about sequence archive log not sent
---  Reference: mmonteverde@faberbits.com / matias.monteverde@gmail.com
+--  Submodule: dg_standby_logs_missing.sql
+--  Purpose:   basic info about logs not sent to standby database (aka log gap)
 --  Tested:    10g, 11g
 --
 --  Copyright (c) 2014-5 Matias Monteverde Giannini
@@ -31,12 +30,6 @@
 -- 
 --------------------------------------------------------------------------------
 
-
---
---  Check for LOGSEQ Arch lost and not applied and generate state WAIT_FOR_GAP
---
--- Run in standby database
---
 
 
 SELECT high.thread#, "LowGap#", "HighGap#"
@@ -72,5 +65,6 @@ FROM
         )
         GROUP BY thread#
     ) low
-   WHERE low.thread# = high.thread#
-/
+   WHERE low.thread# = high.thread#;
+
+--  ex: ts=4 sw=4 et filetype=sql
