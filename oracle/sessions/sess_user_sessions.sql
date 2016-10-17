@@ -31,26 +31,26 @@
 --------------------------------------------------------------------------------
 
 CLEAR COLUMN
-SET LINE 200
+SET LINE 180
 
 COL sid      FORMAT '999999'
 COL serial   FORMAT '999999'
+COL spid     FORMAT '99999' HEADING "OS_PID"
 COL username FORMAT a15
-COL machine  FORMAT a35
-COL server   FORMAT a15
+COL machine  FORMAT a15
+COL server   FORMAT a10
 COL osuser   FORMAT a10
 COL program  FORMAT a30 WORD_WRAPPED
-COL spid     FORMAT '99999' HEADING "OS_PID"
 
 SELECT
 	s.sid,
 	s.serial#,
+	TO_NUMBER(p.spid) AS spid,
 	s.username,
 	s.machine,
 	s.server,
 	s.osuser,
-	s.program,
-	p.spid
+	s.program
 FROM
     v$session s JOIN v$process p
 ON
