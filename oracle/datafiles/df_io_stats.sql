@@ -34,7 +34,7 @@
 CLEAR COLUMN
 SET LINESIZE 160
 
-COL name FORMAT a50 TRUNCATED
+COL name        HEADING "File Name" FORMAT a50 TRUNCATED
 COL phyrds      HEADING "Physical Reads"
 COL phywrts     HEADING "Physical Writes"
 COL phyrds_pct  HEADING "Read %"
