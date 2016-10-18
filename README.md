@@ -1,4 +1,4 @@
 The SQL diaries
 ===============
 
-A bunch of utterly useless morsels of SQL code.
+A bunch of morsels of SQL code.
