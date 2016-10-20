@@ -9,7 +9,7 @@
 --  Reference: http://dba.stackexchange.com/questions/21805/
 --  Tested:    10g, 11g
 --
---  Copyright (c) 2014-5 Roberto Reale
+--  Copyright (c) 2014-6 Roberto Reale
 --  
 --  Permission is hereby granted, free of charge, to any person obtaining a
 --  copy of this software and associated documentation files (the "Software"),
@@ -50,8 +50,8 @@ FROM
 JOIN
     gv$logfile lf
 ON
-    lg.Group# = lf.Group# 
+    lg.group# = lf.group# 
 ORDER BY
-    lg.GROUP# ASC;
+    lg.group# ASC;
 
 --  ex: ts=4 sw=4 et filetype=sql
