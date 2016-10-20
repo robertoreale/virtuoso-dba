@@ -4,11 +4,11 @@
 -- 
 --  Phylum:    Oracle
 --  Module:    logs
---  Submodule: log_count_and_average_size
+--  Submodule: log_arch_count_and_average_size
 --  Purpose:   computes count of archived logs and their average size
 --  Tested:    10g, 11g
 --
---  Copyright (c) 2014-5 Roberto Reale
+--  Copyright (c) 2014-6 Roberto Reale
 --  
 --  Permission is hereby granted, free of charge, to any person obtaining a
 --  copy of this software and associated documentation files (the "Software"),
