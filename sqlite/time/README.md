@@ -1,5 +1,0 @@
-SQLite
-===
-
-Time and Date
----

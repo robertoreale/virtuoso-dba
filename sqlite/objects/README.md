@@ -1,5 +1,0 @@
-SQLite
-===
-
-Objects
----

@@ -1,2 +1,0 @@
-MySQL and MariaDB
-===
