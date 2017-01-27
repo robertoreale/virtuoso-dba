@@ -1,7 +1,10 @@
-# Calculate temporary tablespace size
+Chapter 1
+===================================================================
 
-Here is how we calculate the size of temporary tablespaces:
+Calculate temporary tablespace size
+-------------------------------------------------------------------
 
+Here is how we calculate the size of temporary tablespaces:::
 
     SELECT
         inst_id,
@@ -16,5 +19,3 @@ Here is how we calculate the size of temporary tablespaces:
         (inst_id, ts#)
     GROUP BY
         inst_id, ts.name, tmpf.block_size;
-
-# ex: ts=4 sw=4 et filetype=markdown
