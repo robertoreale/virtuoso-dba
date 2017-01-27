@@ -35,7 +35,7 @@ SELECT
     inst_id,
     ts.name,
     tmpf.block_size,
-    SUM(tmpf.bytes) bytes
+    SUM(tmpf.bytes) AS bytes
 FROM
     gv$tablespace ts
 JOIN
