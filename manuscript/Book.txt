@@ -1,4 +1,4 @@
 cover.md
-chapter01.md
-chapter02.md
-chapter03.md
+first-steps.md
+enter-plsql.md
+internals.md
