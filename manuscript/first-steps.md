@@ -265,28 +265,6 @@ December 31, 9999 CE, one second to midnight.
     CONNECT BY level < &n;
 
 
-### Verify the law of large numbers
-
-*Keywords*: CONNECT BY, analytic functions, random values, subqueries, ODCI
-functions, TABLE function, numerical recipes
-
-Verify the law of large numbers by rolling a die n times, with n >> 0 
-
-    SELECT
-        (
-            SELECT
-                AVG(ROUND(DBMS_RANDOM.VALUE(1, 6)))
-            FROM
-                dual
-            CONNECT BY LEVEL < &n
-        ) sample_average,
-        (
-            SELECT AVG(column_value) FROM TABLE(ODCINUMBERLIST(1,2,3,4,5,6))
-        ) expected_value
-    FROM
-        dual;
-
-
 ### Generate Fibonacci sequence
 
 *Keywords*: recursive CTE, numerical recipes
