@@ -1,4 +1,4 @@
-## First steps
+## First Steps
 
 ### Show database role (primary, standby, etc.)
 
