@@ -1,5 +1,4 @@
-The Virtuoso DBA
-===
+# Basic recipes
 
 ## Show database role (primary, standby, etc.)
 
@@ -377,41 +376,5 @@ At least 11g R2 is required for the recursive CTE to work.
     GROUP BY
         tablespace_name;
 
-
-## Show all Oracle error codes and messages
-
-*Keywords*: LIKE, CONNECT BY, function in WITH clause, SQLERRM
-
-*Reference*: https://stackoverflow.com/questions/11892043/
-
-    WITH
-        FUNCTION ora_code_desc(p_code IN VARCHAR2) RETURN VARCHAR2
-        IS
-        BEGIN
-            RETURN SQLERRM(SUBSTR(p_code, 4));
-        END;
-    SELECT
-        ora_code_desc('ORA-'||level) FROM dual
-    WHERE
-        ora_code_desc('ORA-'||level) NOT LIKE '%Message '||level||' not found%'
-    CONNECT BY LEVEL < 100000;
-
-
-## Display the number of ASM allocated and free allocation units
-
-*Keywords*: PIVOT emulation, internals, asm
-
-*Reference*: MOS Doc ID 351117.1
-
-    SELECT
-        group_kfdat                                       AS group#,
-        number_kfdat                                      AS disk#,
-        --  emulate the PIVOT functions which is missing in 10g
-        SUM(CASE WHEN v_kfdat = 'V' THEN 1 ELSE 0 END)    AS alloc_au,
-        SUM(CASE WHEN v_kfdat = 'F' THEN 1 ELSE 0 END)    AS free_au
-    FROM
-        x$kfdat
-    GROUP BY
-        group_kfdat, number_kfdat;
 
 <!-- vim: set fenc=utf-8 spell spl=en ts=4 sw=4 et filetype=markdown : -->
