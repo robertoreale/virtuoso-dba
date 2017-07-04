@@ -23,6 +23,7 @@ The Virtuoso DBA
 ## Display hidden/undocumented initialization parameters
 
 *Keywords*: DECODE function
+
 *Reference*: http://www.oracle-training.cc/oracle_tips_hidden_parameters.htm
 
     SELECT
