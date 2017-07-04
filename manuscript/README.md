@@ -325,7 +325,7 @@ At least 11g R2 is required for the recursive CTE to work.
         dba_recyclebin;
 
 
-## For each tablespace T, find the probability of segments in T to be smaller than or equal to a given size.
+## For each tablespace T, find the probability of segments in T to be smaller than or equal to a given size
 
 *Keywords*: probability distributions, logical storage
 
