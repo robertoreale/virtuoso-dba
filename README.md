@@ -117,6 +117,28 @@ December 31, 9999 CE, one second to midnight.
         dual;
 
 
+## List the oldest and the newest AWR snapshots
+
+*Keywords*: awr, subqueries, analytic functions
+
+    SELECT
+        snap_id,
+        begin_interval_time,
+        end_interval_time 
+    FROM
+        sys.wrm$_snapshot
+    WHERE
+        snap_id = (SELECT MIN(snap_id) FROM sys.wrm$_snapshot)
+    UNION SELECT
+        snap_id,
+        begin_interval_time,
+        end_interval_time
+    FROM
+        sys.wrm$_snapshot
+    WHERE
+        snap_id = (SELECT MAX(snap_id) FROM sys.wrm$_snapshot);
+
+
 ## Show how much is tablespace usage growing
 
 *Keywords*: regression models, dynamic views, logical storage
