@@ -254,6 +254,26 @@ December 31, 9999 CE, one second to midnight.
     FROM
         dual;
 
+## Show bugs fixed by each installed patch
+
+*Keywords*: XML database, patches
+
+*Reference*: xt_scripts/opatch/bugs_fixed.sql
+
+    WITH bugs AS (
+        SELECT
+            id,
+            description
+        FROM XMLTABLE(
+            '/bugInfo/bugs/bug'
+            PASSING DBMS_QOPATCH.GET_OPATCH_BUGS
+            COLUMNS
+                id          NUMBER PATH '@id',
+                description VARCHAR2(100) PATH 'description'
+        )
+    )
+    SELECT * FROM bugs;
+
 
 ## Calculate the sum of a geometric series
 
