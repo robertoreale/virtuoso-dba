@@ -262,7 +262,7 @@ Verify the law of large numbers by rolling a die n times, with n >> 0
 
 ## Display the number of ASM allocated and free allocation units
 
-*Keywords*: PIVOT emulation, internal views, asm
+*Keywords*: PIVOT emulation, internals, asm
 
 *Reference*: MOS Doc ID 351117.1
 
