@@ -167,4 +167,24 @@ December 31, 9999 CE, one second to midnight.
         dual;
 
 
+# Verify the law of large numbers by rolling a die n times, with n >> 0 
+
+*Keywords*: CONNECT BY, analytic functions, random values, subqueries, ODCI
+functions, TABLE function
+
+    SELECT
+        (
+            SELECT
+                AVG(ROUND(DBMS_RANDOM.VALUE(1, 6)))
+            FROM
+                dual
+            CONNECT BY LEVEL < &n
+        ) sample_average,
+        (
+            SELECT AVG(column_value) FROM TABLE(ODCINUMBERLIST(1,2,3,4,5,6))
+        ) expected_value
+    FROM
+        dual;
+
+
 <!-- vim: set fenc=utf-8 spell spl=en ts=4 sw=4 et filetype=markdown : -->
