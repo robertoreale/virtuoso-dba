@@ -308,6 +308,23 @@ At least 11g R2 is required for the recursive CTE to work.
         fibonacci;
 
 
+## List the objects in the recycle bin, sorting by the version
+
+*Keywords*: analytical functions
+
+    SELECT
+        original_name,
+        type,
+        object_name,
+        droptime,
+        RANK() OVER (
+            PARTITION BY original_name, type ORDER BY droptime DESC
+        ) obj_version,
+        can_purge
+    FROM
+        dba_recyclebin;
+
+
 ## For each tablespace T, find the probability of segments in T to be smaller than or equal to a given size.
 
 *Keywords*: probability distributions, logical storage
