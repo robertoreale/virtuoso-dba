@@ -1,4 +1,4 @@
-## Basic recipes
+## First steps
 
 ### Show database role (primary, standby, etc.)
 
