@@ -27,4 +27,4 @@ Hint: Assume a FQDN has the form N_1.N_2….N_t, where t > 1 and each N_i can co
  
 select machine   from v$session where  REGEXP_LIKE(machine, '^([[:alnum:]]+\.)+[[:alnum:]-]+$') ;
 
-[modeline]: # ( vim: set fenc=utf-8 spell spl=en: ts=4 sw=4 filetype=markdown )
+<!-- vim: set fenc=utf-8 spell spl=en: ts=4 sw=4 filetype=markdown -->
