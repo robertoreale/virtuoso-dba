@@ -73,7 +73,6 @@ It is calculated according to the following formula:
                     /            
                     =====        
  
-
 Cf. the book *Oracle Performance Troubleshooting*, by Robin Schumacher.
 
     SELECT
