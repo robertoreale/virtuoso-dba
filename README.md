@@ -1,6 +1,23 @@
 The Virtuoso DBA
 ===
 
+# List user Data Pump jobs
+
+*Keywords*: LIKE, data pump
+
+    SELECT
+        owner_name,
+        job_name,
+        operation,
+        job_mode,
+        state,
+        attached_sessions
+    FROM
+        dba_datapump_jobs
+    WHERE
+        job_name NOT LIKE 'BIN$%';
+
+
 ## Calculate the size of the temporary tablespaces
 
 *Keywords*: aggregate functions, dynamic views, logical storage
