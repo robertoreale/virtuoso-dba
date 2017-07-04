@@ -5,7 +5,7 @@
 all: README.md
 
 README.md: manuscript/*.md
-	cat manuscript/cover.md manuscript/chapter??.md | grep -v '^<!-- vim:' > README.md
+	( cd manuscript && xargs cat < Book.txt ) | grep -v '^<!-- vim:' > README.md
 	markdown-toc -i README.md
 
 clean:
