@@ -170,7 +170,7 @@ December 31, 9999 CE, one second to midnight.
 # Verify the law of large numbers by rolling a die n times, with n >> 0 
 
 *Keywords*: CONNECT BY, analytic functions, random values, subqueries, ODCI
-functions, TABLE function, math
+functions, TABLE function, numerical recipes
 
     SELECT
         (
