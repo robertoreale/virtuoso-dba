@@ -276,6 +276,38 @@ Verify the law of large numbers by rolling a die n times, with n >> 0
         dual;
 
 
+## Generate Fibonacci sequence
+
+*Keywords*: recursive CTE, numerical recipes
+
+*Reference*: http://www.codeproject.com/Tips/815840/Fibonacci-sequence-in-Oracle-using-sinqle-SQL-stat
+
+At least 11g R2 is required for the recursive CTE to work.
+
+
+    WITH fibonacci(n, f_n, f_n_next) AS
+        (
+            SELECT            --  base case
+                1                 AS n,
+                0                 AS f_n,
+                1                 AS f_n_next
+            FROM
+                dual
+            UNION ALL SELECT  --  recursive definition
+                n + 1             AS n,
+                f_n_next          AS f_n,
+                f_n + f_n_next    AS f_n_next
+            FROM
+                fibonacci
+            WHERE
+                n < &m
+        )
+    SELECT
+        f_n                       AS nth_fibonacci_number
+    FROM
+        fibonacci;
+
+
 ## Show all Oracle error codes and messages
 
 *Keywords*: LIKE, CONNECT BY, function in WITH clause, SQLERRM
