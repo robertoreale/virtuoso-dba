@@ -34,6 +34,19 @@ The Virtuoso DBA
     ) WHERE ROWNUM <= &n;
 
 
+## Associate blocking and blocked sessions
+
+*Keywords*: self join, locking
+
+    SELECT
+        l1.sid AS blocking,
+        l2.sid AS blocked
+    FROM
+        gv$lock l1 JOIN gv$lock l2 USING (id1, id2)
+    WHERE
+        l1.block = 1 AND l2.request > 0;
+
+
 ## Calculate the size of the temporary tablespaces
 
 *Keywords*: aggregate functions, dynamic views, logical storage
