@@ -167,6 +167,13 @@ December 31, 9999 CE, one second to midnight.
         dual;
 
 
+## Calculate the sum of a geometric series
+
+*Keywords*: CONNECT BY, numerical recipes
+
+    SELECT SUM(POWER(2, -level)) sum FROM dual CONNECT BY level < &n;
+
+
 # Verify the law of large numbers by rolling a die n times, with n >> 0 
 
 *Keywords*: CONNECT BY, analytic functions, random values, subqueries, ODCI
