@@ -102,7 +102,7 @@ Cf. the book *Oracle Performance Troubleshooting*, by Robin Schumacher.
             1 - NVL(SQRT(MAX(blocks) / (SQRT(SQRT(COUNT(blocks))) * SUM(blocks))), 0)
         )                             AS fragmentation
     FROM
-        sys.dba_free_space
+        dba_free_space
     GROUP BY
         tablespace_name;
 
