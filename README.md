@@ -135,4 +135,14 @@ December 31, 9999 CE, one second to midnight.
         db, tablespace_name;
 
 
+## Return the total number of installed patches
+
+*Keywords*: XML database
+
+    SELECT
+        EXTRACTVALUE(dbms_qopatch.get_opatch_count, '/patchCountInfo')
+    FROM
+        dual;
+
+
 <!-- vim: set fenc=utf-8 spell spl=en ts=4 sw=4 et filetype=markdown : -->
