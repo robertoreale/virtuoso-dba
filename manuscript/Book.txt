@@ -1,4 +1,5 @@
 cover.md
 first-steps.md
 enter-plsql.md
+stochastic-world.md
 internals.md
