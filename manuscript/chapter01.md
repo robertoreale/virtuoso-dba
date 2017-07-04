@@ -107,34 +107,6 @@ Cf. the book *Oracle Performance Troubleshooting*, by Robin Schumacher.
         tablespace_name;
 
 
-### Display hidden/undocumented initialization parameters
-
-*Keywords*: DECODE function
-
-*Reference*: http://www.oracle-training.cc/oracle_tips_hidden_parameters.htm
-
-    SELECT
-        i.ksppinm                AS name,
-        cv.ksppstvl              AS value,
-        cv.ksppstdf              AS def,
-        DECODE
-            (
-                i.ksppity,
-                1, 'boolean',
-                2, 'string',
-                3, 'number',
-                4, 'file',
-                i.ksppity
-            )                    AS type,
-        i.ksppdesc               AS description
-    FROM
-        sys.x$ksppi i JOIN sys.x$ksppcv cv USING (indx)
-    WHERE
-        i.ksppinm LIKE '\_%' ESCAPE '\'
-    ORDER BY
-        name;
-
-
 ### Count number of segments for each order of magnitude
 
 *Keywords*: DECODE function, analytic functions

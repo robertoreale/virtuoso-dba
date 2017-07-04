@@ -1,4 +1,32 @@
-## Other recipes
+## Internals
+
+### Display hidden/undocumented initialization parameters
+
+*Keywords*: DECODE function, internals
+
+*Reference*: http://www.oracle-training.cc/oracle_tips_hidden_parameters.htm
+
+    SELECT
+        i.ksppinm                AS name,
+        cv.ksppstvl              AS value,
+        cv.ksppstdf              AS def,
+        DECODE
+            (
+                i.ksppity,
+                1, 'boolean',
+                2, 'string',
+                3, 'number',
+                4, 'file',
+                i.ksppity
+            )                    AS type,
+        i.ksppdesc               AS description
+    FROM
+        sys.x$ksppi i JOIN sys.x$ksppcv cv USING (indx)
+    WHERE
+        i.ksppinm LIKE '\_%' ESCAPE '\'
+    ORDER BY
+        name;
+
 
 ### Display the number of ASM allocated and free allocation units
 
