@@ -174,10 +174,12 @@ December 31, 9999 CE, one second to midnight.
     SELECT SUM(POWER(2, -level)) sum FROM dual CONNECT BY level < &n;
 
 
-# Verify the law of large numbers by rolling a die n times, with n >> 0 
+# Verify the law of large numbers
 
 *Keywords*: CONNECT BY, analytic functions, random values, subqueries, ODCI
 functions, TABLE function, numerical recipes
+
+Verify the law of large numbers by rolling a die n times, with n >> 0 
 
     SELECT
         (
