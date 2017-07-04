@@ -1,6 +1,13 @@
 The Virtuoso DBA
 ===
 
+## Show database role (primary, standby, etc.)
+
+*Keywords*: dynamic views, data guard
+
+    SELECT database_role FROM gv$database;
+
+
 ## List user Data Pump jobs
 
 *Keywords*: LIKE, data pump
