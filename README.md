@@ -226,4 +226,22 @@ Verify the law of large numbers by rolling a die n times, with n >> 0
         ora_code_desc('ORA-'||level) NOT LIKE '%Message '||level||' not found%'
     CONNECT BY LEVEL < 100000;
 
+
+## Display the number of ASM allocated and free allocation units
+
+*Keywords*: PIVOT emulation, internal views, asm
+
+*Reference*: MOS Doc ID 351117.1
+
+    SELECT
+        group_kfdat                                       AS group#,
+        number_kfdat                                      AS disk#,
+        --  emulate the PIVOT functions which is missing in 10g
+        SUM(CASE WHEN v_kfdat = 'V' THEN 1 ELSE 0 END)    AS alloc_au,
+        SUM(CASE WHEN v_kfdat = 'F' THEN 1 ELSE 0 END)    AS free_au
+    FROM
+        x$kfdat
+    GROUP BY
+        group_kfdat, number_kfdat;
+
 <!-- vim: set fenc=utf-8 spell spl=en ts=4 sw=4 et filetype=markdown : -->
