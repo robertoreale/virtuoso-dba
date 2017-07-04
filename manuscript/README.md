@@ -247,10 +247,10 @@ December 31, 9999 CE, one second to midnight.
 
 ## Return the total number of installed patches
 
-*Keywords*: XML database
+*Keywords*: XML database, patches
 
     SELECT
-        EXTRACTVALUE(dbms_qopatch.get_opatch_count, '/patchCountInfo')
+        EXTRACTVALUE(DBMS_QOPATCH.GET_OPATCH_COUNT, '/patchCountInfo')
     FROM
         dual;
 
