@@ -1,3 +1,9 @@
+# Build prerequisites
+#
+#   1. a sane GNU system
+#   2. Node.js
+#   3. the markdown-toc package (https://github.com/jonschlinkert/markdown-toc)
+
 .PHONY: README.md all clean
 
 # The first rule in a Makefile is the one executed by default ("make"). It
