@@ -3,7 +3,7 @@ The Virtuoso DBA
 
 <!-- toc -->
 
-- [Basic recipes](#basic-recipes)
+- [First Steps](#first-steps)
   * [Show database role (primary, standby, etc.)](#show-database-role-primary-standby-etc)
   * [List user Data Pump jobs](#list-user-data-pump-jobs)
   * [List the top-n largest segments](#list-the-top-n-largest-segments)
@@ -18,21 +18,23 @@ The Virtuoso DBA
   * [Show how much is tablespace usage growing](#show-how-much-is-tablespace-usage-growing)
   * [Return the total number of installed patches](#return-the-total-number-of-installed-patches)
   * [Show bugs fixed by each installed patch](#show-bugs-fixed-by-each-installed-patch)
+  * [List the objects in the recycle bin, sorting by the version](#list-the-objects-in-the-recycle-bin-sorting-by-the-version)
+- [Numerical Recipes](#numerical-recipes)
   * [Calculate the sum of a geometric series](#calculate-the-sum-of-a-geometric-series)
   * [Solve Besel's problem](#solve-besels-problem)
-  * [Verify the law of large numbers](#verify-the-law-of-large-numbers)
   * [Generate Fibonacci sequence](#generate-fibonacci-sequence)
-  * [List the objects in the recycle bin, sorting by the version](#list-the-objects-in-the-recycle-bin-sorting-by-the-version)
-  * [For each tablespace T, find the probability of segments in T to be smaller than or equal to a given size](#for-each-tablespace-t-find-the-probability-of-segments-in-t-to-be-smaller-than-or-equal-to-a-given-size)
 - [Enter PL/SQL](#enter-plsql)
   * [Show all Oracle error codes and messages](#show-all-oracle-error-codes-and-messages)
+- [A Stochastic World](#a-stochastic-world)
+  * [Verify the law of large numbers](#verify-the-law-of-large-numbers)
+  * [For each tablespace T, find the probability of segments in T to be smaller than or equal to a given size](#for-each-tablespace-t-find-the-probability-of-segments-in-t-to-be-smaller-than-or-equal-to-a-given-size)
 - [Internals](#internals)
   * [Display hidden/undocumented initialization parameters](#display-hiddenundocumented-initialization-parameters)
   * [Display the number of ASM allocated and free allocation units](#display-the-number-of-asm-allocated-and-free-allocation-units)
 
 <!-- tocstop -->
 
-## Basic recipes
+## First Steps
 
 ### Show database role (primary, standby, etc.)
 
@@ -136,7 +138,7 @@ Cf. the book *Oracle Performance Troubleshooting*, by Robin Schumacher.
             1 - NVL(SQRT(MAX(blocks) / (SQRT(SQRT(COUNT(blocks))) * SUM(blocks))), 0)
         )                             AS fragmentation
     FROM
-        sys.dba_free_space
+        dba_free_space
     GROUP BY
         tablespace_name;
 
@@ -259,6 +261,7 @@ December 31, 9999 CE, one second to midnight.
     FROM
         dual;
 
+
 ### Show bugs fixed by each installed patch
 
 *Keywords*: XML database, patches
@@ -280,6 +283,25 @@ December 31, 9999 CE, one second to midnight.
     SELECT * FROM bugs;
 
 
+### List the objects in the recycle bin, sorting by the version
+
+*Keywords*: analytical functions
+
+    SELECT
+        original_name,
+        type,
+        object_name,
+        droptime,
+        RANK() OVER (
+            PARTITION BY original_name, type ORDER BY droptime DESC
+        ) obj_version,
+        can_purge
+    FROM
+        dba_recyclebin;
+
+
+## Numerical Recipes
+
 ### Calculate the sum of a geometric series
 
 *Keywords*: CONNECT BY, numerical recipes
@@ -297,28 +319,6 @@ December 31, 9999 CE, one second to midnight.
     FROM
         dual
     CONNECT BY level < &n;
-
-
-### Verify the law of large numbers
-
-*Keywords*: CONNECT BY, analytic functions, random values, subqueries, ODCI
-functions, TABLE function, numerical recipes
-
-Verify the law of large numbers by rolling a die n times, with n >> 0 
-
-    SELECT
-        (
-            SELECT
-                AVG(ROUND(DBMS_RANDOM.VALUE(1, 6)))
-            FROM
-                dual
-            CONNECT BY LEVEL < &n
-        ) sample_average,
-        (
-            SELECT AVG(column_value) FROM TABLE(ODCINUMBERLIST(1,2,3,4,5,6))
-        ) expected_value
-    FROM
-        dual;
 
 
 ### Generate Fibonacci sequence
@@ -353,36 +353,6 @@ At least 11g R2 is required for the recursive CTE to work.
         fibonacci;
 
 
-### List the objects in the recycle bin, sorting by the version
-
-*Keywords*: analytical functions
-
-    SELECT
-        original_name,
-        type,
-        object_name,
-        droptime,
-        RANK() OVER (
-            PARTITION BY original_name, type ORDER BY droptime DESC
-        ) obj_version,
-        can_purge
-    FROM
-        dba_recyclebin;
-
-
-### For each tablespace T, find the probability of segments in T to be smaller than or equal to a given size
-
-*Keywords*: probability distributions, logical storage
-
-    SELECT
-        tablespace_name, 
-        CUME_DIST(&size) WITHIN GROUP (ORDER BY bytes) probability
-    FROM
-        dba_segments
-    GROUP BY
-        tablespace_name;
-
-
 ## Enter PL/SQL
 
 ### Show all Oracle error codes and messages
@@ -402,6 +372,43 @@ At least 11g R2 is required for the recursive CTE to work.
     WHERE
         ora_code_desc('ORA-'||level) NOT LIKE '%Message '||level||' not found%'
     CONNECT BY LEVEL < 100000;
+
+
+## A Stochastic World
+
+### Verify the law of large numbers
+
+*Keywords*: CONNECT BY, analytic functions, random values, subqueries, ODCI
+functions, TABLE function, numerical recipes
+
+Verify the law of large numbers by rolling a die n times, with n >> 0 
+
+    SELECT
+        (
+            SELECT
+                AVG(ROUND(DBMS_RANDOM.VALUE(1, 6)))
+            FROM
+                dual
+            CONNECT BY LEVEL < &n
+        ) sample_average,
+        (
+            SELECT AVG(column_value) FROM TABLE(ODCINUMBERLIST(1,2,3,4,5,6))
+        ) expected_value
+    FROM
+        dual;
+
+
+### For each tablespace T, find the probability of segments in T to be smaller than or equal to a given size
+
+*Keywords*: probability distributions, logical storage
+
+    SELECT
+        tablespace_name, 
+        CUME_DIST(&size) WITHIN GROUP (ORDER BY bytes) probability
+    FROM
+        dba_segments
+    GROUP BY
+        tablespace_name;
 
 
 ## Internals
