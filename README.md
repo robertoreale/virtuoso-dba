@@ -79,4 +79,16 @@ December 31, 9999 CE, one second to midnight.
         dual;
 
 
+## Show the minimum possible date
+
+*Keywords*: time functions
+
+*Reference*: http://stackoverflow.com/questions/687510/, Oracle bug 106242
+
+    SELECT 
+        TO_CHAR(TO_DATE(1, 'J'), 'DD-MON-YYYY hh12:mi:ss AD') AS earliest_date
+    FROM
+        dual;
+
+
 <!-- vim: set fenc=utf-8 spell spl=en ts=4 sw=4 et filetype=markdown : -->
