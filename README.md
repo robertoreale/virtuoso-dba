@@ -174,6 +174,18 @@ December 31, 9999 CE, one second to midnight.
     SELECT SUM(POWER(2, -level)) sum FROM dual CONNECT BY level < &n;
 
 
+## Solve Besel's problem
+
+*Keywords*: CONNECT BY, numerical recipes
+
+    SELECT
+        SUM(POWER(level, -2))    sum,
+        POWER(ATAN(1)*4, 2) / 6  pi_squared_over_six
+    FROM
+        dual
+    CONNECT BY level < &n;
+
+
 # Verify the law of large numbers
 
 *Keywords*: CONNECT BY, analytic functions, random values, subqueries, ODCI
