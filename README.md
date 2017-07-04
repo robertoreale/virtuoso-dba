@@ -1,6 +1,8 @@
 The Virtuoso DBA
 ===
 
+# Basic recipes
+
 ## Show database role (primary, standby, etc.)
 
 *Keywords*: dynamic views, data guard
@@ -378,6 +380,8 @@ At least 11g R2 is required for the recursive CTE to work.
         tablespace_name;
 
 
+# Enter PL/SQL
+
 ## Show all Oracle error codes and messages
 
 *Keywords*: LIKE, CONNECT BY, function in WITH clause, SQLERRM
@@ -397,6 +401,8 @@ At least 11g R2 is required for the recursive CTE to work.
     CONNECT BY LEVEL < 100000;
 
 
+# Other recipes
+
 ## Display the number of ASM allocated and free allocation units
 
 *Keywords*: PIVOT emulation, internals, asm
@@ -414,4 +420,3 @@ At least 11g R2 is required for the recursive CTE to work.
     GROUP BY
         group_kfdat, number_kfdat;
 
-<!-- vim: set fenc=utf-8 spell spl=en ts=4 sw=4 et filetype=markdown : -->
