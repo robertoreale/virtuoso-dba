@@ -1,6 +1,37 @@
 The Virtuoso DBA
 ===
 
+<!-- toc -->
+
+- [Basic recipes](#basic-recipes)
+  * [Show database role (primary, standby, etc.)](#show-database-role-primary-standby-etc)
+  * [List user Data Pump jobs](#list-user-data-pump-jobs)
+  * [List the top-n largest segments](#list-the-top-n-largest-segments)
+  * [Associate blocking and blocked sessions](#associate-blocking-and-blocked-sessions)
+  * [Calculate the size of the temporary tablespaces](#calculate-the-size-of-the-temporary-tablespaces)
+  * [Calculate a fragmentation factor for tablespaces](#calculate-a-fragmentation-factor-for-tablespaces)
+  * [Display hidden/undocumented initialization parameters](#display-hiddenundocumented-initialization-parameters)
+  * [Count number of segments for each order of magnitude](#count-number-of-segments-for-each-order-of-magnitude)
+  * [Count the client sessions with a FQDN](#count-the-client-sessions-with-a-fqdn)
+  * [Show the maximum possible date](#show-the-maximum-possible-date)
+  * [Show the minimum possible date](#show-the-minimum-possible-date)
+  * [List the oldest and the newest AWR snapshots](#list-the-oldest-and-the-newest-awr-snapshots)
+  * [Show how much is tablespace usage growing](#show-how-much-is-tablespace-usage-growing)
+  * [Return the total number of installed patches](#return-the-total-number-of-installed-patches)
+  * [Show bugs fixed by each installed patch](#show-bugs-fixed-by-each-installed-patch)
+  * [Calculate the sum of a geometric series](#calculate-the-sum-of-a-geometric-series)
+  * [Solve Besel's problem](#solve-besels-problem)
+  * [Verify the law of large numbers](#verify-the-law-of-large-numbers)
+  * [Generate Fibonacci sequence](#generate-fibonacci-sequence)
+  * [List the objects in the recycle bin, sorting by the version](#list-the-objects-in-the-recycle-bin-sorting-by-the-version)
+  * [For each tablespace T, find the probability of segments in T to be smaller than or equal to a given size](#for-each-tablespace-t-find-the-probability-of-segments-in-t-to-be-smaller-than-or-equal-to-a-given-size)
+- [Enter PL/SQL](#enter-plsql)
+  * [Show all Oracle error codes and messages](#show-all-oracle-error-codes-and-messages)
+- [Other recipes](#other-recipes)
+  * [Display the number of ASM allocated and free allocation units](#display-the-number-of-asm-allocated-and-free-allocation-units)
+
+<!-- tocstop -->
+
 ## Basic recipes
 
 ### Show database role (primary, standby, etc.)
