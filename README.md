@@ -18,6 +18,22 @@ The Virtuoso DBA
         job_name NOT LIKE 'BIN$%';
 
 
+## List the top-n largest segments
+
+*Keywords*: limiting query result, physical storage
+
+    SELECT * FROM
+    (
+        SELECT
+            owner,
+            segment_name         AS segment,
+            segment_type         AS type,
+            tablespace_name      AS tablespace,
+            bytes / 1024 / 1024  AS mib_total
+        FROM dba_segments ORDER BY bytes DESC
+    ) WHERE ROWNUM <= &n;
+
+
 ## Calculate the size of the temporary tablespaces
 
 *Keywords*: aggregate functions, dynamic views, logical storage
