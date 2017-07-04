@@ -1,6 +1,6 @@
-# Enter PL/SQL
+## Enter PL/SQL
 
-## Show all Oracle error codes and messages
+### Show all Oracle error codes and messages
 
 *Keywords*: LIKE, CONNECT BY, function in WITH clause, SQLERRM
 

@@ -1,16 +1,16 @@
 The Virtuoso DBA
 ===
 
-# Basic recipes
+## Basic recipes
 
-## Show database role (primary, standby, etc.)
+### Show database role (primary, standby, etc.)
 
 *Keywords*: dynamic views, data guard
 
     SELECT database_role FROM gv$database;
 
 
-## List user Data Pump jobs
+### List user Data Pump jobs
 
 *Keywords*: LIKE, data pump
 
@@ -27,7 +27,7 @@ The Virtuoso DBA
         job_name NOT LIKE 'BIN$%';
 
 
-## List the top-n largest segments
+### List the top-n largest segments
 
 *Keywords*: limiting query result, physical storage
 
@@ -43,7 +43,7 @@ The Virtuoso DBA
     ) WHERE ROWNUM <= &n;
 
 
-## Associate blocking and blocked sessions
+### Associate blocking and blocked sessions
 
 *Keywords*: self join, locking
 
@@ -56,7 +56,7 @@ The Virtuoso DBA
         l1.block = 1 AND l2.request > 0;
 
 
-## Calculate the size of the temporary tablespaces
+### Calculate the size of the temporary tablespaces
 
 *Keywords*: aggregate functions, dynamic views, logical storage
 
@@ -70,12 +70,12 @@ The Virtuoso DBA
     JOIN
         gv$tempfile tmpf
     USING
-        (inst_id, ts#)
+        (inst_id, ts##)
     GROUP BY
         inst_id, ts.name, tmpf.block_size;
 
 
-## Calculate a fragmentation factor for tablespaces
+### Calculate a fragmentation factor for tablespaces
 
 *Keywords*: aggregate functions, logical storage
 
@@ -91,7 +91,7 @@ It is calculated according to the following formula:
                          
                     =====        
          4_______   \            
-        \/blocks#    >    blocks 
+        \/blocks##    >    blocks 
                     /            
                     =====        
  
@@ -110,7 +110,7 @@ Cf. the book *Oracle Performance Troubleshooting*, by Robin Schumacher.
         tablespace_name;
 
 
-## Display hidden/undocumented initialization parameters
+### Display hidden/undocumented initialization parameters
 
 *Keywords*: DECODE function
 
@@ -138,7 +138,7 @@ Cf. the book *Oracle Performance Troubleshooting*, by Robin Schumacher.
         name;
 
 
-## Count number of segments for each order of magnitude
+### Count number of segments for each order of magnitude
 
 *Keywords*: DECODE function, analytic functions
 
@@ -164,7 +164,7 @@ IEC prefixes are used.
     ORDER BY TRUNC(LOG(1024, bytes));
 
 
-## Count the client sessions with a FQDN
+### Count the client sessions with a FQDN
 
 *Keywords*: regular expressions, dynamic views
 
@@ -178,7 +178,7 @@ Assume a FQDN has the form N_1.N_2.….N_t, where t > 1 and each N_i can contain
         REGEXP_LIKE(machine, '^([[:alnum:]]+\.)+[[:alnum:]-]+$');
 
 
-## Show the maximum possible date
+### Show the maximum possible date
 
 *Keywords*: time functions
 
@@ -195,7 +195,7 @@ December 31, 9999 CE, one second to midnight.
         dual;
 
 
-## Show the minimum possible date
+### Show the minimum possible date
 
 *Keywords*: time functions
 
@@ -207,7 +207,7 @@ December 31, 9999 CE, one second to midnight.
         dual;
 
 
-## List the oldest and the newest AWR snapshots
+### List the oldest and the newest AWR snapshots
 
 *Keywords*: awr, subqueries, analytic functions
 
@@ -229,7 +229,7 @@ December 31, 9999 CE, one second to midnight.
         snap_id = (SELECT MAX(snap_id) FROM sys.wrm$_snapshot);
 
 
-## Show how much is tablespace usage growing
+### Show how much is tablespace usage growing
 
 *Keywords*: regression models, dynamic views, logical storage
 
@@ -240,14 +240,14 @@ December 31, 9999 CE, one second to midnight.
     FROM
         dba_hist_tbspc_space_usage h=
         JOIN gv$database d USING(dbid)
-        JOIN gv$tablespace t ON (h.tablespace_id = t.ts#)
+        JOIN gv$tablespace t ON (h.tablespace_id = t.ts##)
     GROUP BY
         d.name, t.name
     ORDER BY
         db, tablespace_name;
 
 
-## Return the total number of installed patches
+### Return the total number of installed patches
 
 *Keywords*: XML database, patches
 
@@ -256,7 +256,7 @@ December 31, 9999 CE, one second to midnight.
     FROM
         dual;
 
-## Show bugs fixed by each installed patch
+### Show bugs fixed by each installed patch
 
 *Keywords*: XML database, patches
 
@@ -277,14 +277,14 @@ December 31, 9999 CE, one second to midnight.
     SELECT * FROM bugs;
 
 
-## Calculate the sum of a geometric series
+### Calculate the sum of a geometric series
 
 *Keywords*: CONNECT BY, numerical recipes
 
     SELECT SUM(POWER(2, -level)) sum FROM dual CONNECT BY level < &n;
 
 
-## Solve Besel's problem
+### Solve Besel's problem
 
 *Keywords*: CONNECT BY, numerical recipes
 
@@ -296,7 +296,7 @@ December 31, 9999 CE, one second to midnight.
     CONNECT BY level < &n;
 
 
-## Verify the law of large numbers
+### Verify the law of large numbers
 
 *Keywords*: CONNECT BY, analytic functions, random values, subqueries, ODCI
 functions, TABLE function, numerical recipes
@@ -318,7 +318,7 @@ Verify the law of large numbers by rolling a die n times, with n >> 0
         dual;
 
 
-## Generate Fibonacci sequence
+### Generate Fibonacci sequence
 
 *Keywords*: recursive CTE, numerical recipes
 
@@ -350,7 +350,7 @@ At least 11g R2 is required for the recursive CTE to work.
         fibonacci;
 
 
-## List the objects in the recycle bin, sorting by the version
+### List the objects in the recycle bin, sorting by the version
 
 *Keywords*: analytical functions
 
@@ -367,7 +367,7 @@ At least 11g R2 is required for the recursive CTE to work.
         dba_recyclebin;
 
 
-## For each tablespace T, find the probability of segments in T to be smaller than or equal to a given size
+### For each tablespace T, find the probability of segments in T to be smaller than or equal to a given size
 
 *Keywords*: probability distributions, logical storage
 
@@ -380,9 +380,9 @@ At least 11g R2 is required for the recursive CTE to work.
         tablespace_name;
 
 
-# Enter PL/SQL
+## Enter PL/SQL
 
-## Show all Oracle error codes and messages
+### Show all Oracle error codes and messages
 
 *Keywords*: LIKE, CONNECT BY, function in WITH clause, SQLERRM
 
@@ -401,9 +401,9 @@ At least 11g R2 is required for the recursive CTE to work.
     CONNECT BY LEVEL < 100000;
 
 
-# Other recipes
+## Other recipes
 
-## Display the number of ASM allocated and free allocation units
+### Display the number of ASM allocated and free allocation units
 
 *Keywords*: PIVOT emulation, internals, asm
 
