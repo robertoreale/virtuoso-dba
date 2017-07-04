@@ -53,6 +53,42 @@ The Virtuoso DBA
         inst_id, ts.name, tmpf.block_size;
 
 
+## Calculate a fragmentation factor for tablespaces
+
+*Keywords*: aggregate functions, logical storage
+
+The fragmentation column gives an overall score with respect to how badly a
+tablespace is fragmented; a 100% score indicates no fragmentation at all.
+
+It is calculated according to the following formula:
+
+                ___________      
+              \/max(blocks)      
+                         
+    1 - ------------------------ 
+                         
+                    =====        
+         4_______   \            
+        \/blocks#    >    blocks 
+                    /            
+                    =====        
+ 
+
+Cf. the book *Oracle Performance Troubleshooting*, by Robin Schumacher.
+
+    SELECT
+        tablespace_name               AS tablespace,
+        COUNT(*)                      AS free_chunks,
+        NVL(MAX(bytes) / 1048576, 0)  AS largest_chunk,
+        100 * (
+            1 - NVL(SQRT(MAX(blocks) / (SQRT(SQRT(COUNT(blocks))) * SUM(blocks))), 0)
+        )                             AS fragmentation
+    FROM
+        sys.dba_free_space
+    GROUP BY
+        tablespace_name;
+
+
 ## Display hidden/undocumented initialization parameters
 
 *Keywords*: DECODE function
