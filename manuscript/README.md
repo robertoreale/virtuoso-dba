@@ -308,6 +308,19 @@ At least 11g R2 is required for the recursive CTE to work.
         fibonacci;
 
 
+## For each tablespace T, find the probability of segments in T to be smaller than or equal to a given size.
+
+*Keywords*: probability distributions, logical storage
+
+    SELECT
+        tablespace_name, 
+        CUME_DIST(&size) WITHIN GROUP (ORDER BY bytes) probability
+    FROM
+        dba_segments
+    GROUP BY
+        tablespace_name;
+
+
 ## Show all Oracle error codes and messages
 
 *Keywords*: LIKE, CONNECT BY, function in WITH clause, SQLERRM
