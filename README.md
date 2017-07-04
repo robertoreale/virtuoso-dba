@@ -10,7 +10,6 @@ The Virtuoso DBA
   * [Associate blocking and blocked sessions](#associate-blocking-and-blocked-sessions)
   * [Calculate the size of the temporary tablespaces](#calculate-the-size-of-the-temporary-tablespaces)
   * [Calculate a fragmentation factor for tablespaces](#calculate-a-fragmentation-factor-for-tablespaces)
-  * [Display hidden/undocumented initialization parameters](#display-hiddenundocumented-initialization-parameters)
   * [Count number of segments for each order of magnitude](#count-number-of-segments-for-each-order-of-magnitude)
   * [Count the client sessions with a FQDN](#count-the-client-sessions-with-a-fqdn)
   * [Show the maximum possible date](#show-the-maximum-possible-date)
@@ -27,7 +26,8 @@ The Virtuoso DBA
   * [For each tablespace T, find the probability of segments in T to be smaller than or equal to a given size](#for-each-tablespace-t-find-the-probability-of-segments-in-t-to-be-smaller-than-or-equal-to-a-given-size)
 - [Enter PL/SQL](#enter-plsql)
   * [Show all Oracle error codes and messages](#show-all-oracle-error-codes-and-messages)
-- [Other recipes](#other-recipes)
+- [Internals](#internals)
+  * [Display hidden/undocumented initialization parameters](#display-hiddenundocumented-initialization-parameters)
   * [Display the number of ASM allocated and free allocation units](#display-the-number-of-asm-allocated-and-free-allocation-units)
 
 <!-- tocstop -->
@@ -139,34 +139,6 @@ Cf. the book *Oracle Performance Troubleshooting*, by Robin Schumacher.
         sys.dba_free_space
     GROUP BY
         tablespace_name;
-
-
-### Display hidden/undocumented initialization parameters
-
-*Keywords*: DECODE function
-
-*Reference*: http://www.oracle-training.cc/oracle_tips_hidden_parameters.htm
-
-    SELECT
-        i.ksppinm                AS name,
-        cv.ksppstvl              AS value,
-        cv.ksppstdf              AS def,
-        DECODE
-            (
-                i.ksppity,
-                1, 'boolean',
-                2, 'string',
-                3, 'number',
-                4, 'file',
-                i.ksppity
-            )                    AS type,
-        i.ksppdesc               AS description
-    FROM
-        sys.x$ksppi i JOIN sys.x$ksppcv cv USING (indx)
-    WHERE
-        i.ksppinm LIKE '\_%' ESCAPE '\'
-    ORDER BY
-        name;
 
 
 ### Count number of segments for each order of magnitude
@@ -432,7 +404,35 @@ At least 11g R2 is required for the recursive CTE to work.
     CONNECT BY LEVEL < 100000;
 
 
-## Other recipes
+## Internals
+
+### Display hidden/undocumented initialization parameters
+
+*Keywords*: DECODE function, internals
+
+*Reference*: http://www.oracle-training.cc/oracle_tips_hidden_parameters.htm
+
+    SELECT
+        i.ksppinm                AS name,
+        cv.ksppstvl              AS value,
+        cv.ksppstdf              AS def,
+        DECODE
+            (
+                i.ksppity,
+                1, 'boolean',
+                2, 'string',
+                3, 'number',
+                4, 'file',
+                i.ksppity
+            )                    AS type,
+        i.ksppdesc               AS description
+    FROM
+        sys.x$ksppi i JOIN sys.x$ksppcv cv USING (indx)
+    WHERE
+        i.ksppinm LIKE '\_%' ESCAPE '\'
+    ORDER BY
+        name;
+
 
 ### Display the number of ASM allocated and free allocation units
 
