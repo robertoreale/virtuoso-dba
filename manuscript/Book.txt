@@ -1,5 +1,6 @@
 cover.md
 first-steps.md
+numerical-recipes.md
 enter-plsql.md
 stochastic-world.md
 internals.md
