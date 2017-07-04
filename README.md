@@ -61,5 +61,22 @@ Assume a FQDN has the form N_1.N_2.….N_t, where t > 1 and each N_i can contain
     WHERE
         REGEXP_LIKE(machine, '^([[:alnum:]]+\.)+[[:alnum:]-]+$');
 
-   
+
+## Show the maximum possible date
+
+*Keywords*: time functions
+
+*Reference*: http://stackoverflow.com/questions/687510/
+
+December 31, 9999 CE, one second to midnight.
+
+    SELECT
+        TO_CHAR(
+            TO_DATE('9999-12-31', 'YYYY-MM-DD')
+            + (1 - 1/24/60/60),
+        'DD-MON-YYYY hh12:mi:ss AD') AS latest_date
+    FROM
+        dual;
+
+
 <!-- vim: set fenc=utf-8 spell spl=en ts=4 sw=4 et filetype=markdown : -->
