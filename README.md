@@ -7,16 +7,18 @@ The Virtuoso DBA
   * [Show database role (primary, standby, etc.)](#show-database-role-primary-standby-etc)
   * [List user Data Pump jobs](#list-user-data-pump-jobs)
   * [List the top-n largest segments](#list-the-top-n-largest-segments)
+  * [Display the findings discovered by all advisors in the database](#display-the-findings-discovered-by-all-advisors-in-the-database)
   * [Associate blocking and blocked sessions](#associate-blocking-and-blocked-sessions)
   * [Calculate the size of the temporary tablespaces](#calculate-the-size-of-the-temporary-tablespaces)
   * [Calculate a fragmentation factor for tablespaces](#calculate-a-fragmentation-factor-for-tablespaces)
   * [Count number of segments for each order of magnitude](#count-number-of-segments-for-each-order-of-magnitude)
   * [Count the client sessions with a FQDN](#count-the-client-sessions-with-a-fqdn)
-  * [Show the maximum possible date](#show-the-maximum-possible-date)
-  * [Show the minimum possible date](#show-the-minimum-possible-date)
   * [List the oldest and the newest AWR snapshots](#list-the-oldest-and-the-newest-awr-snapshots)
   * [Show how much is tablespace usage growing](#show-how-much-is-tablespace-usage-growing)
   * [List the objects in the recycle bin, sorting by the version](#list-the-objects-in-the-recycle-bin-sorting-by-the-version)
+- [Time Functions](#time-functions)
+  * [Show the maximum possible date](#show-the-maximum-possible-date)
+  * [Show the minimum possible date](#show-the-minimum-possible-date)
 - [Numerical Recipes](#numerical-recipes)
   * [Calculate the sum of a geometric series](#calculate-the-sum-of-a-geometric-series)
   * [Solve Besel's problem](#solve-besels-problem)
@@ -75,6 +77,39 @@ The Virtuoso DBA
             bytes / 1024 / 1024  AS mib_total
         FROM dba_segments ORDER BY bytes DESC
     ) WHERE ROWNUM <= &n;
+
+
+### Display the findings discovered by all advisors in the database
+
+*Keywords*: addm, nested queries
+
+    SELECT
+        f.type,
+        t.execution_start,
+        t.execution_end,
+        t.status,
+        f.impact,
+        f.impact_type,
+        f.message
+    FROM
+        dba_advisor_findings f
+    JOIN
+        dba_advisor_tasks    t  ON f.task_id = t.task_id
+    WHERE
+        (
+            --  Oracle Bug 12347332
+            (
+                SELECT
+                    version
+                FROM
+                    product_component_version
+                WHERE
+                    product LIKE 'Oracle Database%'
+            )
+                NOT LIKE '10.2.0.5%'
+            OR f.message 
+                <> 'Significant virtual memory paging was detected on the host operating system.'
+        );
 
 
 ### Associate blocking and blocked sessions
@@ -184,35 +219,6 @@ Assume a FQDN has the form N_1.N_2.….N_t, where t > 1 and each N_i can contain
         REGEXP_LIKE(machine, '^([[:alnum:]]+\.)+[[:alnum:]-]+$');
 
 
-### Show the maximum possible date
-
-*Keywords*: time functions
-
-*Reference*: http://stackoverflow.com/questions/687510/
-
-December 31, 9999 CE, one second to midnight.
-
-    SELECT
-        TO_CHAR(
-            TO_DATE('9999-12-31', 'YYYY-MM-DD')
-            + (1 - 1/24/60/60),
-        'DD-MON-YYYY hh12:mi:ss AD') AS latest_date
-    FROM
-        dual;
-
-
-### Show the minimum possible date
-
-*Keywords*: time functions
-
-*Reference*: http://stackoverflow.com/questions/687510/, Oracle bug 106242
-
-    SELECT 
-        TO_CHAR(TO_DATE(1, 'J'), 'DD-MON-YYYY hh12:mi:ss AD') AS earliest_date
-    FROM
-        dual;
-
-
 ### List the oldest and the newest AWR snapshots
 
 *Keywords*: awr, subqueries, analytic functions
@@ -268,6 +274,37 @@ December 31, 9999 CE, one second to midnight.
         can_purge
     FROM
         dba_recyclebin;
+
+
+## Time Functions
+
+### Show the maximum possible date
+
+*Keywords*: time functions
+
+*Reference*: http://stackoverflow.com/questions/687510/
+
+December 31, 9999 CE, one second to midnight.
+
+    SELECT
+        TO_CHAR(
+            TO_DATE('9999-12-31', 'YYYY-MM-DD')
+            + (1 - 1/24/60/60),
+        'DD-MON-YYYY hh12:mi:ss AD') AS latest_date
+    FROM
+        dual;
+
+
+### Show the minimum possible date
+
+*Keywords*: time functions
+
+*Reference*: http://stackoverflow.com/questions/687510/, Oracle bug 106242
+
+    SELECT 
+        TO_CHAR(TO_DATE(1, 'J'), 'DD-MON-YYYY hh12:mi:ss AD') AS earliest_date
+    FROM
+        dual;
 
 
 ## Numerical Recipes
