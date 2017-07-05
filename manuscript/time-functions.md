@@ -65,7 +65,7 @@ December 31, 9999 CE, one second to midnight.
     CONNECT BY LEVEL < 10000;
 
 
-# Count audit records for the last hour
+### Count audit records for the last hour
 
 *Keywords*: time functions, audit
 
