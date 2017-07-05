@@ -1,5 +1,6 @@
 cover.md
 first-steps.md
+time-functions.md
 numerical-recipes.md
 xml-database-101.md
 enter-imperative-thinking.md
