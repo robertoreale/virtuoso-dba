@@ -51,4 +51,37 @@ At least 11g R2 is required for the recursive CTE to work.
         fibonacci;
 
 
+## Verify that the cosine function has a fixed point
+
+*Keywords*: recursive CTE, numerical recipes, analytic functions, random values
+
+A fixed point is a point x_0 such that x_0 = cos(x_0).
+
+    WITH iter(x, cos_x, n) AS 
+        (
+            SELECT
+                s.r      AS x,
+                COS(s.r) AS cos_x,
+                1        AS n
+            FROM
+                dual,
+                (SELECT DBMS_RANDOM.VALUE(0, 1) r FROM dual) s
+            UNION ALL
+            SELECT
+                COS(x)      AS x,
+                COS(COS(x)) AS cos_x,
+                n + 1       AS N
+            FROM
+                iter
+            WHERE
+                n < &m
+        )
+    SELECT
+        x,
+        cos_x,
+        ABS(cos_x - LAG(cos_x) OVER (ORDER BY n)) distance
+    FROM
+        iter;
+
+
 <!-- vim: set fenc=utf-8 spell spl=en ts=4 sw=4 et filetype=markdown : -->
