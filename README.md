@@ -17,6 +17,8 @@ The Virtuoso DBA
   * [Show how much is tablespace usage growing](#show-how-much-is-tablespace-usage-growing)
   * [List the objects in the recycle bin, sorting by the version](#list-the-objects-in-the-recycle-bin-sorting-by-the-version)
 - [Time Functions](#time-functions)
+  * [Show the first and last day of the current month](#show-the-first-and-last-day-of-the-current-month)
+  * [Show the first and last day of the current month](#show-the-first-and-last-day-of-the-current-month-1)
   * [Show the maximum possible date](#show-the-maximum-possible-date)
   * [Show the minimum possible date](#show-the-minimum-possible-date)
 - [Numerical Recipes](#numerical-recipes)
@@ -277,6 +279,30 @@ Assume a FQDN has the form N_1.N_2.….N_t, where t > 1 and each N_i can contain
 
 
 ## Time Functions
+
+### Show the first and last day of the current month
+
+*Keywords*: time functions
+
+    SELECT
+        TRUNC(SYSDATE, 'MONTH')   first_day_curr_month,
+        TRUNC(LAST_DAY(SYSDATE))  last_day_curr_month
+    FROM
+        dual;
+
+
+### Show the first and last day of the current month
+
+*Keywords*: time functions
+
+*Reference*: http://viralpatel.net/blogs/useful-oracle-queries/
+
+    SELECT
+        TRUNC(SYSDATE, 'YEAR')                      first_day_curr_year,
+        ADD_MONTHS(TRUNC(SYSDATE, 'YEAR'), 12) - 1  last_day_curr_year
+    FROM
+        dual;
+
 
 ### Show the maximum possible date
 
