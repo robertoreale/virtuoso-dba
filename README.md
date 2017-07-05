@@ -15,9 +15,9 @@ The Virtuoso DBA
     + [Count the client sessions with a FQDN](#count-the-client-sessions-with-a-fqdn)
     + [Give basic info about lob segments](#give-basic-info-about-lob-segments)
     + [Sort the object types by their average name length](#sort-the-object-types-by-their-average-name-length)
-    + [List the oldest and the newest AWR snapshots](#list-the-oldest-and-the-newest-awr-snapshots)
-    + [Show how much is tablespace usage growing](#show-how-much-is-tablespace-usage-growing)
+  * [Data Analytics](#data-analytics)
     + [List the objects in the recycle bin, sorting by the version](#list-the-objects-in-the-recycle-bin-sorting-by-the-version)
+    + [Show how much is tablespace usage growing](#show-how-much-is-tablespace-usage-growing)
   * [Time Functions](#time-functions)
     + [Show the first and last day of the current month](#show-the-first-and-last-day-of-the-current-month)
     + [Show the first and last day of the current month](#show-the-first-and-last-day-of-the-current-month-1)
@@ -32,6 +32,7 @@ The Virtuoso DBA
   * [Verify that the cosine function has a fixed point](#verify-that-the-cosine-function-has-a-fixed-point)
   * [XML Database 101](#xml-database-101)
     + [Return the total number of installed patches](#return-the-total-number-of-installed-patches)
+    + [List user passwords (hashed, of course...)](#list-user-passwords-hashed-of-course)
     + [Show bugs fixed by each installed patch](#show-bugs-fixed-by-each-installed-patch)
   * [Enter Imperative Thinking](#enter-imperative-thinking)
     + [Show all Oracle error codes and messages](#show-all-oracle-error-codes-and-messages)
@@ -265,26 +266,23 @@ Assume a FQDN has the form N_1.N_2.….N_t, where t > 1 and each N_i can contain
         AVG(LENGTH(object_name)) DESC;
 
 
-### List the oldest and the newest AWR snapshots
+## Data Analytics
 
-*Keywords*: awr, subqueries, analytic functions
+### List the objects in the recycle bin, sorting by the version
+
+*Keywords*: analytical functions
 
     SELECT
-        snap_id,
-        begin_interval_time,
-        end_interval_time 
+        original_name,
+        type,
+        object_name,
+        droptime,
+        RANK() OVER (
+            PARTITION BY original_name, type ORDER BY droptime DESC
+        ) obj_version,
+        can_purge
     FROM
-        sys.wrm$_snapshot
-    WHERE
-        snap_id = (SELECT MIN(snap_id) FROM sys.wrm$_snapshot)
-    UNION SELECT
-        snap_id,
-        begin_interval_time,
-        end_interval_time
-    FROM
-        sys.wrm$_snapshot
-    WHERE
-        snap_id = (SELECT MAX(snap_id) FROM sys.wrm$_snapshot);
+        dba_recyclebin;
 
 
 ### Show how much is tablespace usage growing
@@ -303,23 +301,6 @@ Assume a FQDN has the form N_1.N_2.….N_t, where t > 1 and each N_i can contain
         d.name, t.name
     ORDER BY
         db, tablespace_name;
-
-
-### List the objects in the recycle bin, sorting by the version
-
-*Keywords*: analytical functions
-
-    SELECT
-        original_name,
-        type,
-        object_name,
-        droptime,
-        RANK() OVER (
-            PARTITION BY original_name, type ORDER BY droptime DESC
-        ) obj_version,
-        can_purge
-    FROM
-        dba_recyclebin;
 
 
 ## Time Functions
@@ -498,6 +479,23 @@ A fixed point is a point x_0 such that x_0 = cos(x_0).
         EXTRACTVALUE(DBMS_QOPATCH.GET_OPATCH_COUNT, '/patchCountInfo')
     FROM
         dual;
+
+
+### List user passwords (hashed, of course...)
+
+*Keywords*: XML database, security
+
+From 11g onwards, password hashes do not appear in dba_users anymore.  Of course they are still visible in sys.user$, but we can do better...
+
+    SELECT
+        username,
+        EXTRACT(
+            XMLTYPE(
+                DBMS_METADATA.GET_XML('USER', username)),
+                '//USER_T/PASSWORD/text()'
+            ).getStringVal()  AS  password_hash
+    FROM
+        dba_users;
 
 
 ### Show bugs fixed by each installed patch
