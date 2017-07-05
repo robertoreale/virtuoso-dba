@@ -1,4 +1,4 @@
-cover.md
+intro.md
 first-steps.md
 string-manipulation.md
 data-analytics.md
