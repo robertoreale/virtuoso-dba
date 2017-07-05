@@ -12,12 +12,17 @@ The Virtuoso DBA
   * [Calculate the size of the temporary tablespaces](#calculate-the-size-of-the-temporary-tablespaces)
   * [Calculate a fragmentation factor for tablespaces](#calculate-a-fragmentation-factor-for-tablespaces)
   * [Count number of segments for each order of magnitude](#count-number-of-segments-for-each-order-of-magnitude)
-  * [Count the client sessions with a FQDN](#count-the-client-sessions-with-a-fqdn)
   * [Give basic info about lob segments](#give-basic-info-about-lob-segments)
   * [Sort the object types by their average name length](#sort-the-object-types-by-their-average-name-length)
+- [String Manipulation](#string-manipulation)
+  * [Count the client sessions with a FQDN](#count-the-client-sessions-with-a-fqdn)
+  * [Calculate the edit distance between a table name and the names of dependent indexes](#calculate-the-edit-distance-between-a-table-name-and-the-names-of-dependent-indexes)
 - [Data Analytics](#data-analytics)
+  * [Rank all the tables in the system based on their cardinality](#rank-all-the-tables-in-the-system-based-on-their-cardinality)
   * [List the objects in the recycle bin, sorting by the version](#list-the-objects-in-the-recycle-bin-sorting-by-the-version)
   * [Show how much is tablespace usage growing](#show-how-much-is-tablespace-usage-growing)
+- [Grouping & Reporting](#grouping--reporting)
+  * [Count the data files for each tablespaces and for each filesystem location](#count-the-data-files-for-each-tablespaces-and-for-each-filesystem-location)
 - [Time Functions](#time-functions)
   * [Show the first and last day of the current month](#show-the-first-and-last-day-of-the-current-month)
   * [Show the first and last day of the current month](#show-the-first-and-last-day-of-the-current-month-1)
@@ -213,20 +218,6 @@ IEC prefixes are used.
     ORDER BY TRUNC(LOG(1024, bytes));
 
 
-### Count the client sessions with a FQDN
-
-*Keywords*: regular expressions, dynamic views
-
-Assume a FQDN has the form N_1.N_2.….N_t, where t > 1 and each N_i can contain lowercase letters, numbers and the dash.
- 
-    SELECT
-        machine
-    FROM
-        gv$session
-    WHERE
-        REGEXP_LIKE(machine, '^([[:alnum:]]+\.)+[[:alnum:]-]+$');
-
-
 ### Give basic info about lob segments
 
 *Keywords*: aggregate functions, lobs
@@ -266,7 +257,59 @@ Assume a FQDN has the form N_1.N_2.….N_t, where t > 1 and each N_i can contain
         AVG(LENGTH(object_name)) DESC;
 
 
+## String Manipulation
+
+### Count the client sessions with a FQDN
+
+*Keywords*: regular expressions, dynamic views
+
+Assume a FQDN has the form N_1.N_2.....N_t, where t > 1 and each N_i can contain lowercase letters, numbers and the dash.
+ 
+    SELECT
+        machine
+    FROM
+        gv$session
+    WHERE
+        REGEXP_LIKE(machine, '^([[:alnum:]]+\.)+[[:alnum:]-]+$');
+
+
+### Calculate the edit distance between a table name and the names of dependent indexes
+
+*Keywords*: edit distance for strings
+
+    SELECT
+        owner,
+        table_name,
+        index_name,
+        UTL_MATCH.EDIT_DISTANCE(table_name, index_name) edit_distance
+    FROM
+        dba_indexes
+    WHERE
+        generated = 'N';
+
 ## Data Analytics
+
+### Rank all the tables in the system based on their cardinality
+
+*Keywords*: analytical functions
+
+We partition the result set by tablespace.
+
+    SELECT
+        tablespace_name,
+        owner,
+        table_name,
+        num_rows,
+        RANK() OVER (
+            PARTITION BY tablespace_name ORDER BY num_rows DESC
+        ) AS rank
+    FROM
+        dba_tables
+    WHERE
+        num_rows IS NOT NULL
+    ORDER BY
+        tablespace_name;
+
 
 ### List the objects in the recycle bin, sorting by the version
 
@@ -301,6 +344,32 @@ Assume a FQDN has the form N_1.N_2.….N_t, where t > 1 and each N_i can contain
         d.name, t.name
     ORDER BY
         db, tablespace_name;
+
+
+## Grouping & Reporting
+
+### Count the data files for each tablespaces and for each filesystem location
+
+*Keywords*: grouping, regular expressions
+
+Assume a Unix filesystem, don’t follow symlinks.  Moreover, generate subtotals for each of the two dimensions (*scil*. tablespace and filesystem location).
+ 
+    WITH df AS (
+        SELECT
+            tablespace_name,
+            REGEXP_REPLACE(file_name, '/[^/]+$', '') dirname,
+            REGEXP_SUBSTR (file_name, '/[^/]+$')     basename
+        FROM
+            dba_data_files
+    )
+    SELECT
+        tablespace_name,
+        dirname         path,
+        COUNT(basename) file_count
+    from
+        df
+    GROUP BY CUBE(tablespace_name, dirname)
+    ORDER BY tablespace_name, dirname;
 
 
 ## Time Functions
