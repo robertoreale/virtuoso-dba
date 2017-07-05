@@ -40,8 +40,8 @@
   * [Return the total number of installed patches](#return-the-total-number-of-installed-patches)
   * [List user passwords (hashed, of course...)](#list-user-passwords-hashed-of-course)
   * [Return patch details such as patch and inventory location](#return-patch-details-such-as-patch-and-inventory-location)
-  * [XXX](#xxx)
-  * [XXX](#xxx-1)
+  * [Show patch inventory](#show-patch-inventory)
+  * [Show patch inventory, part 2](#show-patch-inventory-part-2)
   * [Show bugs fixed by each installed patch](#show-bugs-fixed-by-each-installed-patch)
 - [Enter Imperative Thinking](#enter-imperative-thinking)
   * [Show all Oracle error codes and messages](#show-all-oracle-error-codes-and-messages)
@@ -585,7 +585,7 @@ From 11g onwards, password hashes do not appear in dba_users anymore.  Of course
         dual;
 
 
-## XXX
+## Show patch inventory
 
 *Keywords*: XML database, patches
 
@@ -599,7 +599,7 @@ From 11g onwards, password hashes do not appear in dba_users anymore.  Of course
         dual;
 
 
-## XXX
+## Show patch inventory, part 2
 
 *Keywords*: XML database, patches
 
