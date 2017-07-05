@@ -13,6 +13,8 @@ The Virtuoso DBA
   * [Calculate a fragmentation factor for tablespaces](#calculate-a-fragmentation-factor-for-tablespaces)
   * [Count number of segments for each order of magnitude](#count-number-of-segments-for-each-order-of-magnitude)
   * [Count the client sessions with a FQDN](#count-the-client-sessions-with-a-fqdn)
+  * [Give basic info about lob segments](#give-basic-info-about-lob-segments)
+  * [Sort the object types by their average name length](#sort-the-object-types-by-their-average-name-length)
   * [List the oldest and the newest AWR snapshots](#list-the-oldest-and-the-newest-awr-snapshots)
   * [Show how much is tablespace usage growing](#show-how-much-is-tablespace-usage-growing)
   * [List the objects in the recycle bin, sorting by the version](#list-the-objects-in-the-recycle-bin-sorting-by-the-version)
@@ -21,10 +23,12 @@ The Virtuoso DBA
   * [Show the first and last day of the current month](#show-the-first-and-last-day-of-the-current-month-1)
   * [Show the maximum possible date](#show-the-maximum-possible-date)
   * [Show the minimum possible date](#show-the-minimum-possible-date)
+  * [List leap years from 1 AD](#list-leap-years-from-1-ad)
 - [Numerical Recipes](#numerical-recipes)
   * [Calculate the sum of a geometric series](#calculate-the-sum-of-a-geometric-series)
   * [Solve Besel's problem](#solve-besels-problem)
   * [Generate Fibonacci sequence](#generate-fibonacci-sequence)
+- [Verify that the cosine function has a fixed point](#verify-that-the-cosine-function-has-a-fixed-point)
 - [XML Database 101](#xml-database-101)
   * [Return the total number of installed patches](#return-the-total-number-of-installed-patches)
   * [Show bugs fixed by each installed patch](#show-bugs-fixed-by-each-installed-patch)
@@ -221,6 +225,45 @@ Assume a FQDN has the form N_1.N_2.….N_t, where t > 1 and each N_i can contain
         REGEXP_LIKE(machine, '^([[:alnum:]]+\.)+[[:alnum:]-]+$');
 
 
+### Give basic info about lob segments
+
+*Keywords*: aggregate functions, lobs
+
+    SELECT
+        lob.owner,
+        lob.table_name,
+        lob.column_name,
+        segment_name,
+        SUM(seg.bytes) / 1024  AS segment_size
+    FROM
+        dba_segments seg
+    JOIN
+        dba_lobs     lob
+    USING (segment_name)
+    WHERE
+        segment_name LIKE 'SYS_LOB%'
+    GROUP BY
+        lob.owner,
+        lob.table_name,
+        lob.column_name,
+        segment_name;
+
+
+### Sort the object types by their average name length
+
+*Keywords*: aggregate functions, string functions
+
+    SELECT
+        object_type,
+        AVG(LENGTH(object_name)) avg_name_length
+    FROM
+        dba_objects
+    GROUP BY
+        object_type
+    ORDER BY
+        AVG(LENGTH(object_name)) DESC;
+
+
 ### List the oldest and the newest AWR snapshots
 
 *Keywords*: awr, subqueries, analytic functions
@@ -333,6 +376,17 @@ December 31, 9999 CE, one second to midnight.
         dual;
 
 
+### List leap years from 1 AD
+
+*Keywords*: time functions
+
+    SELECT
+        level AS year
+    FROM
+        dual
+    WHERE TO_CHAR(LAST_DAY(TO_DATE('0102'||TO_CHAR(level), 'DDMMYYYY')), 'DD') = '29'
+    CONNECT BY LEVEL < 10000;
+
 ## Numerical Recipes
 
 ### Calculate the sum of a geometric series
@@ -384,6 +438,39 @@ At least 11g R2 is required for the recursive CTE to work.
         f_n                       AS nth_fibonacci_number
     FROM
         fibonacci;
+
+
+## Verify that the cosine function has a fixed point
+
+*Keywords*: recursive CTE, numerical recipes, analytic functions, random values
+
+A fixed point is a point x_0 such that x_0 = cos(x_0).
+
+    WITH iter(x, cos_x, n) AS 
+        (
+            SELECT
+                s.r      AS x,
+                COS(s.r) AS cos_x,
+                1        AS n
+            FROM
+                dual,
+                (SELECT DBMS_RANDOM.VALUE(0, 1) r FROM dual) s
+            UNION ALL
+            SELECT
+                COS(x)      AS x,
+                COS(COS(x)) AS cos_x,
+                n + 1       AS N
+            FROM
+                iter
+            WHERE
+                n < &m
+        )
+    SELECT
+        x,
+        cos_x,
+        ABS(cos_x - LAG(cos_x) OVER (ORDER BY n)) distance
+    FROM
+        iter;
 
 
 ## XML Database 101
