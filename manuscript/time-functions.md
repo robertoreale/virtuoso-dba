@@ -64,4 +64,18 @@ December 31, 9999 CE, one second to midnight.
     WHERE TO_CHAR(LAST_DAY(TO_DATE('0102'||TO_CHAR(level), 'DDMMYYYY')), 'DD') = '29'
     CONNECT BY LEVEL < 10000;
 
+
+# Count audit records for the last hour
+
+*Keywords*: time functions, audit
+
+    SELECT
+        COUNT(*)  AS count_last_hour
+    FROM
+        sys.aud$
+    WHERE
+        CAST((FROM_TZ(ntimestamp#, '00:00') AT local) AS date)
+            < SYSDATE - INTERVAL '1' HOUR;
+
+
 <!-- vim: set fenc=utf-8 spell spl=en ts=4 sw=4 et filetype=markdown : -->
