@@ -53,4 +53,15 @@ December 31, 9999 CE, one second to midnight.
         dual;
 
 
+### List leap years from 1 AD
+
+*Keywords*: time functions
+
+    SELECT
+        level AS year
+    FROM
+        dual
+    WHERE TO_CHAR(LAST_DAY(TO_DATE('0102'||TO_CHAR(level), 'DDMMYYYY')), 'DD') = '29'
+    CONNECT BY LEVEL < 10000;
+
 <!-- vim: set fenc=utf-8 spell spl=en ts=4 sw=4 et filetype=markdown : -->
