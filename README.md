@@ -38,6 +38,9 @@ The Virtuoso DBA
 - [XML Database 101](#xml-database-101)
   * [Return the total number of installed patches](#return-the-total-number-of-installed-patches)
   * [List user passwords (hashed, of course...)](#list-user-passwords-hashed-of-course)
+  * [Return patch details such as patch and inventory location](#return-patch-details-such-as-patch-and-inventory-location)
+  * [XXX](#xxx)
+  * [XXX](#xxx-1)
   * [Show bugs fixed by each installed patch](#show-bugs-fixed-by-each-installed-patch)
 - [Enter Imperative Thinking](#enter-imperative-thinking)
   * [Show all Oracle error codes and messages](#show-all-oracle-error-codes-and-messages)
@@ -565,6 +568,60 @@ From 11g onwards, password hashes do not appear in dba_users anymore.  Of course
             ).getStringVal()  AS  password_hash
     FROM
         dba_users;
+
+
+### Return patch details such as patch and inventory location
+
+*Keywords*: XML database, patches
+
+*Reference*: xt_scripts/opatch/info.sql
+
+    SELECT 
+        XMLSERIALIZE(
+            DOCUMENT DBMS_QOPATCH.GET_OPATCH_INSTALL_INFO AS CLOB INDENT SIZE = 2
+        ) AS info 
+    FROM
+        dual;
+
+
+### XXX
+
+*Keywords*: XML database, patches
+
+*Reference*: xt_scripts/opatch/lsinventory.sql
+
+    SELECT
+        XMLTRANSFORM(
+            DBMS_QOPATCH.GET_OPATCH_LSINVENTORY, DBMS_QOPATCH.GET_OPATCH_XSLT
+        ).GetClobVal() AS lsinventory
+    FROM
+        dual;
+
+
+### XXX
+
+*Keywords*: XML database, patches
+
+*Reference*: xt_scripts/opatch/patches.sql
+
+    WITH opatch AS (
+        SELECT DBMS_QOPATCH.GET_OPATCH_LSINVENTORY patch_output FROM dual
+    )
+    SELECT
+        patches.*
+    FROM
+        opatch,
+        XMLTABLE(
+            'InventoryInstance/patches/*'
+            PASSING opatch.patch_output
+            COLUMNS
+                patch_id     NUMBER       PATH 'patchID',
+                patch_uid    NUMBER       PATH 'uniquePatchID',
+                description  VARCHAR2(80) PATH 'patchDescription',
+                applied_date VARCHAR2(30) PATH 'appliedDate',
+                sql_patch    VARCHAR2(8)  PATH 'sqlPatch',
+                rollbackable VARCHAR2(8)  PATH 'rollbackable'
+        ) patches;
 
 
 ### Show bugs fixed by each installed patch
