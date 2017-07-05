@@ -204,6 +204,21 @@ Assume a FQDN has the form N_1.N_2.….N_t, where t > 1 and each N_i can contain
         segment_name;
 
 
+### Sort the object types by their average name length
+
+*Keywords*: aggregate functions, string functions
+
+    SELECT
+        object_type,
+        AVG(LENGTH(object_name)) avg_name_length
+    FROM
+        dba_objects
+    GROUP BY
+        object_type
+    ORDER BY
+        AVG(LENGTH(object_name)) DESC;
+
+
 ### List the oldest and the newest AWR snapshots
 
 *Keywords*: awr, subqueries, analytic functions
