@@ -1,5 +1,16 @@
 ## Time Functions
 
+### Show the first and last day of the current month
+
+*Keywords*: time functions
+
+    SELECT
+        TRUNC(SYSDATE, 'MONTH')   first_day_curr_month,
+        TRUNC(LAST_DAY(SYSDATE))  last_day_curr_month
+    FROM
+        dual;
+
+
 ### Show the maximum possible date
 
 *Keywords*: time functions
