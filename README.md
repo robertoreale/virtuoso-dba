@@ -29,7 +29,7 @@ The Virtuoso DBA
   * [Calculate the sum of a geometric series](#calculate-the-sum-of-a-geometric-series)
   * [Solve Besel's problem](#solve-besels-problem)
   * [Generate Fibonacci sequence](#generate-fibonacci-sequence)
-- [Verify that the cosine function has a fixed point](#verify-that-the-cosine-function-has-a-fixed-point)
+  * [Verify that the cosine function has a fixed point](#verify-that-the-cosine-function-has-a-fixed-point)
 - [XML Database 101](#xml-database-101)
   * [Return the total number of installed patches](#return-the-total-number-of-installed-patches)
   * [List user passwords (hashed, of course...)](#list-user-passwords-hashed-of-course)
@@ -436,7 +436,7 @@ At least 11g R2 is required for the recursive CTE to work.
         fibonacci;
 
 
-## Verify that the cosine function has a fixed point
+### Verify that the cosine function has a fixed point
 
 *Keywords*: recursive CTE, numerical recipes, analytic functions, random values
 
