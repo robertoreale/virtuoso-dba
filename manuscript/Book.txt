@@ -1,6 +1,7 @@
 cover.md
 first-steps.md
 numerical-recipes.md
+xml-database-101.md
 enter-imperative-thinking.md
 stochastic-world.md
 internals.md
