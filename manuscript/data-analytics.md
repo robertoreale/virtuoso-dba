@@ -1,5 +1,27 @@
 ## Data Analytics
 
+### Rank all the tables in the system based on their cardinality
+
+*Keywords*: analytical functions
+
+We partition the result set by tablespace.
+
+    SELECT
+        tablespace_name,
+        owner,
+        table_name,
+        num_rows,
+        RANK() OVER (
+            PARTITION BY tablespace_name ORDER BY num_rows DESC
+        ) AS rank
+    FROM
+        dba_tables
+    WHERE
+        num_rows IS NOT NULL
+    ORDER BY
+        tablespace_name;
+
+
 ### List the objects in the recycle bin, sorting by the version
 
 *Keywords*: analytical functions
