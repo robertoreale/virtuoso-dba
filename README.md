@@ -23,7 +23,7 @@ The Virtuoso DBA
   * [Calculate the sum of a geometric series](#calculate-the-sum-of-a-geometric-series)
   * [Solve Besel's problem](#solve-besels-problem)
   * [Generate Fibonacci sequence](#generate-fibonacci-sequence)
-- [Enter PL/SQL](#enter-plsql)
+- [Enter Imperative Thinking](#enter-imperative-thinking)
   * [Show all Oracle error codes and messages](#show-all-oracle-error-codes-and-messages)
 - [A Stochastic World](#a-stochastic-world)
   * [Verify the law of large numbers](#verify-the-law-of-large-numbers)
@@ -353,7 +353,7 @@ At least 11g R2 is required for the recursive CTE to work.
         fibonacci;
 
 
-## Enter PL/SQL
+## Enter Imperative Thinking
 
 ### Show all Oracle error codes and messages
 
