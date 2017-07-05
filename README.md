@@ -16,13 +16,14 @@ The Virtuoso DBA
   * [Show the minimum possible date](#show-the-minimum-possible-date)
   * [List the oldest and the newest AWR snapshots](#list-the-oldest-and-the-newest-awr-snapshots)
   * [Show how much is tablespace usage growing](#show-how-much-is-tablespace-usage-growing)
-  * [Return the total number of installed patches](#return-the-total-number-of-installed-patches)
-  * [Show bugs fixed by each installed patch](#show-bugs-fixed-by-each-installed-patch)
   * [List the objects in the recycle bin, sorting by the version](#list-the-objects-in-the-recycle-bin-sorting-by-the-version)
 - [Numerical Recipes](#numerical-recipes)
   * [Calculate the sum of a geometric series](#calculate-the-sum-of-a-geometric-series)
   * [Solve Besel's problem](#solve-besels-problem)
   * [Generate Fibonacci sequence](#generate-fibonacci-sequence)
+- [XML Database 101](#xml-database-101)
+  * [Return the total number of installed patches](#return-the-total-number-of-installed-patches)
+  * [Show bugs fixed by each installed patch](#show-bugs-fixed-by-each-installed-patch)
 - [Enter Imperative Thinking](#enter-imperative-thinking)
   * [Show all Oracle error codes and messages](#show-all-oracle-error-codes-and-messages)
 - [A Stochastic World](#a-stochastic-world)
@@ -252,37 +253,6 @@ December 31, 9999 CE, one second to midnight.
         db, tablespace_name;
 
 
-### Return the total number of installed patches
-
-*Keywords*: XML database, patches
-
-    SELECT
-        EXTRACTVALUE(DBMS_QOPATCH.GET_OPATCH_COUNT, '/patchCountInfo')
-    FROM
-        dual;
-
-
-### Show bugs fixed by each installed patch
-
-*Keywords*: XML database, patches
-
-*Reference*: xt_scripts/opatch/bugs_fixed.sql
-
-    WITH bugs AS (
-        SELECT
-            id,
-            description
-        FROM XMLTABLE(
-            '/bugInfo/bugs/bug'
-            PASSING DBMS_QOPATCH.GET_OPATCH_BUGS
-            COLUMNS
-                id          NUMBER PATH '@id',
-                description VARCHAR2(100) PATH 'description'
-        )
-    )
-    SELECT * FROM bugs;
-
-
 ### List the objects in the recycle bin, sorting by the version
 
 *Keywords*: analytical functions
@@ -351,6 +321,39 @@ At least 11g R2 is required for the recursive CTE to work.
         f_n                       AS nth_fibonacci_number
     FROM
         fibonacci;
+
+
+## XML Database 101
+
+### Return the total number of installed patches
+
+*Keywords*: XML database, patches
+
+    SELECT
+        EXTRACTVALUE(DBMS_QOPATCH.GET_OPATCH_COUNT, '/patchCountInfo')
+    FROM
+        dual;
+
+
+### Show bugs fixed by each installed patch
+
+*Keywords*: XML database, patches
+
+*Reference*: xt_scripts/opatch/bugs_fixed.sql
+
+    WITH bugs AS (
+        SELECT
+            id,
+            description
+        FROM XMLTABLE(
+            '/bugInfo/bugs/bug'
+            PASSING DBMS_QOPATCH.GET_OPATCH_BUGS
+            COLUMNS
+                id          NUMBER PATH '@id',
+                description VARCHAR2(100) PATH 'description'
+        )
+    )
+    SELECT * FROM bugs;
 
 
 ## Enter Imperative Thinking
