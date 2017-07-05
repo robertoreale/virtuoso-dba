@@ -1,5 +1,4 @@
-The Virtuoso DBA
-===
+![the Virtuoso DBA](manuscript/images/title_page.jpg)
 
 <!-- toc -->
 
@@ -53,16 +52,16 @@ The Virtuoso DBA
 
 <!-- tocstop -->
 
-## First Steps
+# First Steps
 
-### Show database role (primary, standby, etc.)
+## Show database role (primary, standby, etc.)
 
 *Keywords*: dynamic views, data guard
 
     SELECT database_role FROM gv$database;
 
 
-### List user Data Pump jobs
+## List user Data Pump jobs
 
 *Keywords*: LIKE, data pump
 
@@ -79,7 +78,7 @@ The Virtuoso DBA
         job_name NOT LIKE 'BIN$%';
 
 
-### List the top-n largest segments
+## List the top-n largest segments
 
 *Keywords*: limiting query result, physical storage
 
@@ -95,7 +94,7 @@ The Virtuoso DBA
     ) WHERE ROWNUM <= &n;
 
 
-### Display the findings discovered by all advisors in the database
+## Display the findings discovered by all advisors in the database
 
 *Keywords*: addm, nested queries
 
@@ -128,7 +127,7 @@ The Virtuoso DBA
         );
 
 
-### Associate blocking and blocked sessions
+## Associate blocking and blocked sessions
 
 *Keywords*: self join, locking
 
@@ -141,7 +140,7 @@ The Virtuoso DBA
         l1.block = 1 AND l2.request > 0;
 
 
-### Calculate the size of the temporary tablespaces
+## Calculate the size of the temporary tablespaces
 
 *Keywords*: aggregate functions, dynamic views, logical storage
 
@@ -155,12 +154,12 @@ The Virtuoso DBA
     JOIN
         gv$tempfile tmpf
     USING
-        (inst_id, ts##)
+        (inst_id, ts#)
     GROUP BY
         inst_id, ts.name, tmpf.block_size;
 
 
-### Calculate a fragmentation factor for tablespaces
+## Calculate a fragmentation factor for tablespaces
 
 *Keywords*: aggregate functions, logical storage
 
@@ -176,7 +175,7 @@ It is calculated according to the following formula:
                          
                     =====        
          4_______   \            
-        \/blocks##    >    blocks 
+        \/blocks#    >    blocks 
                     /            
                     =====        
  
@@ -195,7 +194,7 @@ Cf. the book *Oracle Performance Troubleshooting*, by Robin Schumacher.
         tablespace_name;
 
 
-### Count number of segments for each order of magnitude
+## Count number of segments for each order of magnitude
 
 *Keywords*: DECODE function, analytic functions
 
@@ -221,7 +220,7 @@ IEC prefixes are used.
     ORDER BY TRUNC(LOG(1024, bytes));
 
 
-### Give basic info about lob segments
+## Give basic info about lob segments
 
 *Keywords*: aggregate functions, lobs
 
@@ -245,7 +244,7 @@ IEC prefixes are used.
         segment_name;
 
 
-### Sort the object types by their average name length
+## Sort the object types by their average name length
 
 *Keywords*: aggregate functions, string functions
 
@@ -260,9 +259,9 @@ IEC prefixes are used.
         AVG(LENGTH(object_name)) DESC;
 
 
-## String Manipulation
+# String Manipulation
 
-### Count the client sessions with a FQDN
+## Count the client sessions with a FQDN
 
 *Keywords*: regular expressions, dynamic views
 
@@ -276,7 +275,7 @@ Assume a FQDN has the form N_1.N_2.....N_t, where t > 1 and each N_i can contain
         REGEXP_LIKE(machine, '^([[:alnum:]]+\.)+[[:alnum:]-]+$');
 
 
-### Calculate the edit distance between a table name and the names of dependent indexes
+## Calculate the edit distance between a table name and the names of dependent indexes
 
 *Keywords*: edit distance for strings
 
@@ -290,9 +289,9 @@ Assume a FQDN has the form N_1.N_2.....N_t, where t > 1 and each N_i can contain
     WHERE
         generated = 'N';
 
-## Data Analytics
+# Data Analytics
 
-### Rank all the tables in the system based on their cardinality
+## Rank all the tables in the system based on their cardinality
 
 *Keywords*: analytical functions
 
@@ -314,7 +313,7 @@ We partition the result set by tablespace.
         tablespace_name;
 
 
-### List the objects in the recycle bin, sorting by the version
+## List the objects in the recycle bin, sorting by the version
 
 *Keywords*: analytical functions
 
@@ -331,7 +330,7 @@ We partition the result set by tablespace.
         dba_recyclebin;
 
 
-### Show how much is tablespace usage growing
+## Show how much is tablespace usage growing
 
 *Keywords*: regression models, dynamic views, logical storage
 
@@ -342,16 +341,16 @@ We partition the result set by tablespace.
     FROM
         dba_hist_tbspc_space_usage h=
         JOIN gv$database d USING(dbid)
-        JOIN gv$tablespace t ON (h.tablespace_id = t.ts##)
+        JOIN gv$tablespace t ON (h.tablespace_id = t.ts#)
     GROUP BY
         d.name, t.name
     ORDER BY
         db, tablespace_name;
 
 
-## Grouping & Reporting
+# Grouping & Reporting
 
-### Count the data files for each tablespaces and for each filesystem location
+## Count the data files for each tablespaces and for each filesystem location
 
 *Keywords*: grouping, regular expressions
 
@@ -375,9 +374,9 @@ Assume a Unix filesystem, don’t follow symlinks.  Moreover, generate subtotals
     ORDER BY tablespace_name, dirname;
 
 
-## Time Functions
+# Time Functions
 
-### Show the first and last day of the current month
+## Show the first and last day of the current month
 
 *Keywords*: time functions
 
@@ -388,7 +387,7 @@ Assume a Unix filesystem, don’t follow symlinks.  Moreover, generate subtotals
         dual;
 
 
-### Show the first and last day of the current month
+## Show the first and last day of the current month
 
 *Keywords*: time functions
 
@@ -401,7 +400,7 @@ Assume a Unix filesystem, don’t follow symlinks.  Moreover, generate subtotals
         dual;
 
 
-### Show the maximum possible date
+## Show the maximum possible date
 
 *Keywords*: time functions
 
@@ -418,7 +417,7 @@ December 31, 9999 CE, one second to midnight.
         dual;
 
 
-### Show the minimum possible date
+## Show the minimum possible date
 
 *Keywords*: time functions
 
@@ -430,7 +429,7 @@ December 31, 9999 CE, one second to midnight.
         dual;
 
 
-### List leap years from 1 AD
+## List leap years from 1 AD
 
 *Keywords*: time functions
 
@@ -442,7 +441,7 @@ December 31, 9999 CE, one second to midnight.
     CONNECT BY LEVEL < 10000;
 
 
-### Count audit records for the last hour
+## Count audit records for the last hour
 
 *Keywords*: time functions, audit
 
@@ -455,16 +454,16 @@ December 31, 9999 CE, one second to midnight.
             < SYSDATE - INTERVAL '1' HOUR;
 
 
-## Numerical Recipes
+# Numerical Recipes
 
-### Calculate the sum of a geometric series
+## Calculate the sum of a geometric series
 
 *Keywords*: CONNECT BY, numerical recipes
 
     SELECT SUM(POWER(2, -level)) sum FROM dual CONNECT BY level < &n;
 
 
-### Solve Besel's problem
+## Solve Besel's problem
 
 *Keywords*: CONNECT BY, numerical recipes
 
@@ -476,7 +475,7 @@ December 31, 9999 CE, one second to midnight.
     CONNECT BY level < &n;
 
 
-### Generate Fibonacci sequence
+## Generate Fibonacci sequence
 
 *Keywords*: recursive CTE, numerical recipes
 
@@ -508,7 +507,7 @@ At least 11g R2 is required for the recursive CTE to work.
         fibonacci;
 
 
-### Verify that the cosine function has a fixed point
+## Verify that the cosine function has a fixed point
 
 *Keywords*: recursive CTE, numerical recipes, analytic functions, random values
 
@@ -541,9 +540,9 @@ A fixed point is a point x_0 such that x_0 = cos(x_0).
         iter;
 
 
-## XML Database 101
+# XML Database 101
 
-### Return the total number of installed patches
+## Return the total number of installed patches
 
 *Keywords*: XML database, patches
 
@@ -553,7 +552,7 @@ A fixed point is a point x_0 such that x_0 = cos(x_0).
         dual;
 
 
-### List user passwords (hashed, of course...)
+## List user passwords (hashed, of course...)
 
 *Keywords*: XML database, security
 
@@ -570,7 +569,7 @@ From 11g onwards, password hashes do not appear in dba_users anymore.  Of course
         dba_users;
 
 
-### Return patch details such as patch and inventory location
+## Return patch details such as patch and inventory location
 
 *Keywords*: XML database, patches
 
@@ -584,7 +583,7 @@ From 11g onwards, password hashes do not appear in dba_users anymore.  Of course
         dual;
 
 
-### XXX
+## XXX
 
 *Keywords*: XML database, patches
 
@@ -598,7 +597,7 @@ From 11g onwards, password hashes do not appear in dba_users anymore.  Of course
         dual;
 
 
-### XXX
+## XXX
 
 *Keywords*: XML database, patches
 
@@ -624,7 +623,7 @@ From 11g onwards, password hashes do not appear in dba_users anymore.  Of course
         ) patches;
 
 
-### Show bugs fixed by each installed patch
+## Show bugs fixed by each installed patch
 
 *Keywords*: XML database, patches
 
@@ -645,9 +644,9 @@ From 11g onwards, password hashes do not appear in dba_users anymore.  Of course
     SELECT * FROM bugs;
 
 
-## Enter Imperative Thinking
+# Enter Imperative Thinking
 
-### Show all Oracle error codes and messages
+## Show all Oracle error codes and messages
 
 *Keywords*: LIKE, CONNECT BY, function in WITH clause, SQLERRM
 
@@ -666,9 +665,9 @@ From 11g onwards, password hashes do not appear in dba_users anymore.  Of course
     CONNECT BY LEVEL < 100000;
 
 
-## A Stochastic World
+# A Stochastic World
 
-### Verify the law of large numbers
+## Verify the law of large numbers
 
 *Keywords*: CONNECT BY, analytic functions, random values, subqueries, ODCI
 functions, TABLE function, numerical recipes
@@ -690,7 +689,7 @@ Verify the law of large numbers by rolling a die n times, with n >> 0
         dual;
 
 
-### For each tablespace T, find the probability of segments in T to be smaller than or equal to a given size
+## For each tablespace T, find the probability of segments in T to be smaller than or equal to a given size
 
 *Keywords*: probability distributions, logical storage
 
@@ -703,9 +702,9 @@ Verify the law of large numbers by rolling a die n times, with n >> 0
         tablespace_name;
 
 
-## Internals
+# Internals
 
-### Display hidden/undocumented initialization parameters
+## Display hidden/undocumented initialization parameters
 
 *Keywords*: DECODE function, internals
 
@@ -733,7 +732,7 @@ Verify the law of large numbers by rolling a die n times, with n >> 0
         name;
 
 
-### Display the number of ASM allocated and free allocation units
+## Display the number of ASM allocated and free allocation units
 
 *Keywords*: PIVOT emulation, internals, asm
 
