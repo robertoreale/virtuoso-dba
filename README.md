@@ -3,43 +3,44 @@ The Virtuoso DBA
 
 <!-- toc -->
 
-- [First Steps](#first-steps)
-  * [Show database role (primary, standby, etc.)](#show-database-role-primary-standby-etc)
-  * [List user Data Pump jobs](#list-user-data-pump-jobs)
-  * [List the top-n largest segments](#list-the-top-n-largest-segments)
-  * [Display the findings discovered by all advisors in the database](#display-the-findings-discovered-by-all-advisors-in-the-database)
-  * [Associate blocking and blocked sessions](#associate-blocking-and-blocked-sessions)
-  * [Calculate the size of the temporary tablespaces](#calculate-the-size-of-the-temporary-tablespaces)
-  * [Calculate a fragmentation factor for tablespaces](#calculate-a-fragmentation-factor-for-tablespaces)
-  * [Count number of segments for each order of magnitude](#count-number-of-segments-for-each-order-of-magnitude)
-  * [Count the client sessions with a FQDN](#count-the-client-sessions-with-a-fqdn)
-  * [Give basic info about lob segments](#give-basic-info-about-lob-segments)
-  * [Sort the object types by their average name length](#sort-the-object-types-by-their-average-name-length)
-  * [List the oldest and the newest AWR snapshots](#list-the-oldest-and-the-newest-awr-snapshots)
-  * [Show how much is tablespace usage growing](#show-how-much-is-tablespace-usage-growing)
-  * [List the objects in the recycle bin, sorting by the version](#list-the-objects-in-the-recycle-bin-sorting-by-the-version)
-- [Time Functions](#time-functions)
-  * [Show the first and last day of the current month](#show-the-first-and-last-day-of-the-current-month)
-  * [Show the first and last day of the current month](#show-the-first-and-last-day-of-the-current-month-1)
-  * [Show the maximum possible date](#show-the-maximum-possible-date)
-  * [Show the minimum possible date](#show-the-minimum-possible-date)
-  * [List leap years from 1 AD](#list-leap-years-from-1-ad)
-- [Numerical Recipes](#numerical-recipes)
-  * [Calculate the sum of a geometric series](#calculate-the-sum-of-a-geometric-series)
-  * [Solve Besel's problem](#solve-besels-problem)
-  * [Generate Fibonacci sequence](#generate-fibonacci-sequence)
-- [Verify that the cosine function has a fixed point](#verify-that-the-cosine-function-has-a-fixed-point)
-- [XML Database 101](#xml-database-101)
-  * [Return the total number of installed patches](#return-the-total-number-of-installed-patches)
-  * [Show bugs fixed by each installed patch](#show-bugs-fixed-by-each-installed-patch)
-- [Enter Imperative Thinking](#enter-imperative-thinking)
-  * [Show all Oracle error codes and messages](#show-all-oracle-error-codes-and-messages)
-- [A Stochastic World](#a-stochastic-world)
-  * [Verify the law of large numbers](#verify-the-law-of-large-numbers)
-  * [For each tablespace T, find the probability of segments in T to be smaller than or equal to a given size](#for-each-tablespace-t-find-the-probability-of-segments-in-t-to-be-smaller-than-or-equal-to-a-given-size)
-- [Internals](#internals)
-  * [Display hidden/undocumented initialization parameters](#display-hiddenundocumented-initialization-parameters)
-  * [Display the number of ASM allocated and free allocation units](#display-the-number-of-asm-allocated-and-free-allocation-units)
+  * [First Steps](#first-steps)
+    + [Show database role (primary, standby, etc.)](#show-database-role-primary-standby-etc)
+    + [List user Data Pump jobs](#list-user-data-pump-jobs)
+    + [List the top-n largest segments](#list-the-top-n-largest-segments)
+    + [Display the findings discovered by all advisors in the database](#display-the-findings-discovered-by-all-advisors-in-the-database)
+    + [Associate blocking and blocked sessions](#associate-blocking-and-blocked-sessions)
+    + [Calculate the size of the temporary tablespaces](#calculate-the-size-of-the-temporary-tablespaces)
+    + [Calculate a fragmentation factor for tablespaces](#calculate-a-fragmentation-factor-for-tablespaces)
+    + [Count number of segments for each order of magnitude](#count-number-of-segments-for-each-order-of-magnitude)
+    + [Count the client sessions with a FQDN](#count-the-client-sessions-with-a-fqdn)
+    + [Give basic info about lob segments](#give-basic-info-about-lob-segments)
+    + [Sort the object types by their average name length](#sort-the-object-types-by-their-average-name-length)
+    + [List the oldest and the newest AWR snapshots](#list-the-oldest-and-the-newest-awr-snapshots)
+    + [Show how much is tablespace usage growing](#show-how-much-is-tablespace-usage-growing)
+    + [List the objects in the recycle bin, sorting by the version](#list-the-objects-in-the-recycle-bin-sorting-by-the-version)
+  * [Time Functions](#time-functions)
+    + [Show the first and last day of the current month](#show-the-first-and-last-day-of-the-current-month)
+    + [Show the first and last day of the current month](#show-the-first-and-last-day-of-the-current-month-1)
+    + [Show the maximum possible date](#show-the-maximum-possible-date)
+    + [Show the minimum possible date](#show-the-minimum-possible-date)
+    + [List leap years from 1 AD](#list-leap-years-from-1-ad)
+- [Count audit records for the last hour](#count-audit-records-for-the-last-hour)
+  * [Numerical Recipes](#numerical-recipes)
+    + [Calculate the sum of a geometric series](#calculate-the-sum-of-a-geometric-series)
+    + [Solve Besel's problem](#solve-besels-problem)
+    + [Generate Fibonacci sequence](#generate-fibonacci-sequence)
+  * [Verify that the cosine function has a fixed point](#verify-that-the-cosine-function-has-a-fixed-point)
+  * [XML Database 101](#xml-database-101)
+    + [Return the total number of installed patches](#return-the-total-number-of-installed-patches)
+    + [Show bugs fixed by each installed patch](#show-bugs-fixed-by-each-installed-patch)
+  * [Enter Imperative Thinking](#enter-imperative-thinking)
+    + [Show all Oracle error codes and messages](#show-all-oracle-error-codes-and-messages)
+  * [A Stochastic World](#a-stochastic-world)
+    + [Verify the law of large numbers](#verify-the-law-of-large-numbers)
+    + [For each tablespace T, find the probability of segments in T to be smaller than or equal to a given size](#for-each-tablespace-t-find-the-probability-of-segments-in-t-to-be-smaller-than-or-equal-to-a-given-size)
+  * [Internals](#internals)
+    + [Display hidden/undocumented initialization parameters](#display-hiddenundocumented-initialization-parameters)
+    + [Display the number of ASM allocated and free allocation units](#display-the-number-of-asm-allocated-and-free-allocation-units)
 
 <!-- tocstop -->
 
@@ -386,6 +387,20 @@ December 31, 9999 CE, one second to midnight.
         dual
     WHERE TO_CHAR(LAST_DAY(TO_DATE('0102'||TO_CHAR(level), 'DDMMYYYY')), 'DD') = '29'
     CONNECT BY LEVEL < 10000;
+
+
+# Count audit records for the last hour
+
+*Keywords*: time functions, audit
+
+    SELECT
+        COUNT(*)  AS count_last_hour
+    FROM
+        sys.aud$
+    WHERE
+        CAST((FROM_TZ(ntimestamp#, '00:00') AT local) AS date)
+            < SYSDATE - INTERVAL '1' HOUR;
+
 
 ## Numerical Recipes
 
