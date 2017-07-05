@@ -41,7 +41,7 @@ From 11g onwards, password hashes do not appear in dba_users anymore.  Of course
         dual;
 
 
-## XXX
+## Show patch inventory
 
 *Keywords*: XML database, patches
 
@@ -55,7 +55,7 @@ From 11g onwards, password hashes do not appear in dba_users anymore.  Of course
         dual;
 
 
-## XXX
+## Show patch inventory, part 2
 
 *Keywords*: XML database, patches
 
