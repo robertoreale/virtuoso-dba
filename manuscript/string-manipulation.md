@@ -1,6 +1,6 @@
-## String Manipulation
+# String Manipulation
 
-### Count the client sessions with a FQDN
+## Count the client sessions with a FQDN
 
 *Keywords*: regular expressions, dynamic views
 
@@ -14,7 +14,7 @@ Assume a FQDN has the form N_1.N_2.....N_t, where t > 1 and each N_i can contain
         REGEXP_LIKE(machine, '^([[:alnum:]]+\.)+[[:alnum:]-]+$');
 
 
-### Calculate the edit distance between a table name and the names of dependent indexes
+## Calculate the edit distance between a table name and the names of dependent indexes
 
 *Keywords*: edit distance for strings
 

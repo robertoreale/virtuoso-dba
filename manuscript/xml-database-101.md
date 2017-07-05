@@ -1,6 +1,6 @@
-## XML Database 101
+# XML Database 101
 
-### Return the total number of installed patches
+## Return the total number of installed patches
 
 *Keywords*: XML database, patches
 
@@ -10,7 +10,7 @@
         dual;
 
 
-### List user passwords (hashed, of course...)
+## List user passwords (hashed, of course...)
 
 *Keywords*: XML database, security
 
@@ -27,7 +27,7 @@ From 11g onwards, password hashes do not appear in dba_users anymore.  Of course
         dba_users;
 
 
-### Return patch details such as patch and inventory location
+## Return patch details such as patch and inventory location
 
 *Keywords*: XML database, patches
 
@@ -41,7 +41,7 @@ From 11g onwards, password hashes do not appear in dba_users anymore.  Of course
         dual;
 
 
-### XXX
+## XXX
 
 *Keywords*: XML database, patches
 
@@ -55,7 +55,7 @@ From 11g onwards, password hashes do not appear in dba_users anymore.  Of course
         dual;
 
 
-### XXX
+## XXX
 
 *Keywords*: XML database, patches
 
@@ -81,7 +81,7 @@ From 11g onwards, password hashes do not appear in dba_users anymore.  Of course
         ) patches;
 
 
-### Show bugs fixed by each installed patch
+## Show bugs fixed by each installed patch
 
 *Keywords*: XML database, patches
 

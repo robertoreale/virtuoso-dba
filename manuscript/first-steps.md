@@ -1,13 +1,13 @@
-## First Steps
+# First Steps
 
-### Show database role (primary, standby, etc.)
+## Show database role (primary, standby, etc.)
 
 *Keywords*: dynamic views, data guard
 
     SELECT database_role FROM gv$database;
 
 
-### List user Data Pump jobs
+## List user Data Pump jobs
 
 *Keywords*: LIKE, data pump
 
@@ -24,7 +24,7 @@
         job_name NOT LIKE 'BIN$%';
 
 
-### List the top-n largest segments
+## List the top-n largest segments
 
 *Keywords*: limiting query result, physical storage
 
@@ -40,7 +40,7 @@
     ) WHERE ROWNUM <= &n;
 
 
-### Display the findings discovered by all advisors in the database
+## Display the findings discovered by all advisors in the database
 
 *Keywords*: addm, nested queries
 
@@ -73,7 +73,7 @@
         );
 
 
-### Associate blocking and blocked sessions
+## Associate blocking and blocked sessions
 
 *Keywords*: self join, locking
 
@@ -86,7 +86,7 @@
         l1.block = 1 AND l2.request > 0;
 
 
-### Calculate the size of the temporary tablespaces
+## Calculate the size of the temporary tablespaces
 
 *Keywords*: aggregate functions, dynamic views, logical storage
 
@@ -100,12 +100,12 @@
     JOIN
         gv$tempfile tmpf
     USING
-        (inst_id, ts##)
+        (inst_id, ts#)
     GROUP BY
         inst_id, ts.name, tmpf.block_size;
 
 
-### Calculate a fragmentation factor for tablespaces
+## Calculate a fragmentation factor for tablespaces
 
 *Keywords*: aggregate functions, logical storage
 
@@ -121,7 +121,7 @@ It is calculated according to the following formula:
                          
                     =====        
          4_______   \            
-        \/blocks##    >    blocks 
+        \/blocks#    >    blocks 
                     /            
                     =====        
  
@@ -140,7 +140,7 @@ Cf. the book *Oracle Performance Troubleshooting*, by Robin Schumacher.
         tablespace_name;
 
 
-### Count number of segments for each order of magnitude
+## Count number of segments for each order of magnitude
 
 *Keywords*: DECODE function, analytic functions
 
@@ -166,7 +166,7 @@ IEC prefixes are used.
     ORDER BY TRUNC(LOG(1024, bytes));
 
 
-### Give basic info about lob segments
+## Give basic info about lob segments
 
 *Keywords*: aggregate functions, lobs
 
@@ -190,7 +190,7 @@ IEC prefixes are used.
         segment_name;
 
 
-### Sort the object types by their average name length
+## Sort the object types by their average name length
 
 *Keywords*: aggregate functions, string functions
 

@@ -1,6 +1,6 @@
-## Grouping & Reporting
+# Grouping & Reporting
 
-### Count the data files for each tablespaces and for each filesystem location
+## Count the data files for each tablespaces and for each filesystem location
 
 *Keywords*: grouping, regular expressions
 

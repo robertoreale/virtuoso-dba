@@ -1,6 +1,6 @@
-## Internals
+# Internals
 
-### Display hidden/undocumented initialization parameters
+## Display hidden/undocumented initialization parameters
 
 *Keywords*: DECODE function, internals
 
@@ -28,7 +28,7 @@
         name;
 
 
-### Display the number of ASM allocated and free allocation units
+## Display the number of ASM allocated and free allocation units
 
 *Keywords*: PIVOT emulation, internals, asm
 

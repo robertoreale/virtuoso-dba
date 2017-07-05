@@ -1,6 +1,6 @@
-## Data Analytics
+# Data Analytics
 
-### Rank all the tables in the system based on their cardinality
+## Rank all the tables in the system based on their cardinality
 
 *Keywords*: analytical functions
 
@@ -22,7 +22,7 @@ We partition the result set by tablespace.
         tablespace_name;
 
 
-### List the objects in the recycle bin, sorting by the version
+## List the objects in the recycle bin, sorting by the version
 
 *Keywords*: analytical functions
 
@@ -39,7 +39,7 @@ We partition the result set by tablespace.
         dba_recyclebin;
 
 
-### Show how much is tablespace usage growing
+## Show how much is tablespace usage growing
 
 *Keywords*: regression models, dynamic views, logical storage
 
@@ -50,7 +50,7 @@ We partition the result set by tablespace.
     FROM
         dba_hist_tbspc_space_usage h=
         JOIN gv$database d USING(dbid)
-        JOIN gv$tablespace t ON (h.tablespace_id = t.ts##)
+        JOIN gv$tablespace t ON (h.tablespace_id = t.ts#)
     GROUP BY
         d.name, t.name
     ORDER BY

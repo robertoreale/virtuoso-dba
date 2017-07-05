@@ -1,6 +1,6 @@
-## Time Functions
+# Time Functions
 
-### Show the first and last day of the current month
+## Show the first and last day of the current month
 
 *Keywords*: time functions
 
@@ -11,7 +11,7 @@
         dual;
 
 
-### Show the first and last day of the current month
+## Show the first and last day of the current month
 
 *Keywords*: time functions
 
@@ -24,7 +24,7 @@
         dual;
 
 
-### Show the maximum possible date
+## Show the maximum possible date
 
 *Keywords*: time functions
 
@@ -41,7 +41,7 @@ December 31, 9999 CE, one second to midnight.
         dual;
 
 
-### Show the minimum possible date
+## Show the minimum possible date
 
 *Keywords*: time functions
 
@@ -53,7 +53,7 @@ December 31, 9999 CE, one second to midnight.
         dual;
 
 
-### List leap years from 1 AD
+## List leap years from 1 AD
 
 *Keywords*: time functions
 
@@ -65,7 +65,7 @@ December 31, 9999 CE, one second to midnight.
     CONNECT BY LEVEL < 10000;
 
 
-### Count audit records for the last hour
+## Count audit records for the last hour
 
 *Keywords*: time functions, audit
 
