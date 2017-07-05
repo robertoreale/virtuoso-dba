@@ -10,6 +10,23 @@
         dual;
 
 
+### List user passwords (hashed, of course...)
+
+*Keywords*: XML database, security
+
+From 11g onwards, password hashes do not appear in dba_users anymore.  Of course they are still visible in sys.user$, but we can do better...
+
+    SELECT
+        username,
+        EXTRACT(
+            XMLTYPE(
+                DBMS_METADATA.GET_XML('USER', username)),
+                '//USER_T/PASSWORD/text()'
+            ).getStringVal()  AS  password_hash
+    FROM
+        dba_users;
+
+
 ### Show bugs fixed by each installed patch
 
 *Keywords*: XML database, patches
