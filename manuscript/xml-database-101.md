@@ -27,6 +27,60 @@ From 11g onwards, password hashes do not appear in dba_users anymore.  Of course
         dba_users;
 
 
+### Return patch details such as patch and inventory location
+
+*Keywords*: XML database, patches
+
+*Reference*: xt_scripts/opatch/info.sql
+
+    SELECT 
+        XMLSERIALIZE(
+            DOCUMENT DBMS_QOPATCH.GET_OPATCH_INSTALL_INFO AS CLOB INDENT SIZE = 2
+        ) AS info 
+    FROM
+        dual;
+
+
+### XXX
+
+*Keywords*: XML database, patches
+
+*Reference*: xt_scripts/opatch/lsinventory.sql
+
+    SELECT
+        XMLTRANSFORM(
+            DBMS_QOPATCH.GET_OPATCH_LSINVENTORY, DBMS_QOPATCH.GET_OPATCH_XSLT
+        ).GetClobVal() AS lsinventory
+    FROM
+        dual;
+
+
+### XXX
+
+*Keywords*: XML database, patches
+
+*Reference*: xt_scripts/opatch/patches.sql
+
+    WITH opatch AS (
+        SELECT DBMS_QOPATCH.GET_OPATCH_LSINVENTORY patch_output FROM dual
+    )
+    SELECT
+        patches.*
+    FROM
+        opatch,
+        XMLTABLE(
+            'InventoryInstance/patches/*'
+            PASSING opatch.patch_output
+            COLUMNS
+                patch_id     NUMBER       PATH 'patchID',
+                patch_uid    NUMBER       PATH 'uniquePatchID',
+                description  VARCHAR2(80) PATH 'patchDescription',
+                applied_date VARCHAR2(30) PATH 'appliedDate',
+                sql_patch    VARCHAR2(8)  PATH 'sqlPatch',
+                rollbackable VARCHAR2(8)  PATH 'rollbackable'
+        ) patches;
+
+
 ### Show bugs fixed by each installed patch
 
 *Keywords*: XML database, patches
