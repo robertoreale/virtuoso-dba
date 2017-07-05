@@ -1,5 +1,6 @@
 cover.md
 first-steps.md
+string-manipulation.md
 data-analytics.md
 time-functions.md
 numerical-recipes.md

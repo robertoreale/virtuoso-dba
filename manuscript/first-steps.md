@@ -166,20 +166,6 @@ IEC prefixes are used.
     ORDER BY TRUNC(LOG(1024, bytes));
 
 
-### Count the client sessions with a FQDN
-
-*Keywords*: regular expressions, dynamic views
-
-Assume a FQDN has the form N_1.N_2.….N_t, where t > 1 and each N_i can contain lowercase letters, numbers and the dash.
- 
-    SELECT
-        machine
-    FROM
-        gv$session
-    WHERE
-        REGEXP_LIKE(machine, '^([[:alnum:]]+\.)+[[:alnum:]-]+$');
-
-
 ### Give basic info about lob segments
 
 *Keywords*: aggregate functions, lobs
