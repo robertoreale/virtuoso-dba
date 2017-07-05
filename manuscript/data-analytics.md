@@ -1,5 +1,22 @@
 ## Data Analytics
 
+### List the objects in the recycle bin, sorting by the version
+
+*Keywords*: analytical functions
+
+    SELECT
+        original_name,
+        type,
+        object_name,
+        droptime,
+        RANK() OVER (
+            PARTITION BY original_name, type ORDER BY droptime DESC
+        ) obj_version,
+        can_purge
+    FROM
+        dba_recyclebin;
+
+
 ### Show how much is tablespace usage growing
 
 *Keywords*: regression models, dynamic views, logical storage
@@ -16,23 +33,6 @@
         d.name, t.name
     ORDER BY
         db, tablespace_name;
-
-
-### List the objects in the recycle bin, sorting by the version
-
-*Keywords*: analytical functions
-
-    SELECT
-        original_name,
-        type,
-        object_name,
-        droptime,
-        RANK() OVER (
-            PARTITION BY original_name, type ORDER BY droptime DESC
-        ) obj_version,
-        can_purge
-    FROM
-        dba_recyclebin;
 
 
 <!-- vim: set fenc=utf-8 spell spl=en ts=4 sw=4 et filetype=markdown : -->
