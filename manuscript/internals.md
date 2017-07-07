@@ -1,5 +1,19 @@
 # Internals
 
+## Count the number of trace files generated each day
+
+*Keywords*: x$ interface
+
+    SELECT
+        TRUNC(creation_time, 'DAY') day,
+        COUNT(*) count
+    FROM x$dbgdirext
+        WHERE
+            type = 2 AND logical_file LIKE '%.trc'
+        GROUP BY TRUNC(creation_time, 'DAY')
+        ORDER BY 2 DESC;
+
+
 ## Display hidden/undocumented initialization parameters
 
 *Keywords*: DECODE function, internals
