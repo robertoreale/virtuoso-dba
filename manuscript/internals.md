@@ -16,7 +16,7 @@
 
 ## Display hidden/undocumented initialization parameters
 
-*Keywords*: DECODE function, internals
+*Keywords*: DECODE function, x$ interface
 
 *Reference*: http://www.oracle-training.cc/oracle_tips_hidden_parameters.htm
 
@@ -44,7 +44,7 @@
 
 ## Display the number of ASM allocated and free allocation units
 
-*Keywords*: PIVOT emulation, internals, asm
+*Keywords*: PIVOT emulation, x$ interface, asm
 
 *Reference*: MOS Doc ID 351117.1
 
