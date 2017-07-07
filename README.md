@@ -15,9 +15,11 @@
   * [Count number of segments for each order of magnitude](#count-number-of-segments-for-each-order-of-magnitude)
   * [Give basic info about lob segments](#give-basic-info-about-lob-segments)
   * [Sort the object types by their average name length](#sort-the-object-types-by-their-average-name-length)
+  * [List all users to which a given role is granted, even indirectly](#list-all-users-to-which-a-given-role-is-granted-even-indirectly)
 - [String Manipulation](#string-manipulation)
   * [Count the client sessions with a FQDN](#count-the-client-sessions-with-a-fqdn)
   * [Calculate the edit distance between a table name and the names of dependent indexes](#calculate-the-edit-distance-between-a-table-name-and-the-names-of-dependent-indexes)
+  * [Get the number of total waits for each event type, with pretty formatting](#get-the-number-of-total-waits-for-each-event-type-with-pretty-formatting)
 - [Data Analytics](#data-analytics)
   * [Rank all the tables in the system based on their cardinality](#rank-all-the-tables-in-the-system-based-on-their-cardinality)
   * [List the objects in the recycle bin, sorting by the version](#list-the-objects-in-the-recycle-bin-sorting-by-the-version)
@@ -49,6 +51,7 @@
   * [Verify the law of large numbers](#verify-the-law-of-large-numbers)
   * [For each tablespace T, find the probability of segments in T to be smaller than or equal to a given size](#for-each-tablespace-t-find-the-probability-of-segments-in-t-to-be-smaller-than-or-equal-to-a-given-size)
 - [Internals](#internals)
+  * [Count the number of trace files generated each day](#count-the-number-of-trace-files-generated-each-day)
   * [Display hidden/undocumented initialization parameters](#display-hiddenundocumented-initialization-parameters)
   * [Display the number of ASM allocated and free allocation units](#display-the-number-of-asm-allocated-and-free-allocation-units)
 
@@ -261,6 +264,23 @@ IEC prefixes are used.
         AVG(LENGTH(object_name)) DESC;
 
 
+## List all users to which a given role is granted, even indirectly
+
+*Keywords*: hierarchical queries, security
+
+    SELECT 
+        grantee
+    FROM
+        dba_role_privs
+    CONNECT BY prior grantee = granted_role
+    START WITH granted_role = '&role'
+    INTERSECT
+    SELECT
+        username
+    FROM
+        dba_users;
+
+
 # String Manipulation
 
 ## Count the client sessions with a FQDN
@@ -290,6 +310,21 @@ Assume a FQDN has the form N_1.N_2.....N_t, where t > 1 and each N_i can contain
         dba_indexes
     WHERE
         generated = 'N';
+
+
+## Get the number of total waits for each event type, with pretty formatting
+
+*Keywords*: formatting, analytic functions, dynamic views
+
+    WITH se AS (
+      SELECT event ev, total_waits tw FROM v$system_event
+    )
+    SELECT
+      RPAD(ev, MAX(LENGTH(ev)+2) OVER (PARTITION BY 1), '.') ||
+      LPAD(tw, MAX(LENGTH(tw)+2) OVER (PARTITION BY 1), '.') total_waits_per_event_type
+    FROM
+        se;
+
 
 # Data Analytics
 
@@ -706,9 +741,23 @@ Verify the law of large numbers by rolling a die n times, with n >> 0
 
 # Internals
 
+## Count the number of trace files generated each day
+
+*Keywords*: x$ interface
+
+    SELECT
+        TRUNC(creation_time, 'DAY') day,
+        COUNT(*) count
+    FROM x$dbgdirext
+        WHERE
+            type = 2 AND logical_file LIKE '%.trc'
+        GROUP BY TRUNC(creation_time, 'DAY')
+        ORDER BY 2 DESC;
+
+
 ## Display hidden/undocumented initialization parameters
 
-*Keywords*: DECODE function, internals
+*Keywords*: DECODE function, x$ interface
 
 *Reference*: http://www.oracle-training.cc/oracle_tips_hidden_parameters.htm
 
@@ -736,7 +785,7 @@ Verify the law of large numbers by rolling a die n times, with n >> 0
 
 ## Display the number of ASM allocated and free allocation units
 
-*Keywords*: PIVOT emulation, internals, asm
+*Keywords*: PIVOT emulation, x$ interface, asm
 
 *Reference*: MOS Doc ID 351117.1
 
