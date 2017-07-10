@@ -16,13 +16,16 @@ This work is licensed under a <a rel="license" href="http://creativecommons.org/
 
 <!-- toc -->
 
+- [Introduction](#introduction)
 - [First Steps](#first-steps)
   * [Show database role (primary, standby, etc.)](#show-database-role-primary-standby-etc)
   * [List user Data Pump jobs](#list-user-data-pump-jobs)
+  * [Calculate the average number of redo log switches per hour](#calculate-the-average-number-of-redo-log-switches-per-hour)
   * [List the top-n largest segments](#list-the-top-n-largest-segments)
   * [Display the findings discovered by all advisors in the database](#display-the-findings-discovered-by-all-advisors-in-the-database)
   * [Associate blocking and blocked sessions](#associate-blocking-and-blocked-sessions)
   * [Calculate the size of the temporary tablespaces](#calculate-the-size-of-the-temporary-tablespaces)
+  * [Compute a count of archived logs and their average size](#compute-a-count-of-archived-logs-and-their-average-size)
   * [Calculate a fragmentation factor for tablespaces](#calculate-a-fragmentation-factor-for-tablespaces)
   * [Count number of segments for each order of magnitude](#count-number-of-segments-for-each-order-of-magnitude)
   * [Give basic info about lob segments](#give-basic-info-about-lob-segments)
@@ -35,6 +38,9 @@ This work is licensed under a <a rel="license" href="http://creativecommons.org/
 - [Data Analytics](#data-analytics)
   * [Rank all the tables in the system based on their cardinality](#rank-all-the-tables-in-the-system-based-on-their-cardinality)
   * [List the objects in the recycle bin, sorting by the version](#list-the-objects-in-the-recycle-bin-sorting-by-the-version)
+  * [Show I/O stats on datafiles](#show-io-stats-on-datafiles)
+  * [List statspack snapshots](#list-statspack-snapshots)
+  * [List top-10 CPU-intensive queries](#list--top-10-cpu-intensive-queries)
   * [Show how much is tablespace usage growing](#show-how-much-is-tablespace-usage-growing)
 - [Grouping & Reporting](#grouping--reporting)
   * [Count the data files for each tablespaces and for each filesystem location](#count-the-data-files-for-each-tablespaces-and-for-each-filesystem-location)
@@ -67,8 +73,14 @@ This work is licensed under a <a rel="license" href="http://creativecommons.org/
   * [Count the number of trace files generated each day](#count-the-number-of-trace-files-generated-each-day)
   * [Display hidden/undocumented initialization parameters](#display-hiddenundocumented-initialization-parameters)
   * [Display the number of ASM allocated and free allocation units](#display-the-number-of-asm-allocated-and-free-allocation-units)
+  * [Display the count of allocation units per ASM file by file alias (for metadata only)](#display-the-count-of-allocation-units-per-asm-file-by-file-alias-for-metadata-only)
+  * [Display the count of allocation units per ASM file by file alias](#display-the-count-of-allocation-units-per-asm-file-by-file-alias)
+  * [Show file utilization](#show-file-utilization)
 
 <!-- tocstop -->
+
+# Introduction
+
 
 # First Steps
 
@@ -94,6 +106,26 @@ This work is licensed under a <a rel="license" href="http://creativecommons.org/
         dba_datapump_jobs
     WHERE
         job_name NOT LIKE 'BIN$%';
+
+
+## Calculate the average number of redo log switches per hour
+
+*Keywords*: dynamic views, aggregate functions
+
+    SELECT
+        inst_id,
+        thread#,
+        TRUNC(first_time)              AS day,
+        COUNT(*)                       AS switches,
+        COUNT(*) / 24                  AS avg_switches_per_hour
+    FROM
+        gv$loghist
+    GROUP BY
+        inst_id,
+        thread#,
+        TRUNC(first_time)
+    ORDER BY
+        day;
 
 
 ## List the top-n largest segments
@@ -175,6 +207,40 @@ This work is licensed under a <a rel="license" href="http://creativecommons.org/
         (inst_id, ts#)
     GROUP BY
         inst_id, ts.name, tmpf.block_size;
+
+
+## Compute a count of archived logs and their average size
+
+*Keywords*: dynamic views, WITH clause
+
+    WITH
+        lh AS (
+            SELECT
+                TO_CHAR(first_time, 'YYYY-MM-DD')    AS day,
+                COUNT(1)                             AS archived#,
+                MIN(recid)                           AS min#,
+                MAX(recid)                           AS max# 
+            FROM
+                gv$log_history
+            GROUP BY
+                TO_CHAR(first_time, 'YYYY-MM-DD')
+            ORDER BY 1 DESC
+        ),
+        lg AS (
+            SELECT
+                COUNT(1)                             AS members#,
+                MAX(bytes) / 1048576                 AS max_size, 
+                MIN(bytes) / 1048576                 AS min_size,
+                AVG(bytes) / 1048576                 AS avg_size
+            FROM
+                gv$log
+        )
+    SELECT
+        lh.*,
+        lg.*,
+        ROUND(lh.archived# * lg.avg_size)             AS daily_avg_size
+    FROM
+        lh, lg;
 
 
 ## Calculate a fragmentation factor for tablespaces
@@ -333,8 +399,8 @@ Assume a FQDN has the form N_1.N_2.....N_t, where t > 1 and each N_i can contain
       SELECT event ev, total_waits tw FROM v$system_event
     )
     SELECT
-      RPAD(ev, MAX(LENGTH(ev)+2) OVER (PARTITION BY 1), '.') ||
-      LPAD(tw, MAX(LENGTH(tw)+2) OVER (PARTITION BY 1), '.') total_waits_per_event_type
+      RPAD(ev, MAX(LENGTH(ev)+2) OVER (), '.') ||
+      LPAD(tw, MAX(LENGTH(tw)+2) OVER (), '.') total_waits_per_event_type
     FROM
         se;
 
@@ -378,6 +444,146 @@ We partition the result set by tablespace.
         can_purge
     FROM
         dba_recyclebin;
+
+
+## Show I/O stats on datafiles
+
+*Keywords*: dynamic views, analytical functions
+
+    SELECT
+        name,
+        phyrds,
+        phywrts,
+        ROUND(RATIO_TO_REPORT(phyrds)  OVER () * 100, 2) AS phyrds_pct,
+        ROUND(RATIO_TO_REPORT(phywrts) OVER () * 100, 2) AS phyrds_pct,
+        fs.phyblkrd + fs.phyblkwrt                       AS blkio
+    FROM
+        gv$datafile df,
+        gv$filestat fs
+    WHERE
+        df.file# = fs.file#
+    ORDER BY
+        fs.phyblkrd + fs.phyblkwrt DESC;
+    
+    
+## List statspack snapshots
+
+*Keywords*: analytics functions, statspack
+
+    SELECT
+        dbid                                                             AS dbid,
+        instance_number                                                  AS instance_number,
+        trunc(snap_time, 'DAY')                                          AS snap_day,
+        snap_id                                                          AS start_snap,
+        LEAD(snap_id) OVER (ORDER BY snap_time)                          AS stop_snap,
+        TO_CHAR(snap_time, 'HH24:MI')                                    AS start_time,
+        LEAD(TO_CHAR(snap_time, 'HH24:MI')) OVER (ORDER BY snap_time)    AS stop_time
+    FROM
+        stats$snapshot;
+
+
+## List  top-10 CPU-intensive queries
+
+*References*: https://community.oracle.com/thread/1101381
+
+    WITH snaps AS
+        (
+            SELECT
+                dbid                                                             AS dbid,
+                instance_number                                                  AS instance_number,
+                TO_CHAR(snap_time, 'DD/MM/YYYY')                                 AS snap_day,
+                snap_id                                                          AS start_snap,
+                LEAD(snap_id) OVER (ORDER BY snap_time)                          AS stop_snap,
+                TO_CHAR(snap_time, 'HH24:MI')                                    AS start_time,
+                LEAD(TO_CHAR(snap_time, 'HH24:MI')) OVER (ORDER BY snap_time)    AS stop_time
+            FROM
+                stats$snapshot
+        ),
+    work AS
+        (
+            SELECT 
+                s.snap_day                                              AS snap_day,
+                s.start_snap                                            AS start_snap,
+                s.stop_snap                                             AS stop_snap,
+                s.start_time                                            AS start_time,
+                s.stop_time                                             AS stop_time,
+                ss1.hash_value                                          AS hash_value,
+                ss1.module                                              AS module,
+                ss1.text_subset                                         AS text_subset,
+                SUM(ss1.buffer_gets    - NVL(ss2.buffer_gets, 0))       AS bg,
+                SUM(ss1.executions     - NVL(ss2.executions, 0))        AS ex,
+                SUM(ss1.cpu_time       - NVL(ss2.cpu_time, 0))          AS ct,
+                SUM(ss1.elapsed_time   - NVL(ss2.elapsed_time, 0))      AS et,
+                SUM(ss1.rows_processed - NVL(ss2.rows_processed, 0))    AS rp,
+                SUM(ss1.disk_reads     - NVL(ss2.disk_reads, 0))        AS dr,
+                SUM(ss1.parse_calls    - NVL(ss2.parse_calls, 0))       AS pc,
+                SUM(ss1.invalidations  - NVL(ss2.invalidations, 0))     AS iv,
+                SUM(ss1.loads          - NVL(ss2.loads, 0))             AS ld
+            FROM
+                snaps s
+            JOIN
+                stats$sql_summary ss1
+            ON
+                       ss1.snap_id         = s.stop_snap
+                AND    ss1.dbid            = s.dbid
+                AND    ss1.instance_number = s.instance_number
+            JOIN
+                stats$sql_summary ss2
+            ON
+                       ss2.snap_id         = s.start_snap
+                AND    ss2.dbid            = ss1.dbid
+                AND    ss2.instance_number = ss1.instance_number
+                AND    ss2.hash_value      = ss1.hash_value
+                AND    ss2.address         = ss1.address
+                AND    ss2.text_subset     = ss1.text_subset
+                AND    ss1.executions      > NVL(ss2.executions, 0)
+            WHERE
+                s.stop_snap IS NOT NULL
+            GROUP BY 
+                s.snap_day,
+                s.start_snap,
+                s.stop_snap,
+                s.start_time,
+                s.stop_time,
+                ss1.hash_value,
+                ss1.module,
+                ss1.text_subset
+        ),
+    top_n AS
+        (
+            SELECT
+                w.*,
+                bg / ex    AS gpe,
+                ROW_NUMBER() OVER
+                    (
+                        PARTITION BY start_snap ORDER BY ct DESC
+                    )      AS nr
+            FROM
+                work w
+        )
+    SELECT
+        snap_day,
+        start_snap,
+        stop_snap,
+        start_time,
+        stop_time,
+        hash_value,
+        module,
+        text_subset,
+        bg,    -- buffer gets
+        ex,    -- executions
+        ct,    -- cpu time
+        et,    -- elapsed time
+        rp,    -- rows processed
+        dr,    -- disk reads
+        pc,    -- parse calls
+        iv,    -- invalidations
+        ld,    -- loads
+        gpe    -- gets per execs
+    FROM
+        top_n
+    WHERE
+        nr <= 10;
 
 
 ## Show how much is tablespace usage growing
@@ -937,4 +1143,70 @@ Verify the law of large numbers by rolling a die n times, with n >> 0
         x$kfdat
     GROUP BY
         group_kfdat, number_kfdat;
+
+
+## Display the count of allocation units per ASM file by file alias (for metadata only)
+
+*Keywords*: x$interface, asm
+
+*Reference*: MOS Doc ID 351117.1
+
+    SELECT
+        COUNT(xnum_kffxp)    AS au_count,
+        number_kffxp         AS file#,
+        group_kffxp          AS dg#
+    FROM
+        x$kffxp
+    WHERE
+        number_kffxp < 256
+    GROUP BY
+        number_kffxp, group_kffxp
+    ORDER BY
+        COUNT(xnum_kffxp);
+
+
+## Display the count of allocation units per ASM file by file alias
+
+*Keywords*: x$interface, asm
+
+*Reference*: MOS Doc ID 351117.1
+
+    SELECT
+        group_kffxp,
+        number_kffxp,
+        name,
+        COUNT(*) count
+    FROM
+        x$kffxp
+    JOIN
+        v$asm_alias
+    ON
+        group_kffxp = group_number AND number_kffxp = file_number
+    GROUP BY
+        group_kffxp, number_kffxp, name
+    ORDER BY
+        group_kffxp, number_kffxp;
+
+
+## Show file utilization
+
+*Keywords*: x$interface, asm
+
+*Reference*: MOS Doc ID 351117.1
+
+    SELECT
+        f.group_number,
+        f.file_number,
+        bytes,
+        space,
+        a.name
+    FROM
+        v$asm_file f
+    JOIN
+        v$asm_alias a
+    ON
+        f.group_number = a.group_number AND f.file_number = a.file_number
+    ORDER BY
+        f.group_number, f.file_number;
+
 
