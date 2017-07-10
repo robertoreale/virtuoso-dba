@@ -3,6 +3,7 @@ first-steps.md
 string-manipulation.md
 data-analytics.md
 grouping-reporting.md
+drawing.md
 time-functions.md
 numerical-recipes.md
 xml-database-101.md
