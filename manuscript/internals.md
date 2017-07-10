@@ -103,81 +103,26 @@
         group_kffxp, number_kffxp;
 
 
---  Purpose:   shows file utilization
---  Reference: MOS Doc ID 351117.1
---  Tested:    10g, 11g
+## Show file utilization
 
+*Keywords*: x$interface, asm
 
-CLEAR COLUMN
-SET LINE 132
+*Reference*: MOS Doc ID 351117.1
 
-COL name FORMAT a60
-
-
-SELECT
-    f.group_number     AS group#,
-    f.file_number      AS file#,
-    bytes              AS bytes,
-    space              AS space,
-    space / 1048576    AS space_mib,
-    a.name             AS name
-FROM
-    v$asm_file f JOIN v$asm_alias a
-ON
-    f.group_number = a.group_number AND f.file_number = a.file_number
-WHERE
-    system_created = 'Y'
-ORDER BY
-    f.group_number, f.file_number;
-
-
---  Purpose:   shows file utilization
---  Reference: MOS Doc ID 351117.1
-
-
-CLEAR COLUMN
-SET LINE 132
-
-COL name FORMAT a60
-
-
-SELECT
-    f.group_number     AS group#,
-    f.file_number      AS file#,
-    bytes              AS bytes,
-    space              AS space,
-    space / 1048576    AS space_mib,
-    a.name             AS name
-FROM
-    v$asm_file f JOIN v$asm_alias a
-ON
-    f.group_number = a.group_number AND f.file_number = a.file_number
-WHERE
-    system_created = 'N'
-ORDER BY
-    f.group_number, f.file_number;
-
-
---  Purpose:   shows the ASM parameters and underscore (i.e. hidden) parameters
---  Reference: https://sites.google.com/site/oracledbnote/automaticstoragemanagement/asm-metadata-and-internals
-
-COL parameter FORMAT a50 HEADING "Parameter"
-COL value     FORMAT a45 HEADING "Instance Value"
-
-
-SELECT
-    a.ksppinm     AS parameter,
-    c.ksppstvl    AS value
-FROM
-    x$ksppi a
-JOIN
-    x$ksppcv b USING (indx)
-JOIN
-    x$ksppsv c USING (indx)
-WHERE
-    ksppinm LIKE '%asm%'
-ORDER BY
-    a.ksppinm;
+    SELECT
+        f.group_number,
+        f.file_number,
+        bytes,
+        space,
+        a.name
+    FROM
+        v$asm_file f
+    JOIN
+        v$asm_alias a
+    ON
+        f.group_number = a.group_number AND f.file_number = a.file_number
+    ORDER BY
+        f.group_number, f.file_number;
 
 
 <!-- vim: set fenc=utf-8 spell spl=en ts=4 sw=4 et filetype=markdown : -->
