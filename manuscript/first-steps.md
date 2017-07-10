@@ -276,4 +276,24 @@ IEC prefixes are used.
         dba_users;
 
 
+## Count memory resize operations, by component and type
+
+*Keywords*: DECODE, dynamic views
+
+    SELECT
+        component,
+        DECODE(
+            SIGN(final_size - initial_size),
+             1, 'GROW',
+             0, 'NO OP',
+            -1, 'SHRINK',
+                'UNKNOWN'
+        ) operation,
+        COUNT(*) count
+    FROM
+        gv$memory_resize_ops 
+    GROUP BY component, SIGN(final_size - initial_size)
+    ORDER BY component;
+
+
 <!-- vim: set fenc=utf-8 spell spl=en ts=4 sw=4 et filetype=markdown : -->
