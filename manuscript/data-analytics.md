@@ -39,6 +39,26 @@ We partition the result set by tablespace.
         dba_recyclebin;
 
 
+## Show I/O stats on datafiles
+
+*Keywords*: dynamic views, analytical functions
+
+    SELECT
+        name,
+        phyrds,
+        phywrts,
+        ROUND(RATIO_TO_REPORT(phyrds)  OVER () * 100, 2) AS phyrds_pct,
+        ROUND(RATIO_TO_REPORT(phywrts) OVER () * 100, 2) AS phyrds_pct,
+        fs.phyblkrd + fs.phyblkwrt                       AS blkio
+    FROM
+        gv$datafile df,
+        gv$filestat fs
+    WHERE
+        df.file# = fs.file#
+    ORDER BY
+        fs.phyblkrd + fs.phyblkwrt DESC;
+    
+    
 ## List statspack snapshots
 
 *Keywords*: analytics functions, statspack
