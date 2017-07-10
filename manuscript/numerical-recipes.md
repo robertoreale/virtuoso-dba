@@ -75,6 +75,22 @@ At least 11g R2 is required for the recursive CTE to work.
         factorial;
 
 
+## Verify that the sum of the reciprocals of factorials converge to e, alternative method
+
+*Keywords*: recursive CTE, numerical recipes
+
+    WITH
+        seq AS (
+            SELECT level n FROM dual CONNECT BY level < &m
+        )
+    SELECT
+        1 + SUM(1 / EXP(SUM(LN(s2.n)))) - EXP(1) AS error
+    FROM
+        seq s1 JOIN seq s2 ON s2.n <= s1.n
+    GROUP BY
+        s1.n;
+
+
 ## Verify that the cosine function has a fixed point
 
 *Keywords*: recursive CTE, numerical recipes, analytic functions, random values
