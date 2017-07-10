@@ -63,6 +63,8 @@ We partition the result set by tablespace.
 
 *Keywords*: analytics functions, aggregate functions, dynamic views, rman
 
+We use percentiles to exclude outliers.
+
     SELECT
         device_type,
         completion_day,
