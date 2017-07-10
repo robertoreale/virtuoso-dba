@@ -75,7 +75,7 @@ We partition the result set by tablespace.
         stats$snapshot;
 
 
-## List  top-10 CPU-intensive queries
+## List top-10 CPU-intensive queries
 
 *References*: https://community.oracle.com/thread/1101381
 
