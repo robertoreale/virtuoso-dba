@@ -31,6 +31,7 @@ This work is licensed under a <a rel="license" href="http://creativecommons.org/
   * [Give basic info about lob segments](#give-basic-info-about-lob-segments)
   * [Sort the object types by their average name length](#sort-the-object-types-by-their-average-name-length)
   * [List all users to which a given role is granted, even indirectly](#list-all-users-to-which-a-given-role-is-granted-even-indirectly)
+  * [Count memory resize operations, by component and type](#count-memory-resize-operations-by-component-and-type)
 - [String Manipulation](#string-manipulation)
   * [Count the client sessions with a FQDN](#count-the-client-sessions-with-a-fqdn)
   * [Calculate the edit distance between a table name and the names of dependent indexes](#calculate-the-edit-distance-between-a-table-name-and-the-names-of-dependent-indexes)
@@ -39,8 +40,9 @@ This work is licensed under a <a rel="license" href="http://creativecommons.org/
   * [Rank all the tables in the system based on their cardinality](#rank-all-the-tables-in-the-system-based-on-their-cardinality)
   * [List the objects in the recycle bin, sorting by the version](#list-the-objects-in-the-recycle-bin-sorting-by-the-version)
   * [Show I/O stats on datafiles](#show-io-stats-on-datafiles)
+  * [Show the progressive growth in backup sets](#show-the-progressive-growth-in-backup-sets)
   * [List statspack snapshots](#list-statspack-snapshots)
-  * [List top-10 CPU-intensive queries](#list--top-10-cpu-intensive-queries)
+  * [List top-10 CPU-intensive queries](#list-top-10-cpu-intensive-queries)
   * [Show how much is tablespace usage growing](#show-how-much-is-tablespace-usage-growing)
 - [Grouping & Reporting](#grouping--reporting)
   * [Count the data files for each tablespaces and for each filesystem location](#count-the-data-files-for-each-tablespaces-and-for-each-filesystem-location)
@@ -59,7 +61,8 @@ This work is licensed under a <a rel="license" href="http://creativecommons.org/
   * [Calculate the sum of a geometric series](#calculate-the-sum-of-a-geometric-series)
   * [Solve Besel's problem](#solve-besels-problem)
   * [Generate Fibonacci sequence](#generate-fibonacci-sequence)
-  * [Verify that the sum of the reciprocals of factorials converge to `e'?](#verify-that-the-sum-of-the-reciprocals-of-factorials-converge-to-e)
+  * [Verify that the sum of the reciprocals of factorials converge to e](#verify-that-the-sum-of-the-reciprocals-of-factorials-converge-to-e)
+  * [Verify that the sum of the reciprocals of factorials converge to e, alternative method](#verify-that-the-sum-of-the-reciprocals-of-factorials-converge-to-e-alternative-method)
   * [Verify that the cosine function has a fixed point](#verify-that-the-cosine-function-has-a-fixed-point)
 - [XML Database 101](#xml-database-101)
   * [Return the total number of installed patches](#return-the-total-number-of-installed-patches)
@@ -364,6 +367,26 @@ IEC prefixes are used.
         dba_users;
 
 
+## Count memory resize operations, by component and type
+
+*Keywords*: DECODE, dynamic views
+
+    SELECT
+        component,
+        DECODE(
+            SIGN(final_size - initial_size),
+             1, 'GROW',
+             0, 'NO OP',
+            -1, 'SHRINK',
+                'UNKNOWN'
+        ) operation,
+        COUNT(*) count
+    FROM
+        gv$memory_resize_ops 
+    GROUP BY component, SIGN(final_size - initial_size)
+    ORDER BY component;
+
+
 # String Manipulation
 
 ## Count the client sessions with a FQDN
@@ -470,6 +493,32 @@ We partition the result set by tablespace.
         fs.phyblkrd + fs.phyblkwrt DESC;
     
     
+## Show the progressive growth in backup sets
+
+*Keywords*: analytics functions, aggregate functions, dynamic views, rman
+
+    SELECT
+        device_type,
+        completion_day,
+        cumu_size,
+        cumu_size / LAG(cumu_size) OVER (
+            ORDER BY device_type, completion_day
+        ) AS ratio
+    FROM (
+        SELECT
+            device_type,
+            TRUNC(completion_time, 'DAY')                       completion_day,
+            SUM(bytes)                                          cumu_size,
+            NTILE(100) OVER (ORDER BY device_type, SUM(bytes))  percentile
+        FROM
+            v$backup_piece_details  -- gv$backup_piece_details does not exist
+        GROUP BY
+            device_type, TRUNC(completion_time, 'DAY')
+    )
+    WHERE
+        percentile BETWEEN 10 AND 90;
+
+
 ## List statspack snapshots
 
 *Keywords*: analytics functions, statspack
@@ -486,85 +535,86 @@ We partition the result set by tablespace.
         stats$snapshot;
 
 
-## List  top-10 CPU-intensive queries
+## List top-10 CPU-intensive queries
 
 *References*: https://community.oracle.com/thread/1101381
 
-    WITH snaps AS
-        (
-            SELECT
-                dbid                                                             AS dbid,
-                instance_number                                                  AS instance_number,
-                TO_CHAR(snap_time, 'DD/MM/YYYY')                                 AS snap_day,
-                snap_id                                                          AS start_snap,
-                LEAD(snap_id) OVER (ORDER BY snap_time)                          AS stop_snap,
-                TO_CHAR(snap_time, 'HH24:MI')                                    AS start_time,
-                LEAD(TO_CHAR(snap_time, 'HH24:MI')) OVER (ORDER BY snap_time)    AS stop_time
-            FROM
-                stats$snapshot
-        ),
-    work AS
-        (
-            SELECT 
-                s.snap_day                                              AS snap_day,
-                s.start_snap                                            AS start_snap,
-                s.stop_snap                                             AS stop_snap,
-                s.start_time                                            AS start_time,
-                s.stop_time                                             AS stop_time,
-                ss1.hash_value                                          AS hash_value,
-                ss1.module                                              AS module,
-                ss1.text_subset                                         AS text_subset,
-                SUM(ss1.buffer_gets    - NVL(ss2.buffer_gets, 0))       AS bg,
-                SUM(ss1.executions     - NVL(ss2.executions, 0))        AS ex,
-                SUM(ss1.cpu_time       - NVL(ss2.cpu_time, 0))          AS ct,
-                SUM(ss1.elapsed_time   - NVL(ss2.elapsed_time, 0))      AS et,
-                SUM(ss1.rows_processed - NVL(ss2.rows_processed, 0))    AS rp,
-                SUM(ss1.disk_reads     - NVL(ss2.disk_reads, 0))        AS dr,
-                SUM(ss1.parse_calls    - NVL(ss2.parse_calls, 0))       AS pc,
-                SUM(ss1.invalidations  - NVL(ss2.invalidations, 0))     AS iv,
-                SUM(ss1.loads          - NVL(ss2.loads, 0))             AS ld
-            FROM
-                snaps s
-            JOIN
-                stats$sql_summary ss1
-            ON
-                       ss1.snap_id         = s.stop_snap
-                AND    ss1.dbid            = s.dbid
-                AND    ss1.instance_number = s.instance_number
-            JOIN
-                stats$sql_summary ss2
-            ON
-                       ss2.snap_id         = s.start_snap
-                AND    ss2.dbid            = ss1.dbid
-                AND    ss2.instance_number = ss1.instance_number
-                AND    ss2.hash_value      = ss1.hash_value
-                AND    ss2.address         = ss1.address
-                AND    ss2.text_subset     = ss1.text_subset
-                AND    ss1.executions      > NVL(ss2.executions, 0)
-            WHERE
-                s.stop_snap IS NOT NULL
-            GROUP BY 
-                s.snap_day,
-                s.start_snap,
-                s.stop_snap,
-                s.start_time,
-                s.stop_time,
-                ss1.hash_value,
-                ss1.module,
-                ss1.text_subset
-        ),
-    top_n AS
-        (
-            SELECT
-                w.*,
-                bg / ex    AS gpe,
-                ROW_NUMBER() OVER
-                    (
-                        PARTITION BY start_snap ORDER BY ct DESC
-                    )      AS nr
-            FROM
-                work w
-        )
+    WITH
+        snaps AS
+            (
+                SELECT
+                    dbid                                                             AS dbid,
+                    instance_number                                                  AS instance_number,
+                    trunc(snap_time, 'DAY')                                          AS snap_day,
+                    snap_id                                                          AS start_snap,
+                    LEAD(snap_id) OVER (ORDER BY snap_time)                          AS stop_snap,
+                    TO_CHAR(snap_time, 'HH24:MI')                                    AS start_time,
+                    LEAD(TO_CHAR(snap_time, 'HH24:MI')) OVER (ORDER BY snap_time)    AS stop_time
+                FROM
+                    stats$snapshot
+            ),
+        work AS
+            (
+                SELECT 
+                    s.snap_day                                              AS snap_day,
+                    s.start_snap                                            AS start_snap,
+                    s.stop_snap                                             AS stop_snap,
+                    s.start_time                                            AS start_time,
+                    s.stop_time                                             AS stop_time,
+                    ss1.hash_value                                          AS hash_value,
+                    ss1.module                                              AS module,
+                    ss1.text_subset                                         AS text_subset,
+                    SUM(ss1.buffer_gets    - NVL(ss2.buffer_gets, 0))       AS bg,
+                    SUM(ss1.executions     - NVL(ss2.executions, 0))        AS ex,
+                    SUM(ss1.cpu_time       - NVL(ss2.cpu_time, 0))          AS ct,
+                    SUM(ss1.elapsed_time   - NVL(ss2.elapsed_time, 0))      AS et,
+                    SUM(ss1.rows_processed - NVL(ss2.rows_processed, 0))    AS rp,
+                    SUM(ss1.disk_reads     - NVL(ss2.disk_reads, 0))        AS dr,
+                    SUM(ss1.parse_calls    - NVL(ss2.parse_calls, 0))       AS pc,
+                    SUM(ss1.invalidations  - NVL(ss2.invalidations, 0))     AS iv,
+                    SUM(ss1.loads          - NVL(ss2.loads, 0))             AS ld
+                FROM
+                    snaps s
+                JOIN
+                    stats$sql_summary ss1
+                ON
+                           ss1.snap_id         = s.stop_snap
+                    AND    ss1.dbid            = s.dbid
+                    AND    ss1.instance_number = s.instance_number
+                JOIN
+                    stats$sql_summary ss2
+                ON
+                           ss2.snap_id         = s.start_snap
+                    AND    ss2.dbid            = ss1.dbid
+                    AND    ss2.instance_number = ss1.instance_number
+                    AND    ss2.hash_value      = ss1.hash_value
+                    AND    ss2.address         = ss1.address
+                    AND    ss2.text_subset     = ss1.text_subset
+                    AND    ss1.executions      > NVL(ss2.executions, 0)
+                WHERE
+                    s.stop_snap IS NOT NULL
+                GROUP BY 
+                    s.snap_day,
+                    s.start_snap,
+                    s.stop_snap,
+                    s.start_time,
+                    s.stop_time,
+                    ss1.hash_value,
+                    ss1.module,
+                    ss1.text_subset
+            ),
+        top_n AS
+            (
+                SELECT
+                    w.*,
+                    bg / ex    AS gpe,
+                    ROW_NUMBER() OVER
+                        (
+                            PARTITION BY start_snap ORDER BY ct DESC
+                        )      AS nr
+                FROM
+                    work w
+            )
     SELECT
         snap_day,
         start_snap,
@@ -574,20 +624,20 @@ We partition the result set by tablespace.
         hash_value,
         module,
         text_subset,
-        bg,    -- buffer gets
-        ex,    -- executions
-        ct,    -- cpu time
-        et,    -- elapsed time
-        rp,    -- rows processed
-        dr,    -- disk reads
-        pc,    -- parse calls
-        iv,    -- invalidations
-        ld,    -- loads
-        gpe    -- gets per execs
+        bg      buffer_gets,
+        ex      executions,
+        ct      cpu_time,
+        et      elapsed_time,
+        rp      rows_processed,
+        dr      disk_reads,
+        pc      parse_calls,
+        iv      invalidations,
+        ld      loads,
+        gpe     gets_per_execs
     FROM
         top_n
     WHERE
-        nr <= 10;
+        nr <= &m;
 
 
 ## Show how much is tablespace usage growing
@@ -939,7 +989,7 @@ At least 11g R2 is required for the recursive CTE to work.
         fibonacci;
 
 
-## Verify that the sum of the reciprocals of factorials converge to `e'?
+## Verify that the sum of the reciprocals of factorials converge to e
 
 *Keywords*: recursive CTE, numerical recipes
 
@@ -952,7 +1002,7 @@ At least 11g R2 is required for the recursive CTE to work.
                 dual
             UNION ALL SELECT  --  recursive definition
                 n + 1             AS n,
-                f_n * (n + 1)          AS f_n
+                f_n * (n + 1)     AS f_n
             FROM
                 factorial
             WHERE
@@ -962,6 +1012,22 @@ At least 11g R2 is required for the recursive CTE to work.
         1 + sum(1 / f_n) - exp(1)  AS error
     FROM
         factorial;
+
+
+## Verify that the sum of the reciprocals of factorials converge to e, alternative method
+
+*Keywords*: doubly increasing sequence, non-equi join
+
+    WITH
+        seq AS (
+            SELECT level n FROM dual CONNECT BY level < &m
+        )
+    SELECT
+        1 + SUM(1 / EXP(SUM(LN(s2.n)))) - EXP(1) AS error
+    FROM
+        seq s1 JOIN seq s2 ON s2.n <= s1.n
+    GROUP BY
+        s1.n;
 
 
 ## Verify that the cosine function has a fixed point
