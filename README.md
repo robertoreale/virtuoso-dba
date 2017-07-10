@@ -44,6 +44,8 @@ This work is licensed under a <a rel="license" href="http://creativecommons.org/
   * [Show how much is tablespace usage growing](#show-how-much-is-tablespace-usage-growing)
 - [Grouping & Reporting](#grouping--reporting)
   * [Count the data files for each tablespaces and for each filesystem location](#count-the-data-files-for-each-tablespaces-and-for-each-filesystem-location)
+- [Drawing](#drawing)
+  * [Generate a histogram for the length of objects’ names](#generate-a-histogram-for-the-length-of-objects-names)
 - [Time Functions](#time-functions)
   * [Show the first and last day of the current month](#show-the-first-and-last-day-of-the-current-month)
   * [Show the first and last day of the current month](#show-the-first-and-last-day-of-the-current-month-1)
@@ -628,6 +630,25 @@ Assume a Unix filesystem, don’t follow symlinks.  Moreover, generate subtotals
         df
     GROUP BY CUBE(tablespace_name, dirname)
     ORDER BY tablespace_name, dirname;
+
+
+# Drawing
+
+## Generate a histogram for the length of objects’ names
+
+*Keywords*: formatting, analytic functions, aggregate functions
+
+    SELECT
+        LENGTH(object_name),
+        LPAD('#',
+            CEIL(RATIO_TO_REPORT(
+                APPROX_COUNT_DISTINCT(object_name)) OVER () * 100
+            ),
+            '#') AS histogram
+    FROM
+        dba_objects
+    GROUP BY LENGTH(object_name)
+    ORDER BY LENGTH(object_name);
 
 
 # Time Functions
