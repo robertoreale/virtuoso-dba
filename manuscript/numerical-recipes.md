@@ -50,6 +50,31 @@ At least 11g R2 is required for the recursive CTE to work.
         fibonacci;
 
 
+## Verify that the sum of the reciprocals of factorials converge to `e'?
+
+*Keywords*: recursive CTE, numerical recipes
+
+    WITH factorial(n, f_n) AS
+        (
+            SELECT            --  base case
+                1                 AS n,
+                1                 AS f_n
+            FROM
+                dual
+            UNION ALL SELECT  --  recursive definition
+                n + 1             AS n,
+                f_n * (n + 1)          AS f_n
+            FROM
+                factorial
+            WHERE
+                n < 50
+        )
+    SELECT
+        1 + sum(1 / f_n) - exp(1)  AS error
+    FROM
+        factorial;
+
+
 ## Verify that the cosine function has a fixed point
 
 *Keywords*: recursive CTE, numerical recipes, analytic functions, random values
