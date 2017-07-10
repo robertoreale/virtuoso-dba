@@ -4,6 +4,7 @@
 
 <!-- toc -->
 
+- [The Virtuoso DBA](#the-virtuoso-dba)
 - [First Steps](#first-steps)
   * [Show database role (primary, standby, etc.)](#show-database-role-primary-standby-etc)
   * [List user Data Pump jobs](#list-user-data-pump-jobs)
@@ -57,6 +58,15 @@
   * [Display the number of ASM allocated and free allocation units](#display-the-number-of-asm-allocated-and-free-allocation-units)
 
 <!-- tocstop -->
+
+# The Virtuoso DBA
+
+This book is for sale at http://leanpub.com/virtuosodba.
+
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a>
+
+This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.
+
 
 # First Steps
 
