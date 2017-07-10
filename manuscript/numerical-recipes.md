@@ -77,7 +77,7 @@ At least 11g R2 is required for the recursive CTE to work.
 
 ## Verify that the sum of the reciprocals of factorials converge to e, alternative method
 
-*Keywords*: recursive CTE, numerical recipes
+*Keywords*: doubly increasing sequence, non-equi join
 
     WITH
         seq AS (
