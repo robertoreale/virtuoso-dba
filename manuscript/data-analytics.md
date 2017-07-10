@@ -39,6 +39,22 @@ We partition the result set by tablespace.
         dba_recyclebin;
 
 
+## List statspack snapshots
+
+*Keywords*: analytics functions, statspack
+
+    SELECT
+        dbid                                                             AS dbid,
+        instance_number                                                  AS instance_number,
+        trunc(snap_time, 'DAY')                                          AS snap_day,
+        snap_id                                                          AS start_snap,
+        LEAD(snap_id) OVER (ORDER BY snap_time)                          AS stop_snap,
+        TO_CHAR(snap_time, 'HH24:MI')                                    AS start_time,
+        LEAD(TO_CHAR(snap_time, 'HH24:MI')) OVER (ORDER BY snap_time)    AS stop_time
+    FROM
+        stats$snapshot;
+
+
 ## Show how much is tablespace usage growing
 
 *Keywords*: regression models, dynamic views, logical storage
