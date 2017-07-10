@@ -59,20 +59,30 @@ We partition the result set by tablespace.
         fs.phyblkrd + fs.phyblkwrt DESC;
     
     
-## XXX
-select
-device_type,
-completion_day,
-cumu_size,
-cumu_size/lag(cumu_size) over (order by device_type, completion_day) ratio
-from (
-select
-  device_type,
-  trunc(completion_time, 'DAY') completion_day,
-  sum(bytes) cumu_size,
-  ntile(100) over (order by device_type, sum(bytes)) percentile
-from v$backup_piece_details group by device_type,  trunc(completion_time, 'DAY'))
-where percentile between 10 and 90;
+## Show the progressive growth in backup sets
+
+*Keywords*: analytics functions, aggregate functions, dynamic views, rman
+
+    SELECT
+        device_type,
+        completion_day,
+        cumu_size,
+        cumu_size / LAG(cumu_size) OVER (
+            ORDER BY device_type, completion_day
+        ) AS ratio
+    FROM (
+        SELECT
+            device_type,
+            TRUNC(completion_time, 'DAY')                       completion_day,
+            SUM(bytes)                                          cumu_size,
+            NTILE(100) OVER (ORDER BY device_type, SUM(bytes))  percentile
+        FROM
+            v$backup_piece_details  -- gv$backup_piece_details does not exist
+        GROUP BY
+            device_type, TRUNC(completion_time, 'DAY')
+    )
+    WHERE
+        percentile BETWEEN 10 AND 90;
 
 
 ## List statspack snapshots
