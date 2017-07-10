@@ -27,7 +27,6 @@
 
 At least 11g R2 is required for the recursive CTE to work.
 
-
     WITH fibonacci(n, f_n, f_n_next) AS
         (
             SELECT            --  base case
