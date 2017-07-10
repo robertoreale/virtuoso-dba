@@ -11,7 +11,7 @@
 all: README.md
 
 README.md: manuscript/*.md
-	cat misc/cover.md > README.md
+	cat markdown/cover.md > README.md
 	( cd manuscript && xargs cat < Book.txt ) | grep -v '^<!-- vim:' >> README.md
 	markdown-toc -i README.md
 
