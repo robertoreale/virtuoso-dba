@@ -46,6 +46,7 @@ This work is licensed under a <a rel="license" href="http://creativecommons.org/
   * [Count the data files for each tablespaces and for each filesystem location](#count-the-data-files-for-each-tablespaces-and-for-each-filesystem-location)
 - [Drawing](#drawing)
   * [Generate a histogram for the length of objects’ names](#generate-a-histogram-for-the-length-of-objects-names)
+  * [Build a histogram for the order of magnitude of segments’ sizes](#build-a-histogram-for-the-order-of-magnitude-of-segments-sizes)
 - [Time Functions](#time-functions)
   * [Show the first and last day of the current month](#show-the-first-and-last-day-of-the-current-month)
   * [Show the first and last day of the current month](#show-the-first-and-last-day-of-the-current-month-1)
@@ -58,6 +59,7 @@ This work is licensed under a <a rel="license" href="http://creativecommons.org/
   * [Calculate the sum of a geometric series](#calculate-the-sum-of-a-geometric-series)
   * [Solve Besel's problem](#solve-besels-problem)
   * [Generate Fibonacci sequence](#generate-fibonacci-sequence)
+  * [Verify that the sum of the reciprocals of factorials converge to `e'?](#verify-that-the-sum-of-the-reciprocals-of-factorials-converge-to-e)
   * [Verify that the cosine function has a fixed point](#verify-that-the-cosine-function-has-a-fixed-point)
 - [XML Database 101](#xml-database-101)
   * [Return the total number of installed patches](#return-the-total-number-of-installed-patches)
@@ -636,7 +638,7 @@ Assume a Unix filesystem, don’t follow symlinks.  Moreover, generate subtotals
 
 ## Generate a histogram for the length of objects’ names
 
-*Keywords*: formatting, analytic functions, aggregate functions
+*Keywords*: formatting, analytic functions, aggregate functions, logical storage
 
     SELECT
         LENGTH(object_name),
@@ -649,6 +651,35 @@ Assume a Unix filesystem, don’t follow symlinks.  Moreover, generate subtotals
         dba_objects
     GROUP BY LENGTH(object_name)
     ORDER BY LENGTH(object_name);
+
+
+## Build a histogram for the order of magnitude of segments’ sizes
+
+*Keywords*: formatting, analytic functions, aggregate functions, physical storage
+
+    SELECT
+        DECODE(
+            TRUNC(LOG(1024, bytes)),
+            -- 0, 'bytes',
+            1, 'KiB' ,
+            2, 'MiB',
+            3, 'GiB',
+            4, 'TiB',
+            5, 'PiB',
+            6, 'EiB',
+            7, 'ZiB',
+            8, 'YiB',
+            'UNKNOWN'
+        )           AS order_of_magnitude,
+        LPAD('#',
+            CEIL(RATIO_TO_REPORT(
+                APPROX_COUNT_DISTINCT(SEGMENT_NAME)) OVER () * 100
+            ),
+            '#')    AS histogram
+    FROM
+        dba_segments
+    GROUP BY TRUNC(LOG(1024, bytes))
+    ORDER BY TRUNC(LOG(1024, bytes));
 
 
 # Time Functions
@@ -885,7 +916,6 @@ December 31, 9999 CE, one second to midnight.
 
 At least 11g R2 is required for the recursive CTE to work.
 
-
     WITH fibonacci(n, f_n, f_n_next) AS
         (
             SELECT            --  base case
@@ -907,6 +937,31 @@ At least 11g R2 is required for the recursive CTE to work.
         f_n                       AS nth_fibonacci_number
     FROM
         fibonacci;
+
+
+## Verify that the sum of the reciprocals of factorials converge to `e'?
+
+*Keywords*: recursive CTE, numerical recipes
+
+    WITH factorial(n, f_n) AS
+        (
+            SELECT            --  base case
+                1                 AS n,
+                1                 AS f_n
+            FROM
+                dual
+            UNION ALL SELECT  --  recursive definition
+                n + 1             AS n,
+                f_n * (n + 1)          AS f_n
+            FROM
+                factorial
+            WHERE
+                n < 50
+        )
+    SELECT
+        1 + sum(1 / f_n) - exp(1)  AS error
+    FROM
+        factorial;
 
 
 ## Verify that the cosine function has a fixed point
