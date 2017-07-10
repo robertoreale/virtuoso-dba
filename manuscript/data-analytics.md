@@ -59,22 +59,6 @@ We partition the result set by tablespace.
         fs.phyblkrd + fs.phyblkwrt DESC;
     
     
-## List statspack snapshots
-
-*Keywords*: analytics functions, statspack
-
-    SELECT
-        dbid                                                             AS dbid,
-        instance_number                                                  AS instance_number,
-        trunc(snap_time, 'DAY')                                          AS snap_day,
-        snap_id                                                          AS start_snap,
-        LEAD(snap_id) OVER (ORDER BY snap_time)                          AS stop_snap,
-        TO_CHAR(snap_time, 'HH24:MI')                                    AS start_time,
-        LEAD(TO_CHAR(snap_time, 'HH24:MI')) OVER (ORDER BY snap_time)    AS stop_time
-    FROM
-        stats$snapshot;
-
-
 ## XXX
 select
 device_type,
@@ -89,6 +73,22 @@ select
   ntile(100) over (order by device_type, sum(bytes)) percentile
 from v$backup_piece_details group by device_type,  trunc(completion_time, 'DAY'))
 where percentile between 10 and 90;
+
+
+## List statspack snapshots
+
+*Keywords*: analytics functions, statspack
+
+    SELECT
+        dbid                                                             AS dbid,
+        instance_number                                                  AS instance_number,
+        trunc(snap_time, 'DAY')                                          AS snap_day,
+        snap_id                                                          AS start_snap,
+        LEAD(snap_id) OVER (ORDER BY snap_time)                          AS stop_snap,
+        TO_CHAR(snap_time, 'HH24:MI')                                    AS start_time,
+        LEAD(TO_CHAR(snap_time, 'HH24:MI')) OVER (ORDER BY snap_time)    AS stop_time
+    FROM
+        stats$snapshot;
 
 
 ## List top-10 CPU-intensive queries
