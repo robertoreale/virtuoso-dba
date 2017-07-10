@@ -1,4 +1,4 @@
-# The Virtuoso DBA
+# License Notice
 
 This book is for sale at http://leanpub.com/virtuosodba.
 
