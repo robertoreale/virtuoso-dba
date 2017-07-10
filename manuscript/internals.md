@@ -59,82 +59,50 @@
     GROUP BY
         group_kfdat, number_kfdat;
 
-## Displays the count of allocation units per ASM file by file alias (for metadata only)
+
+## Display the count of allocation units per ASM file by file alias (for metadata only)
 
 *Keywords*: x$interface, asm
 
 *Reference*: MOS Doc ID 351117.1
 
-CLEAR COLUMN
-
-SELECT
-    COUNT(xnum_kffxp)    AS au_count,
-    number_kffxp         AS file#,
-    group_kffxp          AS dg#
-FROM
-    x$kffxp
-WHERE
-    number_kffxp < 256
-GROUP BY
-    number_kffxp, group_kffxp
-ORDER BY
-    COUNT(xnum_kffxp);
-
---  Submodule: asm_file_au_count_sys_created
---  Purpose:   displays the count of allocation units per ASM file by file alias
---  Reference: MOS Doc ID 351117.1
---  Tested:    10g, 11g
+    SELECT
+        COUNT(xnum_kffxp)    AS au_count,
+        number_kffxp         AS file#,
+        group_kffxp          AS dg#
+    FROM
+        x$kffxp
+    WHERE
+        number_kffxp < 256
+    GROUP BY
+        number_kffxp, group_kffxp
+    ORDER BY
+        COUNT(xnum_kffxp);
 
 
-CLEAR COLUMN
-SET LINE 130
-COL name FORMAT a60
+## Display the count of allocation units per ASM file by file alias
 
-SELECT
-    group_kffxp,
-    number_kffxp,
-    name,
-    COUNT(*)
-FROM
-    x$kffxp JOIN v$asm_alias
-ON
-    group_kffxp = group_number
-        AND number_kffxp = file_number
-        AND system_created = 'Y'
-GROUP BY
-    group_kffxp, number_kffxp, name
-ORDER BY
-    group_kffxp, number_kffxp;
+*Keywords*: x$interface, asm
 
---  Submodule: asm_file_au_count_user_created
---  Purpose:   displays the count of allocation units per ASM file by file alias
---  Reference: MOS Doc ID 351117.1
---  Tested:    10g, 11g
---
+*Reference*: MOS Doc ID 351117.1
+
+    SELECT
+        group_kffxp,
+        number_kffxp,
+        name,
+        COUNT(*) count
+    FROM
+        x$kffxp
+    JOIN
+        v$asm_alias
+    ON
+        group_kffxp = group_number AND number_kffxp = file_number
+    GROUP BY
+        group_kffxp, number_kffxp, name
+    ORDER BY
+        group_kffxp, number_kffxp;
 
 
-CLEAR COLUMN
-SET LINE 130
-COL name FORMAT a60
-
-SELECT
-    group_kffxp,
-    number_kffxp,
-    name,
-    COUNT(*)
-FROM
-    x$kffxp JOIN v$asm_alias
-ON
-    group_kffxp = group_number
-        AND number_kffxp = file_number
-        AND system_created = 'N'
-GROUP BY
-    group_kffxp, number_kffxp, name
-ORDER BY
-    group_kffxp, number_kffxp;
-
-
---  Submodule: asm_file_size_sys_created
 --  Purpose:   shows file utilization
 --  Reference: MOS Doc ID 351117.1
 --  Tested:    10g, 11g
