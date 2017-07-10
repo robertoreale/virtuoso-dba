@@ -63,7 +63,7 @@ At least 11g R2 is required for the recursive CTE to work.
                 dual
             UNION ALL SELECT  --  recursive definition
                 n + 1             AS n,
-                f_n * (n + 1)          AS f_n
+                f_n * (n + 1)     AS f_n
             FROM
                 factorial
             WHERE
