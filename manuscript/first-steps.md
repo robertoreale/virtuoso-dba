@@ -24,6 +24,26 @@
         job_name NOT LIKE 'BIN$%';
 
 
+## Calculate the average number of redo log switches per hour
+
+*Keywords*: dynamic views, aggregate functions
+
+    SELECT
+        inst_id,
+        thread#,
+        TRUNC(first_time)              AS day,
+        COUNT(*)                       AS switches,
+        COUNT(*) / 24                  AS avg_switches_per_hour
+    FROM
+        gv$loghist
+    GROUP BY
+        inst_id,
+        thread#,
+        TRUNC(first_time)
+    ORDER BY
+        day;
+
+
 ## List the top-n largest segments
 
 *Keywords*: limiting query result, physical storage
