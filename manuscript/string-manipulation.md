@@ -37,8 +37,8 @@ Assume a FQDN has the form N_1.N_2.....N_t, where t > 1 and each N_i can contain
       SELECT event ev, total_waits tw FROM v$system_event
     )
     SELECT
-      RPAD(ev, MAX(LENGTH(ev)+2) OVER (PARTITION BY 1), '.') ||
-      LPAD(tw, MAX(LENGTH(tw)+2) OVER (PARTITION BY 1), '.') total_waits_per_event_type
+      RPAD(ev, MAX(LENGTH(ev)+2) OVER (), '.') ||
+      LPAD(tw, MAX(LENGTH(tw)+2) OVER (), '.') total_waits_per_event_type
     FROM
         se;
 
