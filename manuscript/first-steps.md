@@ -125,6 +125,40 @@
         inst_id, ts.name, tmpf.block_size;
 
 
+## Compute a count of archived logs and their average size
+
+*Keywords*: dynamic views, WITH clause
+
+    WITH
+        lh AS (
+            SELECT
+                TO_CHAR(first_time, 'YYYY-MM-DD')    AS day,
+                COUNT(1)                             AS archived#,
+                MIN(recid)                           AS min#,
+                MAX(recid)                           AS max# 
+            FROM
+                gv$log_history
+            GROUP BY
+                TO_CHAR(first_time, 'YYYY-MM-DD')
+            ORDER BY 1 DESC
+        ),
+        lg AS (
+            SELECT
+                COUNT(1)                             AS members#,
+                MAX(bytes) / 1048576                 AS max_size, 
+                MIN(bytes) / 1048576                 AS min_size,
+                AVG(bytes) / 1048576                 AS avg_size
+            FROM
+                gv$log
+        )
+    SELECT
+        lh.*,
+        lg.*,
+        ROUND(lh.archived# * lg.avg_size)             AS daily_avg_size
+    FROM
+        lh, lg;
+
+
 ## Calculate a fragmentation factor for tablespaces
 
 *Keywords*: aggregate functions, logical storage
