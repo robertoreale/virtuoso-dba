@@ -88,6 +88,7 @@ This work is licensed under a <a rel="license" href="http://creativecommons.org/
 
 # Introduction
 
+Working as a DBA requires improving skills in at least two key areas: SQL and database administration.  Usually the paths to do so are separate: in this book we will try to unify them in a coherent manner.
 
 # First Steps
 
@@ -496,6 +497,8 @@ We partition the result set by tablespace.
 ## Show the progressive growth in backup sets
 
 *Keywords*: analytics functions, aggregate functions, dynamic views, rman
+
+We use percentiles to exclude outliers.
 
     SELECT
         device_type,
