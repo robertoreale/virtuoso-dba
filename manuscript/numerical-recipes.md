@@ -50,7 +50,7 @@ At least 11g R2 is required for the recursive CTE to work.
         fibonacci;
 
 
-## Verify that the sum of the reciprocals of factorials converge to e?
+## Verify that the sum of the reciprocals of factorials converge to e
 
 *Keywords*: recursive CTE, numerical recipes
 
