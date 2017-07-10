@@ -75,6 +75,22 @@ We partition the result set by tablespace.
         stats$snapshot;
 
 
+## XXX
+select
+device_type,
+completion_day,
+cumu_size,
+cumu_size/lag(cumu_size) over (order by device_type, completion_day) ratio
+from (
+select
+  device_type,
+  trunc(completion_time, 'DAY') completion_day,
+  sum(bytes) cumu_size,
+  ntile(100) over (order by device_type, sum(bytes)) percentile
+from v$backup_piece_details group by device_type,  trunc(completion_time, 'DAY'))
+where percentile between 10 and 90;
+
+
 ## List top-10 CPU-intensive queries
 
 *References*: https://community.oracle.com/thread/1101381
