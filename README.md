@@ -19,12 +19,15 @@ This work is licensed under a <a rel="license" href="http://creativecommons.org/
 - [Introduction](#introduction)
 - [First Steps](#first-steps)
   * [Show database role (primary, standby, etc.)](#show-database-role-primary-standby-etc)
+  * [Show database block size](#show-database-block-size)
   * [List user Data Pump jobs](#list-user-data-pump-jobs)
   * [Calculate the average number of redo log switches per hour](#calculate-the-average-number-of-redo-log-switches-per-hour)
   * [List the top-n largest segments](#list-the-top-n-largest-segments)
+  * [Show the total, used, and free space database-wise](#show-the-total-used-and-free-space-database-wise)
   * [Display the findings discovered by all advisors in the database](#display-the-findings-discovered-by-all-advisors-in-the-database)
   * [Associate blocking and blocked sessions](#associate-blocking-and-blocked-sessions)
   * [Calculate the size of the temporary tablespaces](#calculate-the-size-of-the-temporary-tablespaces)
+  * [Calculate the high-water and excess allocated size for datafiles](#calculate-the-high-water-and-excess-allocated-size-for-datafiles)
   * [Compute a count of archived logs and their average size](#compute-a-count-of-archived-logs-and-their-average-size)
   * [Calculate a fragmentation factor for tablespaces](#calculate-a-fragmentation-factor-for-tablespaces)
   * [Count number of segments for each order of magnitude](#count-number-of-segments-for-each-order-of-magnitude)
@@ -99,6 +102,19 @@ Working as a DBA requires improving skills in at least two key areas: SQL and da
     SELECT database_role FROM gv$database;
 
 
+## Show database block size
+
+*Keywords*: dynamic views, parameters
+
+    SELECT
+        inst_id,
+        TO_NUMBER(value)  AS db_block_size
+    FROM
+        gv$parameter
+    WHERE
+        name = 'db_block_size';
+    
+
 ## List user Data Pump jobs
 
 *Keywords*: LIKE, data pump
@@ -150,6 +166,23 @@ Working as a DBA requires improving skills in at least two key areas: SQL and da
             bytes / 1024 / 1024  AS mib_total
         FROM dba_segments ORDER BY bytes DESC
     ) WHERE ROWNUM <= &n;
+
+
+## Show the total, used, and free space database-wise
+
+*Keywords*: subqueries, physical storage
+
+    SELECT
+        alloc_space                 AS alloc_space,
+        alloc_space - free_space    AS used_space,
+        free_space                  AS free_space
+    FROM
+        (
+            SELECT
+                (SELECT SUM(bytes / 1024 / 1024) from dba_data_files)   AS alloc_space,
+                (SELECT SUM(bytes / 1024 / 1024) from dba_free_space)   AS free_space
+            FROM dual
+        );
 
 
 ## Display the findings discovered by all advisors in the database
@@ -215,6 +248,43 @@ Working as a DBA requires improving skills in at least two key areas: SQL and da
         (inst_id, ts#)
     GROUP BY
         inst_id, ts.name, tmpf.block_size;
+
+
+## Calculate the high-water and excess allocated size for datafiles
+
+*Keywords*: WITH clause, NVL, aggregate functions, physical storage
+
+    WITH
+        pars AS
+            (
+                -- block size in MiB
+                SELECT
+                    TO_NUMBER(value) / 1024 / 1024  AS block_size_mib
+                FROM
+                -- no need to use gv$parameter here
+                    v$parameter
+                WHERE
+                    name = 'db_block_size'
+            )
+    SELECT
+        file_name,
+        blocks                 * pars.block_size_mib  AS file_size,
+        NVL(hwm, 1)            * pars.block_size_mib  AS high_water_mark,
+        (blocks - NVL(hwm, 1)) * pars.block_size_mib  AS excess
+    FROM
+        pars,
+        dba_data_files df
+    JOIN
+        (
+            SELECT
+                file_id,
+                MAX(block_id + blocks - 1)  AS hwm
+            FROM
+                dba_extents
+            GROUP BY
+                file_id
+        ) ext
+    USING (file_id);
 
 
 ## Compute a count of archived logs and their average size
