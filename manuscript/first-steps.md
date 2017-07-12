@@ -73,6 +73,23 @@
     ) WHERE ROWNUM <= &n;
 
 
+## Show the total, used, and free space database-wise
+
+*Keywords*: subqueries, physical storage
+
+    SELECT
+        alloc_space                 AS alloc_space,
+        alloc_space - free_space    AS used_space,
+        free_space                  AS free_space
+    FROM
+        (
+            SELECT
+                (SELECT SUM(bytes / 1024 / 1024) from dba_data_files)   AS alloc_space,
+                (SELECT SUM(bytes / 1024 / 1024) from dba_free_space)   AS free_space
+            FROM dual
+        );
+
+
 ## Display the findings discovered by all advisors in the database
 
 *Keywords*: addm, nested queries
