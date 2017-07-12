@@ -7,6 +7,19 @@
     SELECT database_role FROM gv$database;
 
 
+## Show database block size
+
+*Keywords*: dynamic views, parameters
+
+    SELECT
+        inst_id,
+        TO_NUMBER(value)  AS db_block_size
+    FROM
+        gv$parameter
+    WHERE
+        name = 'db_block_size';
+    
+
 ## List user Data Pump jobs
 
 *Keywords*: LIKE, data pump
