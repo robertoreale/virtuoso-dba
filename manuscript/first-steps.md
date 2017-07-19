@@ -432,20 +432,15 @@ IEC prefixes are used.
         inst_id, sid, serial#, parameter;
 
 
-## XXX
+## Show the instance name and number and the schema or database user name relative to the current session
 
---  Purpose:   shows the instance name relative to the current session
---  Purpose:   shows the instance number relative to the current session
---  Purpose:   returns the schema or the database user name by which the
---             current user is authenticated
-
-*Keywords*:
+*Keywords*: WITH clause, SYS_CONTEXT
 
     WITH
         ctx AS
             (
                 SELECT
-                    SYS_CONTEXT('userenv', 'instance_name') AS instance_name,
+                    SYS_CONTEXT('USERENV', 'INSTANCE_NAME') AS instance_name,
                     SYS_CONTEXT('USERENV', 'SESSION_USER')  AS session_user
                 FROM
                     dual
