@@ -192,6 +192,33 @@
     USING (file_id);
 
 
+## Display parent-child pairs between tables, based on reference constraints
+
+*Keywords*: WITH clause, constraints
+
+    WITH
+        constraints AS 
+            (
+                SELECT
+                    *
+                FROM
+                    all_constraints
+                WHERE
+                    status = 'ENABLED' AND constraint_type IN ('P','R')
+            )
+    SELECT DISTINCT
+        c1.owner         AS owner,
+        c1.table_name    AS table_name,
+        c2.owner         AS parent_owner,
+        c2.table_name    AS parent_table_name
+    FROM
+        constraints  c1
+    JOIN
+        constraints  c2 ON c1.r_constraint_name = c2.constraint_name
+    ORDER BY
+        1, 2, 3, 4;
+
+
 ## Compute a count of archived logs and their average size
 
 *Keywords*: dynamic views, WITH clause
