@@ -2,6 +2,7 @@ intro.md
 first-steps.md
 string-manipulation.md
 data-analytics.md
+graphs-and-trees.md
 grouping-reporting.md
 drawing.md
 time-functions.md

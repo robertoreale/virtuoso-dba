@@ -326,23 +326,6 @@ IEC prefixes are used.
         AVG(LENGTH(object_name)) DESC;
 
 
-## List all users to which a given role is granted, even indirectly
-
-*Keywords*: hierarchical queries, security
-
-    SELECT 
-        grantee
-    FROM
-        dba_role_privs
-    CONNECT BY prior grantee = granted_role
-    START WITH granted_role = '&role'
-    INTERSECT
-    SELECT
-        username
-    FROM
-        dba_users;
-
-
 ## Count memory resize operations, by component and type
 
 *Keywords*: DECODE, dynamic views
@@ -388,7 +371,7 @@ IEC prefixes are used.
     WHERE
         s.osuser IS NOT NULL AND s.username IS NOT NULL
     ORDER BY
-        sid, serial#;
+        inst_id, sid, serial#;
         
 
 ## List some basic CPU statistics for each user session
