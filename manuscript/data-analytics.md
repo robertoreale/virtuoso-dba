@@ -87,9 +87,9 @@ We use percentiles to exclude outliers.
         percentile BETWEEN 10 AND 90;
 
 
-## XXX
+## For each schema, calculate the correlation between the size of the tables both in bytes and as a product rows times columns
 
-*Keywords*: xXX
+*Keywords*: aggregate functions, subqueries, logical and physical storage
 
     SELECT
         owner,
