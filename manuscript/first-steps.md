@@ -239,9 +239,9 @@
         lg AS (
             SELECT
                 COUNT(1)                             AS members#,
-                MAX(bytes) / 1048576                 AS max_size, 
-                MIN(bytes) / 1048576                 AS min_size,
-                AVG(bytes) / 1048576                 AS avg_size
+                MAX(bytes) / 1024 / 1024             AS max_size, 
+                MIN(bytes) / 1024 / 1024             AS min_size,
+                AVG(bytes) / 1024 / 1024             AS avg_size
             FROM
                 gv$log
         )
