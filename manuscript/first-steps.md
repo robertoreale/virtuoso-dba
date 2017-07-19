@@ -432,4 +432,31 @@ IEC prefixes are used.
         inst_id, sid, serial#, parameter;
 
 
+## XXX
+
+--  Purpose:   shows the instance name relative to the current session
+--  Purpose:   shows the instance number relative to the current session
+--  Purpose:   returns the schema or the database user name by which the
+--             current user is authenticated
+
+*Keywords*:
+
+    WITH
+        ctx AS
+            (
+                SELECT
+                    SYS_CONTEXT('userenv', 'instance_name') AS instance_name,
+                    SYS_CONTEXT('USERENV', 'SESSION_USER')  AS session_user
+                FROM
+                    dual
+            )
+    SELECT 
+        ctx.instance_name,
+        i.instance_number,
+        ctx.session_user
+    FROM
+        ctx
+    JOIN
+        gv$instance i ON UPPER(ctx.instance_name) = UPPER(i.instance_name);
+
 <!-- vim: set fenc=utf-8 spell spl=en ts=4 sw=4 et filetype=markdown : -->
