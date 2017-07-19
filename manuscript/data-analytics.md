@@ -87,6 +87,46 @@ We use percentiles to exclude outliers.
         percentile BETWEEN 10 AND 90;
 
 
+## XXX
+
+*Keywords*: xXX
+
+    SELECT
+        owner,
+        CORR(bytes, num_rows * num_cols)
+    FROM
+        (
+            SELECT
+                t1.owner,
+                t1.table_name,
+                t1.num_rows,
+                t2.num_cols,
+                s.bytes
+            FROM
+                dba_tables t1
+            JOIN
+                (
+                    SELECT
+                        owner,
+                        table_name,
+                        COUNT(*) num_cols
+                    FROM
+                        dba_tab_columns
+                    GROUP BY
+                        owner, table_name
+                ) t2
+            ON t1.owner = t2.owner AND t1.table_name = t2.table_name
+            JOIN
+                dba_segments s
+            ON
+                    t1.owner       = s.owner
+                AND t1.table_name  = s.segment_name
+                AND s.segment_type = 'TABLE'
+        )
+    GROUP BY owner
+    ORDER BY owner;
+
+
 ## List statspack snapshots
 
 *Keywords*: analytics functions, statspack
