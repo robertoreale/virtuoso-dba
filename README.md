@@ -41,17 +41,20 @@ This work is licensed under a <a rel="license" href="http://creativecommons.org/
 - [String Manipulation](#string-manipulation)
   * [Count the client sessions with a FQDN](#count-the-client-sessions-with-a-fqdn)
   * [Calculate the edit distance between a table name and the names of dependent indexes](#calculate-the-edit-distance-between-a-table-name-and-the-names-of-dependent-indexes)
+  * [Calculate the minimum, median, and maximum edit distances between a table's name and the names of its indexes](#calculate-the-minimum-median-and-maximum-edit-distances-between-a-tables-name-and-the-names-of-its-indexes)
   * [Get the number of total waits for each event type, with pretty formatting](#get-the-number-of-total-waits-for-each-event-type-with-pretty-formatting)
 - [Data Analytics](#data-analytics)
   * [Rank all the tables in the system based on their cardinality](#rank-all-the-tables-in-the-system-based-on-their-cardinality)
   * [List the objects in the recycle bin, sorting by the version](#list-the-objects-in-the-recycle-bin-sorting-by-the-version)
   * [Show I/O stats on datafiles](#show-io-stats-on-datafiles)
   * [Show the progressive growth in backup sets](#show-the-progressive-growth-in-backup-sets)
+  * [For each schema, calculate the correlation between the size of the tables both in bytes and as a product rows times columns](#for-each-schema-calculate-the-correlation-between-the-size-of-the-tables-both-in-bytes-and-as-a-product-rows-times-columns)
   * [List statspack snapshots](#list-statspack-snapshots)
   * [List top-10 CPU-intensive queries](#list-top-10-cpu-intensive-queries)
   * [Show how much is tablespace usage growing](#show-how-much-is-tablespace-usage-growing)
 - [Graphs and Trees](#graphs-and-trees)
   * [List all users to which a given role is granted, even indirectly](#list-all-users-to-which-a-given-role-is-granted-even-indirectly)
+  * [List privileges granted to each user, even indirectly](#list-privileges-granted-to-each-user-even-indirectly)
   * [Display reference graph between tables](#display-reference-graph-between-tables)
 - [Grouping & Reporting](#grouping--reporting)
   * [Count the data files for each tablespaces and for each filesystem location](#count-the-data-files-for-each-tablespaces-and-for-each-filesystem-location)
@@ -586,6 +589,22 @@ Assume a FQDN has the form N_1.N_2.....N_t, where t > 1 and each N_i can contain
         generated = 'N';
 
 
+## Calculate the minimum, median, and maximum edit distances between a table's name and the names of its indexes
+
+*Keywords*: edit distance for strings, ROLLUP
+
+    SELECT
+        owner,
+        table_name,
+           MIN(UTL_MATCH.EDIT_DISTANCE(table_name, index_name)) min_edit_distance,
+        MEDIAN(UTL_MATCH.EDIT_DISTANCE(table_name, index_name)) median_edit_distance,
+           MAX(UTL_MATCH.EDIT_DISTANCE(table_name, index_name)) max_edit_distance
+    FROM
+        dba_indexes
+    GROUP BY ROLLUP (owner, table_name)
+    ORDER BY         owner, table_name;
+
+
 ## Get the number of total waits for each event type, with pretty formatting
 
 *Keywords*: formatting, analytic functions, dynamic views
@@ -687,6 +706,46 @@ We use percentiles to exclude outliers.
     )
     WHERE
         percentile BETWEEN 10 AND 90;
+
+
+## For each schema, calculate the correlation between the size of the tables both in bytes and as a product rows times columns
+
+*Keywords*: aggregate functions, subqueries, logical and physical storage
+
+    SELECT
+        owner,
+        CORR(bytes, num_rows * num_cols)
+    FROM
+        (
+            SELECT
+                t1.owner,
+                t1.table_name,
+                t1.num_rows,
+                t2.num_cols,
+                s.bytes
+            FROM
+                dba_tables t1
+            JOIN
+                (
+                    SELECT
+                        owner,
+                        table_name,
+                        COUNT(*) num_cols
+                    FROM
+                        dba_tab_columns
+                    GROUP BY
+                        owner, table_name
+                ) t2
+            ON t1.owner = t2.owner AND t1.table_name = t2.table_name
+            JOIN
+                dba_segments s
+            ON
+                    t1.owner       = s.owner
+                AND t1.table_name  = s.segment_name
+                AND s.segment_type = 'TABLE'
+        )
+    GROUP BY owner
+    ORDER BY owner;
 
 
 ## List statspack snapshots
@@ -845,6 +904,25 @@ We use percentiles to exclude outliers.
         username
     FROM
         dba_users;
+
+
+## List privileges granted to each user, even indirectly
+
+*Keywords*: hierarchical queries, security
+
+    SELECT
+        level,
+        u1.name grantee,
+        u2.name privilege,
+        SYS_CONNECT_BY_PATH(u1.name, '/') path
+    FROM
+        sysauth$ sa
+    JOIN
+        user$ u1 ON (u1.user# = grantee#)
+    JOIN
+        user$ u2 ON (u2.user# = sa.privilege#)
+    CONNECT BY PRIOR privilege# = grantee#
+    ORDER BY level, grantee, privilege;
 
 
 ## Display reference graph between tables
