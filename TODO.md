@@ -1,10 +1,6 @@
-The Virtuoso DBA
+TODO
 ===
 
-Oracle Database
----
-
-* ASM: descrizione, come si crea la ridondanza e cosa sono i failure groups. Comandi principali per gestire i disk group.
 * Cosa sono e a cosa servono gli undo segments. In un RAC sono condivisi o privati? Quali blocchi contengono? (Committed, Uncommitted, Expired, Unexpired, …) come funziona la retention?
 * RAC: dove stanno e a cosa servono i voting disk (membership), OCR, CRS?
 * AWR: che cos’è, a cosa serve e come funziona. Cosa sono gli Wait Events e quali sono i più importanti? Per esempio Scattered read, db file sequential real, log file sync, latch free, …
