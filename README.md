@@ -28,6 +28,7 @@ This work is licensed under a <a rel="license" href="http://creativecommons.org/
   * [Associate blocking and blocked sessions](#associate-blocking-and-blocked-sessions)
   * [Calculate the size of the temporary tablespaces](#calculate-the-size-of-the-temporary-tablespaces)
   * [Calculate the high-water and excess allocated size for datafiles](#calculate-the-high-water-and-excess-allocated-size-for-datafiles)
+  * [Display parent-child pairs between tables, based on reference constraints](#display-parent-child-pairs-between-tables-based-on-reference-constraints)
   * [Compute a count of archived logs and their average size](#compute-a-count-of-archived-logs-and-their-average-size)
   * [Calculate a fragmentation factor for tablespaces](#calculate-a-fragmentation-factor-for-tablespaces)
   * [Count number of segments for each order of magnitude](#count-number-of-segments-for-each-order-of-magnitude)
@@ -36,6 +37,7 @@ This work is licensed under a <a rel="license" href="http://creativecommons.org/
   * [Count memory resize operations, by component and type](#count-memory-resize-operations-by-component-and-type)
   * [List some basic I/O statistics for each user session](#list-some-basic-io-statistics-for-each-user-session)
   * [List some basic CPU statistics for each user session](#list-some-basic-cpu-statistics-for-each-user-session)
+  * [Show the instance name and number and the schema or database user name relative to the current session](#show-the-instance-name-and-number-and-the-schema-or-database-user-name-relative-to-the-current-session)
 - [String Manipulation](#string-manipulation)
   * [Count the client sessions with a FQDN](#count-the-client-sessions-with-a-fqdn)
   * [Calculate the edit distance between a table name and the names of dependent indexes](#calculate-the-edit-distance-between-a-table-name-and-the-names-of-dependent-indexes)
@@ -291,6 +293,33 @@ Working as a DBA requires improving skills in at least two key areas: SQL and da
     USING (file_id);
 
 
+## Display parent-child pairs between tables, based on reference constraints
+
+*Keywords*: WITH clause, constraints
+
+    WITH
+        constraints AS 
+            (
+                SELECT
+                    *
+                FROM
+                    all_constraints
+                WHERE
+                    status = 'ENABLED' AND constraint_type IN ('P','R')
+            )
+    SELECT DISTINCT
+        c1.owner         AS owner,
+        c1.table_name    AS table_name,
+        c2.owner         AS parent_owner,
+        c2.table_name    AS parent_table_name
+    FROM
+        constraints  c1
+    JOIN
+        constraints  c2 ON c1.r_constraint_name = c2.constraint_name
+    ORDER BY
+        1, 2, 3, 4;
+
+
 ## Compute a count of archived logs and their average size
 
 *Keywords*: dynamic views, WITH clause
@@ -311,9 +340,9 @@ Working as a DBA requires improving skills in at least two key areas: SQL and da
         lg AS (
             SELECT
                 COUNT(1)                             AS members#,
-                MAX(bytes) / 1048576                 AS max_size, 
-                MIN(bytes) / 1048576                 AS min_size,
-                AVG(bytes) / 1048576                 AS avg_size
+                MAX(bytes) / 1024 / 1024             AS max_size, 
+                MIN(bytes) / 1024 / 1024             AS min_size,
+                AVG(bytes) / 1024 / 1024             AS avg_size
             FROM
                 gv$log
         )
@@ -503,6 +532,28 @@ IEC prefixes are used.
     ORDER BY
         inst_id, sid, serial#, parameter;
 
+
+## Show the instance name and number and the schema or database user name relative to the current session
+
+*Keywords*: WITH clause, SYS_CONTEXT
+
+    WITH
+        ctx AS
+            (
+                SELECT
+                    SYS_CONTEXT('USERENV', 'INSTANCE_NAME') AS instance_name,
+                    SYS_CONTEXT('USERENV', 'SESSION_USER')  AS session_user
+                FROM
+                    dual
+            )
+    SELECT 
+        ctx.instance_name,
+        i.instance_number,
+        ctx.session_user
+    FROM
+        ctx
+    JOIN
+        gv$instance i ON UPPER(ctx.instance_name) = UPPER(i.instance_name);
 
 # String Manipulation
 
@@ -806,7 +857,7 @@ We use percentiles to exclude outliers.
                 SELECT
                     *
                 FROM
-                    all_constraints
+                    dba_constraints
                 WHERE
                     status = 'ENABLED' AND constraint_type IN ('P','R')
             ),
