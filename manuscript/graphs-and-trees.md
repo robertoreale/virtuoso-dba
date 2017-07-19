@@ -27,7 +27,7 @@
                 SELECT
                     *
                 FROM
-                    all_constraints
+                    dba_constraints
                 WHERE
                     status = 'ENABLED' AND constraint_type IN ('P','R')
             ),
