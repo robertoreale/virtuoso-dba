@@ -33,8 +33,9 @@ This work is licensed under a <a rel="license" href="http://creativecommons.org/
   * [Count number of segments for each order of magnitude](#count-number-of-segments-for-each-order-of-magnitude)
   * [Give basic info about lob segments](#give-basic-info-about-lob-segments)
   * [Sort the object types by their average name length](#sort-the-object-types-by-their-average-name-length)
-  * [List all users to which a given role is granted, even indirectly](#list-all-users-to-which-a-given-role-is-granted-even-indirectly)
   * [Count memory resize operations, by component and type](#count-memory-resize-operations-by-component-and-type)
+  * [List some basic I/O statistics for each user session](#list-some-basic-io-statistics-for-each-user-session)
+  * [List some basic CPU statistics for each user session](#list-some-basic-cpu-statistics-for-each-user-session)
 - [String Manipulation](#string-manipulation)
   * [Count the client sessions with a FQDN](#count-the-client-sessions-with-a-fqdn)
   * [Calculate the edit distance between a table name and the names of dependent indexes](#calculate-the-edit-distance-between-a-table-name-and-the-names-of-dependent-indexes)
@@ -47,6 +48,9 @@ This work is licensed under a <a rel="license" href="http://creativecommons.org/
   * [List statspack snapshots](#list-statspack-snapshots)
   * [List top-10 CPU-intensive queries](#list-top-10-cpu-intensive-queries)
   * [Show how much is tablespace usage growing](#show-how-much-is-tablespace-usage-growing)
+- [Graphs and Trees](#graphs-and-trees)
+  * [List all users to which a given role is granted, even indirectly](#list-all-users-to-which-a-given-role-is-granted-even-indirectly)
+  * [Display reference graph between tables](#display-reference-graph-between-tables)
 - [Grouping & Reporting](#grouping--reporting)
   * [Count the data files for each tablespaces and for each filesystem location](#count-the-data-files-for-each-tablespaces-and-for-each-filesystem-location)
 - [Drawing](#drawing)
@@ -421,23 +425,6 @@ IEC prefixes are used.
         AVG(LENGTH(object_name)) DESC;
 
 
-## List all users to which a given role is granted, even indirectly
-
-*Keywords*: hierarchical queries, security
-
-    SELECT 
-        grantee
-    FROM
-        dba_role_privs
-    CONNECT BY prior grantee = granted_role
-    START WITH granted_role = '&role'
-    INTERSECT
-    SELECT
-        username
-    FROM
-        dba_users;
-
-
 ## Count memory resize operations, by component and type
 
 *Keywords*: DECODE, dynamic views
@@ -456,6 +443,65 @@ IEC prefixes are used.
         gv$memory_resize_ops 
     GROUP BY component, SIGN(final_size - initial_size)
     ORDER BY component;
+
+
+## List some basic I/O statistics for each user session
+
+*Keywords*: dynamic views, outer join
+
+    SELECT
+        s.inst_id,
+        s.sid,
+        s.serial#,
+        p.spid,
+        s.status,
+        logon_time,
+        s.username,
+        s.osuser,
+        s.machine,
+        s.program,
+        i.consistent_gets,
+        i.physical_reads
+    FROM
+        gv$session s
+        JOIN gv$sess_io i            ON s.inst_id = i.inst_id AND s.sid   = i.sid
+        LEFT JOIN gv$session_wait w  ON s.inst_id = w.inst_id AND s.sid   = w.sid
+        JOIN gv$process p            ON s.inst_id = p.inst_id AND s.paddr = p.addr
+    WHERE
+        s.osuser IS NOT NULL AND s.username IS NOT NULL
+    ORDER BY
+        inst_id, sid, serial#;
+        
+
+## List some basic CPU statistics for each user session
+
+*Keywords*: dynamic views, outer join
+
+    SELECT
+        s.inst_id,
+        s.sid,
+        s.serial#,
+        p.spid,
+        s.status,
+        logon_time,
+        s.username,
+        w.seconds_in_wait,
+        name AS parameter,
+        value
+    FROM
+        gv$session s
+        JOIN gv$sess_io i            ON s.inst_id = i.inst_id AND s.sid   = i.sid
+        LEFT JOIN gv$session_wait w  ON s.inst_id = w.inst_id AND s.sid   = w.sid
+        JOIN gv$process p            ON s.inst_id = p.inst_id AND s.paddr = p.addr
+        JOIN gv$sesstat t            ON s.inst_id = t.inst_id AND s.sid   = t.sid
+        JOIN gv$statname n           USING (statistic#)
+    WHERE
+        (w.event IS NULL OR 'SQL*Net message from client' = w.event)
+        AND s.osuser   IS NOT NULL
+        AND s.username IS NOT NULL
+        AND n.name     LIKE '%cpu%'
+    ORDER BY
+        inst_id, sid, serial#, parameter;
 
 
 # String Manipulation
@@ -729,6 +775,67 @@ We use percentiles to exclude outliers.
         d.name, t.name
     ORDER BY
         db, tablespace_name;
+
+
+# Graphs and Trees
+
+## List all users to which a given role is granted, even indirectly
+
+*Keywords*: hierarchical queries, security
+
+    SELECT 
+        grantee
+    FROM
+        dba_role_privs
+    CONNECT BY prior grantee = granted_role
+    START WITH granted_role = '&role'
+    INTERSECT
+    SELECT
+        username
+    FROM
+        dba_users;
+
+
+## Display reference graph between tables
+
+*Keywords*: hierarchical queries, constraints
+
+    WITH
+        constraints AS 
+            (
+                SELECT
+                    *
+                FROM
+                    all_constraints
+                WHERE
+                    status = 'ENABLED' AND constraint_type IN ('P','R')
+            ),
+        constraint_tree AS
+            (
+                SELECT DISTINCT
+                    c1.owner || '.' || c1.table_name 
+                        AS table_name,
+                    NVL2(c2.table_name, c2.owner || '.' || c2.table_name, NULL)
+                        AS parent_table_name
+                FROM
+                    constraints c1
+                LEFT OUTER JOIN
+                    constraints c2
+                ON c1.r_constraint_name = c2.constraint_name
+            )
+    SELECT
+        level AS depth,
+        SYS_CONNECT_BY_PATH(table_name, '->') AS path
+    FROM
+        constraint_tree
+    WHERE
+        LEVEL > 1 AND CONNECT_BY_ISLEAF = 1
+    START WITH
+        parent_table_name IS NULL
+    CONNECT BY
+        NOCYCLE parent_table_name = PRIOR table_name
+    ORDER BY
+        depth, path;
 
 
 # Grouping & Reporting
