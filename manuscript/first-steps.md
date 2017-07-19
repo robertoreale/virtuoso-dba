@@ -391,4 +391,35 @@ IEC prefixes are used.
         sid, serial#;
         
 
+## List some basic CPU statistics for each user session
+
+*Keywords*: dynamic views, outer join
+
+    SELECT
+        s.inst_id,
+        s.sid,
+        s.serial#,
+        p.spid,
+        s.status,
+        logon_time,
+        s.username,
+        w.seconds_in_wait,
+        name AS parameter,
+        value
+    FROM
+        gv$session s
+        JOIN gv$sess_io i            ON s.inst_id = i.inst_id AND s.sid   = i.sid
+        LEFT JOIN gv$session_wait w  ON s.inst_id = w.inst_id AND s.sid   = w.sid
+        JOIN gv$process p            ON s.inst_id = p.inst_id AND s.paddr = p.addr
+        JOIN gv$sesstat t            ON s.inst_id = t.inst_id AND s.sid   = t.sid
+        JOIN gv$statname n           USING (statistic#)
+    WHERE
+        (w.event IS NULL OR 'SQL*Net message from client' = w.event)
+        AND s.osuser   IS NOT NULL
+        AND s.username IS NOT NULL
+        AND n.name     LIKE '%cpu%'
+    ORDER BY
+        inst_id, sid, serial#, parameter;
+
+
 <!-- vim: set fenc=utf-8 spell spl=en ts=4 sw=4 et filetype=markdown : -->
