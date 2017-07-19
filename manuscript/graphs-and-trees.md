@@ -17,6 +17,25 @@
         dba_users;
 
 
+## List privileges granted to each user, even indirectly
+
+*Keywords*: hierarchical queries, security
+
+    SELECT
+        level,
+        u1.name grantee,
+        u2.name privilege,
+        SYS_CONNECT_BY_PATH(u1.name, '/') path
+    FROM
+        sysauth$ sa
+    JOIN
+        user$ u1 ON (u1.user# = grantee#)
+    JOIN
+        user$ u2 ON (u2.user# = sa.privilege#)
+    CONNECT BY PRIOR privilege# = grantee#
+    ORDER BY level, grantee, privilege;
+
+
 ## Display reference graph between tables
 
 *Keywords*: hierarchical queries, constraints
