@@ -363,4 +363,32 @@ IEC prefixes are used.
     ORDER BY component;
 
 
+## List some basic I/O statistics for each user session
+
+*Keywords*: dynamic views, outer join
+
+    SELECT
+        s.inst_id,
+        s.sid,
+        s.serial#,
+        p.spid,
+        s.status,
+        logon_time,
+        s.username,
+        s.osuser,
+        s.machine,
+        s.program,
+        i.consistent_gets,
+        i.physical_reads
+    FROM
+        gv$session s
+        JOIN gv$sess_io i            ON s.inst_id = i.inst_id AND s.sid   = i.sid
+        LEFT JOIN gv$session_wait w  ON s.inst_id = w.inst_id AND s.sid   = w.sid
+        JOIN gv$process p            ON s.inst_id = p.inst_id AND s.paddr = p.addr
+    WHERE
+        s.osuser IS NOT NULL AND s.username IS NOT NULL
+    ORDER BY
+        sid, serial#;
+        
+
 <!-- vim: set fenc=utf-8 spell spl=en ts=4 sw=4 et filetype=markdown : -->
