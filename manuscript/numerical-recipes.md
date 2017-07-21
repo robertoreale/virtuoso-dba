@@ -1,5 +1,17 @@
 # Numerical Recipes
 
+## Generate the English alphabet
+
+*Keywords*: CONNECT BY, ASCII
+
+    SELECT
+        CHR(rownum + 64) letter
+    FROM
+        (
+            SELECT level FROM dual CONNECT BY level < 27
+        );
+
+
 ## Calculate the sum of a geometric series
 
 *Keywords*: CONNECT BY, numerical recipes
