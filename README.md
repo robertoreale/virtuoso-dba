@@ -26,6 +26,7 @@ This work is licensed under a <a rel="license" href="http://creativecommons.org/
   * [Show the total, used, and free space database-wise](#show-the-total-used-and-free-space-database-wise)
   * [Display the findings discovered by all advisors in the database](#display-the-findings-discovered-by-all-advisors-in-the-database)
   * [Associate blocking and blocked sessions](#associate-blocking-and-blocked-sessions)
+  * [Show basic info about log files](#show-basic-info-about-log-files)
   * [Calculate the size of the temporary tablespaces](#calculate-the-size-of-the-temporary-tablespaces)
   * [Calculate the high-water and excess allocated size for datafiles](#calculate-the-high-water-and-excess-allocated-size-for-datafiles)
   * [Display parent-child pairs between tables, based on reference constraints](#display-parent-child-pairs-between-tables-based-on-reference-constraints)
@@ -76,6 +77,7 @@ This work is licensed under a <a rel="license" href="http://creativecommons.org/
   * [Show the minimum possible date](#show-the-minimum-possible-date)
   * [List leap years from 1 AD](#list-leap-years-from-1-ad)
   * [Count audit records for the last hour](#count-audit-records-for-the-last-hour)
+  * [Count log file switches, day by day, hour by hour](#count-log-file-switches-day-by-day-hour-by-hour)
   * [Calculate the calendar date of Easter, from 1583 to 2999](#calculate-the-calendar-date-of-easter-from-1583-to-2999)
   * [Exercises](#exercises-6)
 - [Row Generation](#row-generation)
@@ -261,6 +263,30 @@ Working as a DBA requires improving skills in at least two key areas: SQL and da
         gv$lock l1 JOIN gv$lock l2 USING (id1, id2)
     WHERE
         l1.block = 1 AND l2.request > 0;
+
+
+## Show basic info about log files
+
+*Keywords*: self join, redo logs
+
+*Reference*: http://dba.stackexchange.com/questions/21805/
+
+    SELECT
+        lg.group#             AS group#,
+        lg.thread#            AS thread#,
+        lg.sequence#          AS sequence#,
+        lg.archived           AS archived,
+        lg.status             AS status,
+        lf.member             AS file_name,
+        lg.bytes / 1048576    AS file_size
+    FROM
+        gv$log lg
+    JOIN
+        gv$logfile lf
+    ON
+        lg.group# = lf.group# 
+    ORDER BY
+        lg.group# ASC;
 
 
 ## Calculate the size of the temporary tablespaces
@@ -779,13 +805,13 @@ We use percentiles to exclude outliers.
     FROM (
         SELECT
             device_type,
-            TRUNC(completion_time, 'DAY')                       completion_day,
+            TRUNC(completion_time, 'DDD')                       completion_day,
             SUM(bytes)                                          cumu_size,
             NTILE(100) OVER (ORDER BY device_type, SUM(bytes))  percentile
         FROM
             v$backup_piece_details  -- gv$backup_piece_details does not exist
         GROUP BY
-            device_type, TRUNC(completion_time, 'DAY')
+            device_type, TRUNC(completion_time, 'DDD')
     )
     WHERE
         percentile BETWEEN 10 AND 90;
@@ -1210,6 +1236,28 @@ December 31, 9999 CE, one second to midnight.
     WHERE
         CAST((FROM_TZ(ntimestamp#, '00:00') AT local) AS date)
             < SYSDATE - INTERVAL '1' HOUR;
+
+
+## Count log file switches, day by day, hour by hour
+
+*Keywords*: time functions, PIVOT, dynamic views
+
+    SELECT * FROM
+        (
+            SELECT
+                TRUNC(first_time, 'DDD') day,
+                EXTRACT(hour FROM CAST(first_time AS TIMESTAMP)) hour
+            FROM
+                gv$log_history
+        )
+    PIVOT
+        (
+            COUNT(hour) FOR hour IN
+                (
+                    0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12,
+                    13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23
+                )
+        );
 
 
 ## Calculate the calendar date of Easter, from 1583 to 2999
@@ -1773,12 +1821,12 @@ Verify the law of large numbers by rolling a die n times, with n >> 0
 *Keywords*: x$ interface
 
     SELECT
-        TRUNC(creation_time, 'DAY') day,
+        TRUNC(creation_time, 'DDD') day,
         COUNT(*) count
     FROM x$dbgdirext
         WHERE
             type = 2 AND logical_file LIKE '%.trc'
-        GROUP BY TRUNC(creation_time, 'DAY')
+        GROUP BY TRUNC(creation_time, 'DDD')
         ORDER BY 2 DESC;
 
 
