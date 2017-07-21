@@ -25,7 +25,7 @@
     CONNECT BY level <= 256;
 
 
-## Generate the integer between 1 and 256
+## Generate the integers between 1 and 256
 
 *Keywords*: GROUP BY CUBE
 
@@ -39,7 +39,7 @@
         );
 
 
-## Generate the integer between 1 and 100, in random order
+## Generate the integers between 1 and 100, in random order
 
 *Keywords*: CONNECT BY, DBMS_RANDOM
 
