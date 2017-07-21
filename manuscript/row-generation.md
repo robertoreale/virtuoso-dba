@@ -1,5 +1,12 @@
 # Row Generation
 
+## List all integers between 00 and FF, hexadecimal
+
+*Keywords*: CONNECT BY, TO_CHAR
+
+    SELECT TO_CHAR(level - 1, '0X') AS n FROM dual CONNECT BY level <= 256;
+
+
 ## Generate the English alphabet
 
 *Keywords*: CONNECT BY, ASCII
