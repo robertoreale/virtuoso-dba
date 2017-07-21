@@ -7,6 +7,24 @@
     SELECT TO_CHAR(level - 1, '0X') AS n FROM dual CONNECT BY level <= 256;
 
 
+## List all integers between 00000000 and 11111111, hexadecimal
+
+*Keywords*: CONNECT BY, DECODE, bitwise operations
+
+    SELECT 
+        DECODE(BITAND(level - 1, 128), 128, '1', '0') ||
+        DECODE(BITAND(level - 1,  64),  64, '1', '0') ||
+        DECODE(BITAND(level - 1,  32),  32, '1', '0') ||
+        DECODE(BITAND(level - 1,  16),  16, '1', '0') ||
+        DECODE(BITAND(level - 1,   8),   8, '1', '0') ||
+        DECODE(BITAND(level - 1,   4),   4, '1', '0') ||
+        DECODE(BITAND(level - 1,   2),   2, '1', '0') ||
+        DECODE(BITAND(level - 1,   1),   1, '1', '0') AS n
+    FROM
+        dual
+    CONNECT BY level <= 256;
+
+
 ## Generate the English alphabet
 
 *Keywords*: CONNECT BY, ASCII
