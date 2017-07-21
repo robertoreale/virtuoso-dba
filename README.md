@@ -72,7 +72,7 @@ This work is licensed under a <a rel="license" href="http://creativecommons.org/
   * [Exercises](#exercises-5)
 - [Time Functions](#time-functions)
   * [Show the first and last day of the current month](#show-the-first-and-last-day-of-the-current-month)
-  * [Show the first and last day of the current month](#show-the-first-and-last-day-of-the-current-month-1)
+  * [Show the first and last day of the current year](#show-the-first-and-last-day-of-the-current-year)
   * [Show the maximum possible date](#show-the-maximum-possible-date)
   * [Show the minimum possible date](#show-the-minimum-possible-date)
   * [List leap years from 1 AD](#list-leap-years-from-1-ad)
@@ -83,8 +83,8 @@ This work is licensed under a <a rel="license" href="http://creativecommons.org/
 - [Row Generation](#row-generation)
   * [List all integers between 00 and FF, hexadecimal](#list-all-integers-between-00-and-ff-hexadecimal)
   * [List all integers between 00000000 and 11111111, hexadecimal](#list-all-integers-between-00000000-and-11111111-hexadecimal)
-  * [Generate the integer between 1 and 256](#generate-the-integer-between-1-and-256)
-  * [Generate the integer between 1 and 100, in random order](#generate-the-integer-between-1-and-100-in-random-order)
+  * [Generate the integers between 1 and 256](#generate-the-integers-between-1-and-256)
+  * [Generate the integers between 1 and 100, in random order](#generate-the-integers-between-1-and-100-in-random-order)
   * [Generate the English alphabet](#generate-the-english-alphabet)
   * [Print the Sonnet XVIII by Shakespeare](#print-the-sonnet-xviii-by-shakespeare)
   * [List the next seven week days](#list-the-next-seven-week-days)
@@ -108,10 +108,13 @@ This work is licensed under a <a rel="license" href="http://creativecommons.org/
 - [Enter Imperative Thinking](#enter-imperative-thinking)
   * [Show all Oracle error codes and messages](#show-all-oracle-error-codes-and-messages)
   * [Exercises](#exercises-10)
+- [The MODEL Clause](#the-model-clause)
+  * [Generate the even integers between -100 and 100, inclusive](#generate-the-even-integers-between--100-and-100-inclusive)
+  * [Exercises](#exercises-11)
 - [A Stochastic World](#a-stochastic-world)
   * [Verify the law of large numbers](#verify-the-law-of-large-numbers)
   * [For each tablespace T, find the probability of segments in T to be smaller than or equal to a given size](#for-each-tablespace-t-find-the-probability-of-segments-in-t-to-be-smaller-than-or-equal-to-a-given-size)
-  * [Exercises](#exercises-11)
+  * [Exercises](#exercises-12)
 - [Internals](#internals)
   * [Count the number of trace files generated each day](#count-the-number-of-trace-files-generated-each-day)
   * [Display hidden/undocumented initialization parameters](#display-hiddenundocumented-initialization-parameters)
@@ -119,7 +122,7 @@ This work is licensed under a <a rel="license" href="http://creativecommons.org/
   * [Display the count of allocation units per ASM file by file alias (for metadata only)](#display-the-count-of-allocation-units-per-asm-file-by-file-alias-for-metadata-only)
   * [Display the count of allocation units per ASM file by file alias](#display-the-count-of-allocation-units-per-asm-file-by-file-alias)
   * [Show file utilization](#show-file-utilization)
-  * [Exercises](#exercises-12)
+  * [Exercises](#exercises-13)
 
 <!-- tocstop -->
 
@@ -1171,7 +1174,7 @@ Assume a Unix filesystem, don’t follow symlinks.  Moreover, generate subtotals
         dual;
 
 
-## Show the first and last day of the current month
+## Show the first and last day of the current year
 
 *Keywords*: time functions
 
@@ -1414,7 +1417,7 @@ December 31, 9999 CE, one second to midnight.
     CONNECT BY level <= 256;
 
 
-## Generate the integer between 1 and 256
+## Generate the integers between 1 and 256
 
 *Keywords*: GROUP BY CUBE
 
@@ -1428,7 +1431,7 @@ December 31, 9999 CE, one second to midnight.
         );
 
 
-## Generate the integer between 1 and 100, in random order
+## Generate the integers between 1 and 100, in random order
 
 *Keywords*: CONNECT BY, DBMS_RANDOM
 
@@ -1771,6 +1774,31 @@ From 11g onwards, password hashes do not appear in dba_users anymore.  Of course
     WHERE
         ora_code_desc('ORA-'||level) NOT LIKE '%Message '||level||' not found%'
     CONNECT BY LEVEL < 100000;
+
+
+## Exercises
+
+# The MODEL Clause
+
+## Generate the even integers between -100 and 100, inclusive
+
+*Keywords*: MODEL
+
+*Reference*: http://www.orafaq.com/wiki/Oracle_Row_Generator_Techniques
+
+    SELECT
+        n
+    FROM
+        dual
+    WHERE
+        1 = 2
+    MODEL
+        DIMENSION BY (0 AS key)
+        MEASURES     (0 AS n)
+        RULES UPSERT 
+        (
+            n [FOR key FROM -100 TO 100 INCREMENT 2] = CV(key)
+        );
 
 
 ## Exercises
