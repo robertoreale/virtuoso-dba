@@ -12,6 +12,51 @@
         );
 
 
+## Print the Sonnet XVIII by Shakespeare
+
+*Keywords*: UNPIVOT
+
+*Reference*: http://www.oracle.com/technetwork/articles/sql/11g-pivot-097235.html
+
+    SELECT
+        sonnet_18
+    FROM
+        (
+            (
+                SELECT
+                    'Shall I compare thee to a summer''s day?'              AS q1_v1,
+                    'Thou art more lovely and more temperate:'              AS q1_v2,
+                    'Rough winds do shake the darling buds of May,'         AS q1_v3,
+                    'And summer''s lease hath all too short a date'         AS q1_v4,
+                    -- 
+                    'Sometime too hot the eye of heaven shines,'            AS q2_v1,
+                    'And often is his gold complexion dimm''d;'             AS q2_v2,
+                    'And every fair from fair sometime declines,'           AS q2_v3,
+                    'By chance, or nature''s changing course, untrimm''d:'  AS q2_v4,
+                    --
+                    'But thy eternal summer shall not fade,'                AS q3_v1,
+                    'Nor lose possession of that fair thou ow''st;'         AS q3_v2,
+                    'Nor shall Death brag thou wander''st in his shade,'    AS q3_v3,
+                    'When in eternal lines to time thou grow''st:'          AS q3_v4,
+                    --
+                    'So long as men can breathe, or eyes can see,'          AS c_v1,
+                    'So long lives this, and this gives life to thee.'      AS c_v2
+                FROM
+                    dual
+            )
+            UNPIVOT
+            (
+                sonnet_18 FOR verse IN
+                    (
+                        q1_v1, q1_v2, q1_v3, q1_v4,
+                        q2_v1, q2_v2, q2_v3, q2_v4,
+                        q3_v1, q3_v2, q3_v3, q3_v4,
+                        c_v1, c_v2
+                    )
+            )
+        );
+
+
 ## Exercises
 
 <!-- vim: set fenc=utf-8 spell spl=en ts=4 sw=4 et filetype=markdown : -->
