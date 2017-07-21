@@ -384,7 +384,9 @@ IEC prefixes are used.
         s.username,
         s.machine
     FROM
-        gv$sqltext sql JOIN gv$session s ON s.sql_address = sql.address
+        gv$sqltext sql
+    JOIN
+        gv$session s ON s.sql_address = sql.address
     WHERE
         s.sid IN
             (
