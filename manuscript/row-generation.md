@@ -25,6 +25,20 @@
     CONNECT BY level <= 256;
 
 
+## Generate the integer between 1 and 256
+
+*Keywords*: GROUP BY CUBE
+
+*Reference*: https://technology.amis.nl/2005/02/11/courtesy-of-tom-kyte-generating-rows-in-sql-with-the-cube-statement-no-dummy-table-or-table-function-required/
+
+    SELECT
+        rownum
+    FROM
+        (
+            SELECT 1 FROM dual GROUP BY CUBE (1,2,3,4,5,6,7,8)
+        );
+
+
 ## Generate the integer between 1 and 100, in random order
 
 *Keywords*: CONNECT BY, DBMS_RANDOM
