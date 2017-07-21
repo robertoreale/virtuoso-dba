@@ -1,5 +1,23 @@
 # The MODEL Clause
 
+## Generate the even integers between -100 and 100, inclusive
+
+*Keywords*: MODEL
+
+    SELECT
+        n
+    FROM
+        dual
+    WHERE
+        1 = 2
+    MODEL
+        DIMENSION BY (0 AS key)
+        MEASURES     (0 AS n)
+        RULES UPSERT 
+        (
+            n [FOR key FROM -100 TO 100 INCREMENT 2] = CV(key)
+        );
+
 
 ## Exercises
 
