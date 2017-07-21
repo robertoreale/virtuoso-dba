@@ -1,4 +1,4 @@
-# Numerical Recipes
+# Row Generation
 
 ## Generate the English alphabet
 
