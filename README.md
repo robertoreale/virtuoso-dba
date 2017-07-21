@@ -32,17 +32,21 @@ This work is licensed under a <a rel="license" href="http://creativecommons.org/
   * [Compute a count of archived logs and their average size](#compute-a-count-of-archived-logs-and-their-average-size)
   * [Calculate a fragmentation factor for tablespaces](#calculate-a-fragmentation-factor-for-tablespaces)
   * [Count number of segments for each order of magnitude](#count-number-of-segments-for-each-order-of-magnitude)
+  * [Show last rebuild time for indexes](#show-last-rebuild-time-for-indexes)
   * [Give basic info about lob segments](#give-basic-info-about-lob-segments)
   * [Sort the object types by their average name length](#sort-the-object-types-by-their-average-name-length)
   * [Count memory resize operations, by component and type](#count-memory-resize-operations-by-component-and-type)
+  * [Show active sessions with SQL text](#show-active-sessions-with-sql-text)
   * [List some basic I/O statistics for each user session](#list-some-basic-io-statistics-for-each-user-session)
   * [List some basic CPU statistics for each user session](#list-some-basic-cpu-statistics-for-each-user-session)
   * [Show the instance name and number and the schema or database user name relative to the current session](#show-the-instance-name-and-number-and-the-schema-or-database-user-name-relative-to-the-current-session)
+  * [Exercises](#exercises)
 - [String Manipulation](#string-manipulation)
   * [Count the client sessions with a FQDN](#count-the-client-sessions-with-a-fqdn)
   * [Calculate the edit distance between a table name and the names of dependent indexes](#calculate-the-edit-distance-between-a-table-name-and-the-names-of-dependent-indexes)
   * [Calculate the minimum, median, and maximum edit distances between a table's name and the names of its indexes](#calculate-the-minimum-median-and-maximum-edit-distances-between-a-tables-name-and-the-names-of-its-indexes)
   * [Get the number of total waits for each event type, with pretty formatting](#get-the-number-of-total-waits-for-each-event-type-with-pretty-formatting)
+  * [Exercises](#exercises-1)
 - [Data Analytics](#data-analytics)
   * [Rank all the tables in the system based on their cardinality](#rank-all-the-tables-in-the-system-based-on-their-cardinality)
   * [List the objects in the recycle bin, sorting by the version](#list-the-objects-in-the-recycle-bin-sorting-by-the-version)
@@ -52,15 +56,19 @@ This work is licensed under a <a rel="license" href="http://creativecommons.org/
   * [List statspack snapshots](#list-statspack-snapshots)
   * [List top-10 CPU-intensive queries](#list-top-10-cpu-intensive-queries)
   * [Show how much is tablespace usage growing](#show-how-much-is-tablespace-usage-growing)
+  * [Exercises](#exercises-2)
 - [Graphs and Trees](#graphs-and-trees)
   * [List all users to which a given role is granted, even indirectly](#list-all-users-to-which-a-given-role-is-granted-even-indirectly)
   * [List privileges granted to each user, even indirectly](#list-privileges-granted-to-each-user-even-indirectly)
   * [Display reference graph between tables](#display-reference-graph-between-tables)
+  * [Exercises](#exercises-3)
 - [Grouping & Reporting](#grouping--reporting)
   * [Count the data files for each tablespaces and for each filesystem location](#count-the-data-files-for-each-tablespaces-and-for-each-filesystem-location)
+  * [Exercises](#exercises-4)
 - [Drawing](#drawing)
   * [Generate a histogram for the length of objects’ names](#generate-a-histogram-for-the-length-of-objects-names)
   * [Build a histogram for the order of magnitude of segments’ sizes](#build-a-histogram-for-the-order-of-magnitude-of-segments-sizes)
+  * [Exercises](#exercises-5)
 - [Time Functions](#time-functions)
   * [Show the first and last day of the current month](#show-the-first-and-last-day-of-the-current-month)
   * [Show the first and last day of the current month](#show-the-first-and-last-day-of-the-current-month-1)
@@ -69,6 +77,7 @@ This work is licensed under a <a rel="license" href="http://creativecommons.org/
   * [List leap years from 1 AD](#list-leap-years-from-1-ad)
   * [Count audit records for the last hour](#count-audit-records-for-the-last-hour)
   * [Calculate the calendar date of Easter, from 1583 to 2999](#calculate-the-calendar-date-of-easter-from-1583-to-2999)
+  * [Exercises](#exercises-6)
 - [Numerical Recipes](#numerical-recipes)
   * [Calculate the sum of a geometric series](#calculate-the-sum-of-a-geometric-series)
   * [Solve Besel's problem](#solve-besels-problem)
@@ -76,6 +85,7 @@ This work is licensed under a <a rel="license" href="http://creativecommons.org/
   * [Verify that the sum of the reciprocals of factorials converge to e](#verify-that-the-sum-of-the-reciprocals-of-factorials-converge-to-e)
   * [Verify that the sum of the reciprocals of factorials converge to e, alternative method](#verify-that-the-sum-of-the-reciprocals-of-factorials-converge-to-e-alternative-method)
   * [Verify that the cosine function has a fixed point](#verify-that-the-cosine-function-has-a-fixed-point)
+  * [Exercises](#exercises-7)
 - [XML Database 101](#xml-database-101)
   * [Return the total number of installed patches](#return-the-total-number-of-installed-patches)
   * [List user passwords (hashed, of course...)](#list-user-passwords-hashed-of-course)
@@ -83,11 +93,14 @@ This work is licensed under a <a rel="license" href="http://creativecommons.org/
   * [Show patch inventory](#show-patch-inventory)
   * [Show patch inventory, part 2](#show-patch-inventory-part-2)
   * [Show bugs fixed by each installed patch](#show-bugs-fixed-by-each-installed-patch)
+  * [Exercises](#exercises-8)
 - [Enter Imperative Thinking](#enter-imperative-thinking)
   * [Show all Oracle error codes and messages](#show-all-oracle-error-codes-and-messages)
+  * [Exercises](#exercises-9)
 - [A Stochastic World](#a-stochastic-world)
   * [Verify the law of large numbers](#verify-the-law-of-large-numbers)
   * [For each tablespace T, find the probability of segments in T to be smaller than or equal to a given size](#for-each-tablespace-t-find-the-probability-of-segments-in-t-to-be-smaller-than-or-equal-to-a-given-size)
+  * [Exercises](#exercises-10)
 - [Internals](#internals)
   * [Count the number of trace files generated each day](#count-the-number-of-trace-files-generated-each-day)
   * [Display hidden/undocumented initialization parameters](#display-hiddenundocumented-initialization-parameters)
@@ -95,6 +108,7 @@ This work is licensed under a <a rel="license" href="http://creativecommons.org/
   * [Display the count of allocation units per ASM file by file alias (for metadata only)](#display-the-count-of-allocation-units-per-asm-file-by-file-alias-for-metadata-only)
   * [Display the count of allocation units per ASM file by file alias](#display-the-count-of-allocation-units-per-asm-file-by-file-alias)
   * [Show file utilization](#show-file-utilization)
+  * [Exercises](#exercises-11)
 
 <!-- tocstop -->
 
@@ -418,6 +432,33 @@ IEC prefixes are used.
     ORDER BY TRUNC(LOG(1024, bytes));
 
 
+## Show last rebuild time for indexes
+
+*Keywords*: DECODE
+
+    SELECT
+        dbo.owner                                    AS owner,
+        dbi.index_name                               AS name,
+        dbo.created                                  AS created,
+        dbo.last_ddl_time                            AS rebuilt,
+        --  "Indexes can be created on temporary tables.  They are also temporary
+        --  and the data in the index has the same session or transaction scope as
+        --  the data in the underlying table."
+        --                                   (Oracle Database Administrator's Guide) 
+        DECODE(dbt.temporary, 'Y', 'TBL+', '')
+            ||DECODE(dbi.temporary, 'Y', 'IDX', '')  AS temporary
+    FROM
+        dba_objects dbo
+    JOIN
+        dba_indexes dbi
+            ON (dbo.owner = dbi.owner AND dbo.object_name = dbi.index_name)
+    JOIN
+        dba_tables  dbt 
+            ON (dbi.owner = dbo.owner AND dbi.table_name = dbt.table_name)
+    WHERE
+        object_type = 'INDEX';
+
+
 ## Give basic info about lob segments
 
 *Keywords*: aggregate functions, lobs
@@ -475,6 +516,34 @@ IEC prefixes are used.
         gv$memory_resize_ops 
     GROUP BY component, SIGN(final_size - initial_size)
     ORDER BY component;
+
+
+## Show active sessions with SQL text
+
+*Keywords*: dynamic views, IN operator
+
+    SELECT
+        s.sid,
+        s.serial#,
+        sql.sql_text,
+        s.username,
+        s.machine
+    FROM
+        gv$sqltext sql
+    JOIN
+        gv$session s ON s.sql_address = sql.address
+    WHERE
+        s.sid IN
+            (
+                SELECT
+                    sid
+                FROM
+                    v$session
+                WHERE
+                    last_call_et > 5 AND status = 'ACTIVE'
+            )
+    ORDER BY
+        s.sid, sql.piece;
 
 
 ## List some basic I/O statistics for each user session
@@ -558,6 +627,9 @@ IEC prefixes are used.
     JOIN
         gv$instance i ON UPPER(ctx.instance_name) = UPPER(i.instance_name);
 
+
+## Exercises
+
 # String Manipulation
 
 ## Count the client sessions with a FQDN
@@ -618,6 +690,8 @@ Assume a FQDN has the form N_1.N_2.....N_t, where t > 1 and each N_i can contain
     FROM
         se;
 
+
+## Exercises
 
 # Data Analytics
 
@@ -887,6 +961,8 @@ We use percentiles to exclude outliers.
         db, tablespace_name;
 
 
+## Exercises
+
 # Graphs and Trees
 
 ## List all users to which a given role is granted, even indirectly
@@ -967,6 +1043,8 @@ We use percentiles to exclude outliers.
         depth, path;
 
 
+## Exercises
+
 # Grouping & Reporting
 
 ## Count the data files for each tablespaces and for each filesystem location
@@ -992,6 +1070,8 @@ Assume a Unix filesystem, don’t follow symlinks.  Moreover, generate subtotals
     GROUP BY CUBE(tablespace_name, dirname)
     ORDER BY tablespace_name, dirname;
 
+
+## Exercises
 
 # Drawing
 
@@ -1040,6 +1120,8 @@ Assume a Unix filesystem, don’t follow symlinks.  Moreover, generate subtotals
     GROUP BY TRUNC(LOG(1024, bytes))
     ORDER BY TRUNC(LOG(1024, bytes));
 
+
+## Exercises
 
 # Time Functions
 
@@ -1246,6 +1328,8 @@ December 31, 9999 CE, one second to midnight.
         t7;
 
 
+## Exercises
+
 # Numerical Recipes
 
 ## Calculate the sum of a geometric series
@@ -1372,6 +1456,8 @@ A fixed point is a point x_0 such that x_0 = cos(x_0).
         iter;
 
 
+## Exercises
+
 # XML Database 101
 
 ## Return the total number of installed patches
@@ -1476,6 +1562,8 @@ From 11g onwards, password hashes do not appear in dba_users anymore.  Of course
     SELECT * FROM bugs;
 
 
+## Exercises
+
 # Enter Imperative Thinking
 
 ## Show all Oracle error codes and messages
@@ -1496,6 +1584,8 @@ From 11g onwards, password hashes do not appear in dba_users anymore.  Of course
         ora_code_desc('ORA-'||level) NOT LIKE '%Message '||level||' not found%'
     CONNECT BY LEVEL < 100000;
 
+
+## Exercises
 
 # A Stochastic World
 
@@ -1533,6 +1623,8 @@ Verify the law of large numbers by rolling a die n times, with n >> 0
     GROUP BY
         tablespace_name;
 
+
+## Exercises
 
 # Internals
 
@@ -1660,4 +1752,6 @@ Verify the law of large numbers by rolling a die n times, with n >> 0
     ORDER BY
         f.group_number, f.file_number;
 
+
+## Exercises
 
