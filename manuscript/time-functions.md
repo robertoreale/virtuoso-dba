@@ -203,4 +203,6 @@ December 31, 9999 CE, one second to midnight.
         t7;
 
 
+## Exercises
+
 <!-- vim: set fenc=utf-8 spell spl=en ts=4 sw=4 et filetype=markdown : -->

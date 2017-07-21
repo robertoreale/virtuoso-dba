@@ -454,4 +454,7 @@ IEC prefixes are used.
     JOIN
         gv$instance i ON UPPER(ctx.instance_name) = UPPER(i.instance_name);
 
+
+## Exercises
+
 <!-- vim: set fenc=utf-8 spell spl=en ts=4 sw=4 et filetype=markdown : -->

@@ -124,4 +124,6 @@ A fixed point is a point x_0 such that x_0 = cos(x_0).
         iter;
 
 
+## Exercises
+
 <!-- vim: set fenc=utf-8 spell spl=en ts=4 sw=4 et filetype=markdown : -->
