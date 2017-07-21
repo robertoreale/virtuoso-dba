@@ -136,6 +136,30 @@
         l1.block = 1 AND l2.request > 0;
 
 
+## Show basic info about log files
+
+*Keywords*: self join, redo logs
+
+*Reference*: http://dba.stackexchange.com/questions/21805/
+
+    SELECT
+        lg.group#             AS group#,
+        lg.thread#            AS thread#,
+        lg.sequence#          AS sequence#,
+        lg.archived           AS archived,
+        lg.status             AS status,
+        lf.member             AS file_name,
+        lg.bytes / 1048576    AS file_size
+    FROM
+        gv$log lg
+    JOIN
+        gv$logfile lf
+    ON
+        lg.group# = lf.group# 
+    ORDER BY
+        lg.group# ASC;
+
+
 ## Calculate the size of the temporary tablespaces
 
 *Keywords*: aggregate functions, dynamic views, logical storage
