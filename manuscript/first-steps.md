@@ -373,6 +373,32 @@ IEC prefixes are used.
     ORDER BY component;
 
 
+## Show active sessions with SQL text
+
+*Keywords*: dynamic views, IN operator
+
+    SELECT
+        s.sid,
+        s.serial#,
+        sql.sql_text,
+        s.username,
+        s.machine
+    FROM
+        gv$sqltext sql JOIN gv$session s ON s.sql_address = sql.address
+    WHERE
+        s.sid IN
+            (
+                SELECT
+                    sid
+                FROM
+                    v$session
+                WHERE
+                    last_call_et > 5 AND status = 'ACTIVE'
+            )
+    ORDER BY
+        s.sid, sql.piece;
+
+
 ## List some basic I/O statistics for each user session
 
 *Keywords*: dynamic views, outer join
