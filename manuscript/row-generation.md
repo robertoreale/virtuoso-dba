@@ -108,6 +108,25 @@
         );
 
 
+## List the next seven week days
+
+*Keywords*: JSON
+
+*Reference*: https://technology.amis.nl/2016/09/20/next-step-in-row-generation-in-oracle-database-12c-sql-using-json_table/
+
+    SELECT
+        TO_CHAR(rownum + SYSDATE, 'DAY') day
+    FROM
+        (
+            SELECT
+                rws.rn
+            FROM
+                JSON_TABLE('[' || RPAD('1', -1 + 2 * (7), ',1') || ']', '$[*]'
+                COLUMNS ("rn" PATH '$')
+            ) rws
+        )  days;
+
+
 ## Exercises
 
 <!-- vim: set fenc=utf-8 spell spl=en ts=4 sw=4 et filetype=markdown : -->
