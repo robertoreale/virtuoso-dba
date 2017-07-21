@@ -25,18 +25,6 @@
     CONNECT BY level <= 256;
 
 
-## Generate the English alphabet
-
-*Keywords*: CONNECT BY, ASCII
-
-    SELECT
-        CHR(rownum + 64) letter
-    FROM
-        (
-            SELECT level FROM dual CONNECT BY level < 27
-        );
-
-
 ## Generate the integer between 1 and 100, in random order
 
 *Keywords*: CONNECT BY, DBMS_RANDOM
@@ -47,6 +35,18 @@
         dual
     CONNECT BY LEVEL < 100
     ORDER BY DBMS_RANDOM.VALUE;
+
+
+## Generate the English alphabet
+
+*Keywords*: CONNECT BY, ASCII
+
+    SELECT
+        CHR(rownum + 64) letter
+    FROM
+        (
+            SELECT level FROM dual CONNECT BY level < 27
+        );
 
 
 ## Print the Sonnet XVIII by Shakespeare
