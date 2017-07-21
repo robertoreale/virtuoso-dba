@@ -6,6 +6,7 @@ graphs-and-trees.md
 grouping-reporting.md
 drawing.md
 time-functions.md
+row-generation.md
 numerical-recipes.md
 xml-database-101.md
 enter-imperative-thinking.md
