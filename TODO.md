@@ -8,7 +8,6 @@ TODO
 * Errori ricorrent: 1555, 4030 e 4031, 600, 7445 Cosa significano e come si agice.
 * Quali metodi si usano per forzare un piano di esecuzione? Hint, manipolazione delle statistiche, stored outlines (cosa sono?), profili
 * Che cos’è il clustering factor di un indice?
-* Quando si usano gli indici bitmap e quelli B-tree? In cosa differiscono?
 * Il listener ascolta solo sulla porta 1521? Come si può cambiare?
 * Differenza tra backup a caldo e a freddo, prerequisito per poter fare un bck a caldo (archivelog mode).
 * Cosa fare quando si riempie la directory degli archive: spostarli e/o cambiare destinazione degli archive, fare il backup archive può richiedere troppo tempo…
