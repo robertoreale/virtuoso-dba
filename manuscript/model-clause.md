@@ -4,6 +4,8 @@
 
 *Keywords*: MODEL
 
+*Reference*: http://www.orafaq.com/wiki/Oracle_Row_Generator_Techniques
+
     SELECT
         n
     FROM
