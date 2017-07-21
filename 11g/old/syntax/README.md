@@ -1,5 +1,0 @@
-Oracle Database
-===
-
-Syntax Examples
----
