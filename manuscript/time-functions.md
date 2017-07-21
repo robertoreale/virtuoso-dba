@@ -11,7 +11,7 @@
         dual;
 
 
-## Show the first and last day of the current month
+## Show the first and last day of the current year
 
 *Keywords*: time functions
 
