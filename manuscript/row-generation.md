@@ -37,6 +37,18 @@
         );
 
 
+## Generate the integer between 1 and 100, in random order
+
+*Keywords*: CONNECT BY, DBMS_RANDOM
+
+    SELECT
+        level
+    FROM
+        dual
+    CONNECT BY LEVEL < 100
+    ORDER BY DBMS_RANDOM.VALUE;
+
+
 ## Print the Sonnet XVIII by Shakespeare
 
 *Keywords*: UNPIVOT
