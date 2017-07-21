@@ -5,12 +5,12 @@
 *Keywords*: x$ interface
 
     SELECT
-        TRUNC(creation_time, 'DAY') day,
+        TRUNC(creation_time, 'DDD') day,
         COUNT(*) count
     FROM x$dbgdirext
         WHERE
             type = 2 AND logical_file LIKE '%.trc'
-        GROUP BY TRUNC(creation_time, 'DAY')
+        GROUP BY TRUNC(creation_time, 'DDD')
         ORDER BY 2 DESC;
 
 

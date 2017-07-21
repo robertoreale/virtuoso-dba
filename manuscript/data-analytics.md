@@ -75,13 +75,13 @@ We use percentiles to exclude outliers.
     FROM (
         SELECT
             device_type,
-            TRUNC(completion_time, 'DAY')                       completion_day,
+            TRUNC(completion_time, 'DDD')                       completion_day,
             SUM(bytes)                                          cumu_size,
             NTILE(100) OVER (ORDER BY device_type, SUM(bytes))  percentile
         FROM
             v$backup_piece_details  -- gv$backup_piece_details does not exist
         GROUP BY
-            device_type, TRUNC(completion_time, 'DAY')
+            device_type, TRUNC(completion_time, 'DDD')
     )
     WHERE
         percentile BETWEEN 10 AND 90;
