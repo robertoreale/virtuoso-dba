@@ -78,6 +78,28 @@ December 31, 9999 CE, one second to midnight.
             < SYSDATE - INTERVAL '1' HOUR;
 
 
+## Count log file switches, day by day, hour by hour
+
+*Keywords*: time functions, PIVOT, dynamic views
+
+    SELECT * FROM
+        (
+            SELECT
+                TRUNC(first_time, 'DDD') day,
+                EXTRACT(hour FROM CAST(first_time AS TIMESTAMP)) hour
+            FROM
+                gv$log_history
+        )
+    PIVOT
+        (
+            COUNT(hour) FOR hour IN
+                (
+                    0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12,
+                    13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23
+                )
+        );
+
+
 ## Calculate the calendar date of Easter, from 1583 to 2999
 
 *Keywords*: time functions, multiple WITH clauses
