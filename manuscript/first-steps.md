@@ -314,6 +314,33 @@ IEC prefixes are used.
     ORDER BY TRUNC(LOG(1024, bytes));
 
 
+## Show last rebuild time for indexes
+
+*Keywords*: DECODE
+
+    SELECT
+        dbo.owner                                    AS owner,
+        dbi.index_name                               AS name,
+        dbo.created                                  AS created,
+        dbo.last_ddl_time                            AS rebuilt,
+        --  "Indexes can be created on temporary tables.  They are also temporary
+        --  and the data in the index has the same session or transaction scope as
+        --  the data in the underlying table."
+        --                                   (Oracle Database Administrator's Guide) 
+        DECODE(dbt.temporary, 'Y', 'TBL+', '')
+            ||DECODE(dbi.temporary, 'Y', 'IDX', '')  AS temporary
+    FROM
+        dba_objects dbo
+    JOIN
+        dba_indexes dbi
+            ON (dbo.owner = dbi.owner AND dbo.object_name = dbi.index_name)
+    JOIN
+        dba_tables  dbt 
+            ON (dbi.owner = dbo.owner AND dbi.table_name = dbt.table_name)
+    WHERE
+        object_type = 'INDEX';
+
+
 ## Give basic info about lob segments
 
 *Keywords*: aggregate functions, lobs
