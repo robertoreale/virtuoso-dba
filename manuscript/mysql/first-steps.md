@@ -1,3 +1,5 @@
+## First Steps
+
 --------------------------------------------------------------------------------
 --
 --  The SQL Diaries
@@ -94,3 +96,4 @@ GROUP BY
     table_schema, table_name;
 
 --  ex: ts=4 sw=4 et filetype=sql
+<!-- vim: set fenc=utf-8 spell spl=en ts=4 sw=4 et filetype=markdown : -->

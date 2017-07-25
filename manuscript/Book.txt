@@ -16,5 +16,7 @@ oracle/stochastic-world.md
 oracle/internals.md
 postgresql/postgresql.md
 postgresql/first-steps.md
+mysql/mysql.md
+mysql/first-steps.md
 r.md
 mongodb.md
