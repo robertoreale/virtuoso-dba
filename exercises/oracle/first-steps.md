@@ -1,6 +1,6 @@
-# First Steps
+## First Steps
 
-## List foreign constraints associated to their reference columns.
+### List foreign constraints associated to their reference columns.
 
     SELECT
         c.owner              AS source_owner,
