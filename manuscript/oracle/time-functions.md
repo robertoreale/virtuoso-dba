@@ -1,6 +1,6 @@
-# Time Functions
+## Time Functions
 
-## Show the first and last day of the current month
+### Show the first and last day of the current month
 
 *Keywords*: time functions
 
@@ -11,7 +11,7 @@
         dual;
 
 
-## Show the first and last day of the current year
+### Show the first and last day of the current year
 
 *Keywords*: time functions
 
@@ -24,7 +24,7 @@
         dual;
 
 
-## Show the maximum possible date
+### Show the maximum possible date
 
 *Keywords*: time functions
 
@@ -41,7 +41,7 @@ December 31, 9999 CE, one second to midnight.
         dual;
 
 
-## Show the minimum possible date
+### Show the minimum possible date
 
 *Keywords*: time functions
 
@@ -53,7 +53,7 @@ December 31, 9999 CE, one second to midnight.
         dual;
 
 
-## List leap years from 1 AD
+### List leap years from 1 AD
 
 *Keywords*: time functions
 
@@ -65,7 +65,7 @@ December 31, 9999 CE, one second to midnight.
     CONNECT BY LEVEL < 10000;
 
 
-## Count audit records for the last hour
+### Count audit records for the last hour
 
 *Keywords*: time functions, audit
 
@@ -74,11 +74,11 @@ December 31, 9999 CE, one second to midnight.
     FROM
         sys.aud$
     WHERE
-        CAST((FROM_TZ(ntimestamp#, '00:00') AT local) AS date)
+        CAST((FROM_TZ(ntimestamp##, '00:00') AT local) AS date)
             < SYSDATE - INTERVAL '1' HOUR;
 
 
-## Count log file switches, day by day, hour by hour
+### Count log file switches, day by day, hour by hour
 
 *Keywords*: time functions, PIVOT, dynamic views
 
@@ -100,7 +100,7 @@ December 31, 9999 CE, one second to midnight.
         );
 
 
-## Calculate the calendar date of Easter, from 1583 to 2999
+### Calculate the calendar date of Easter, from 1583 to 2999
 
 *Keywords*: time functions, multiple WITH clauses
 
@@ -225,6 +225,6 @@ December 31, 9999 CE, one second to midnight.
         t7;
 
 
-## Exercises
+### Exercises
 
 <!-- vim: set fenc=utf-8 spell spl=en ts=4 sw=4 et filetype=markdown : -->

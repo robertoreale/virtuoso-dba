@@ -1,6 +1,6 @@
-# A Stochastic World
+## A Stochastic World
 
-## Verify the law of large numbers
+### Verify the law of large numbers
 
 *Keywords*: CONNECT BY, analytic functions, random values, subqueries, ODCI
 functions, TABLE function, numerical recipes
@@ -22,7 +22,7 @@ Verify the law of large numbers by rolling a die n times, with n >> 0
         dual;
 
 
-## For each tablespace T, find the probability of segments in T to be smaller than or equal to a given size
+### For each tablespace T, find the probability of segments in T to be smaller than or equal to a given size
 
 *Keywords*: probability distributions, logical storage
 
@@ -35,6 +35,6 @@ Verify the law of large numbers by rolling a die n times, with n >> 0
         tablespace_name;
 
 
-## Exercises
+### Exercises
 
 <!-- vim: set fenc=utf-8 spell spl=en ts=4 sw=4 et filetype=markdown : -->

@@ -1,6 +1,6 @@
-# Graphs and Trees
+## Graphs and Trees
 
-## List all users to which a given role is granted, even indirectly
+### List all users to which a given role is granted, even indirectly
 
 *Keywords*: hierarchical queries, security
 
@@ -17,7 +17,7 @@
         dba_users;
 
 
-## List privileges granted to each user, even indirectly
+### List privileges granted to each user, even indirectly
 
 *Keywords*: hierarchical queries, security
 
@@ -29,14 +29,14 @@
     FROM
         sysauth$ sa
     JOIN
-        user$ u1 ON (u1.user# = grantee#)
+        user$ u1 ON (u1.user## = grantee#)
     JOIN
-        user$ u2 ON (u2.user# = sa.privilege#)
-    CONNECT BY PRIOR privilege# = grantee#
+        user$ u2 ON (u2.user## = sa.privilege#)
+    CONNECT BY PRIOR privilege## = grantee#
     ORDER BY level, grantee, privilege;
 
 
-## Display reference graph between tables
+### Display reference graph between tables
 
 *Keywords*: hierarchical queries, constraints
 
@@ -78,6 +78,6 @@
         depth, path;
 
 
-## Exercises
+### Exercises
 
 <!-- vim: set fenc=utf-8 spell spl=en ts=4 sw=4 et filetype=markdown : -->

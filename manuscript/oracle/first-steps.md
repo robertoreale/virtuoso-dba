@@ -1,13 +1,13 @@
-# First Steps
+## First Steps
 
-## Show database role (primary, standby, etc.)
+### Show database role (primary, standby, etc.)
 
 *Keywords*: dynamic views, data guard
 
     SELECT database_role FROM gv$database;
 
 
-## Get local host name and local IP address of the database server
+### Get local host name and local IP address of the database server
 
 *Keywords*: UTL_* api
 
@@ -18,7 +18,7 @@
         dual;
 
 
-## Show database block size
+### Show database block size
 
 *Keywords*: dynamic views, parameters
 
@@ -31,7 +31,7 @@
         name = 'db_block_size';
     
 
-## List user Data Pump jobs
+### List user Data Pump jobs
 
 *Keywords*: LIKE, data pump
 
@@ -48,13 +48,13 @@
         job_name NOT LIKE 'BIN$%';
 
 
-## Calculate the average number of redo log switches per hour
+### Calculate the average number of redo log switches per hour
 
 *Keywords*: dynamic views, aggregate functions
 
     SELECT
         inst_id,
-        thread#,
+        thread##,
         TRUNC(first_time)              AS day,
         COUNT(*)                       AS switches,
         COUNT(*) / 24                  AS avg_switches_per_hour
@@ -62,13 +62,13 @@
         gv$loghist
     GROUP BY
         inst_id,
-        thread#,
+        thread##,
         TRUNC(first_time)
     ORDER BY
         day;
 
 
-## List the top-n largest segments
+### List the top-n largest segments
 
 *Keywords*: limiting query result, physical storage
 
@@ -84,7 +84,7 @@
     ) WHERE ROWNUM <= &n;
 
 
-## Show the total, used, and free space database-wise
+### Show the total, used, and free space database-wise
 
 *Keywords*: subqueries, physical storage
 
@@ -101,7 +101,7 @@
         );
 
 
-## Display the findings discovered by all advisors in the database
+### Display the findings discovered by all advisors in the database
 
 *Keywords*: addm, nested queries
 
@@ -134,7 +134,7 @@
         );
 
 
-## Associate blocking and blocked sessions
+### Associate blocking and blocked sessions
 
 *Keywords*: self join, locking
 
@@ -147,16 +147,16 @@
         l1.block = 1 AND l2.request > 0;
 
 
-## Show basic info about log files
+### Show basic info about log files
 
 *Keywords*: self join, redo logs
 
 *Reference*: http://dba.stackexchange.com/questions/21805/
 
     SELECT
-        lg.group#             AS group#,
-        lg.thread#            AS thread#,
-        lg.sequence#          AS sequence#,
+        lg.group##             AS group#,
+        lg.thread##            AS thread#,
+        lg.sequence##          AS sequence#,
         lg.archived           AS archived,
         lg.status             AS status,
         lf.member             AS file_name,
@@ -166,12 +166,12 @@
     JOIN
         gv$logfile lf
     ON
-        lg.group# = lf.group# 
+        lg.group## = lf.group# 
     ORDER BY
-        lg.group# ASC;
+        lg.group## ASC;
 
 
-## Calculate the size of the temporary tablespaces
+### Calculate the size of the temporary tablespaces
 
 *Keywords*: aggregate functions, dynamic views, logical storage
 
@@ -185,12 +185,12 @@
     JOIN
         gv$tempfile tmpf
     USING
-        (inst_id, ts#)
+        (inst_id, ts##)
     GROUP BY
         inst_id, ts.name, tmpf.block_size;
 
 
-## Calculate the high-water and excess allocated size for datafiles
+### Calculate the high-water and excess allocated size for datafiles
 
 *Keywords*: WITH clause, NVL, aggregate functions, physical storage
 
@@ -227,7 +227,7 @@
     USING (file_id);
 
 
-## Display parent-child pairs between tables, based on reference constraints
+### Display parent-child pairs between tables, based on reference constraints
 
 *Keywords*: WITH clause, constraints
 
@@ -254,7 +254,7 @@
         1, 2, 3, 4;
 
 
-## Compute a count of archived logs and their average size
+### Compute a count of archived logs and their average size
 
 *Keywords*: dynamic views, WITH clause
 
@@ -262,9 +262,9 @@
         lh AS (
             SELECT
                 TO_CHAR(first_time, 'YYYY-MM-DD')    AS day,
-                COUNT(1)                             AS archived#,
-                MIN(recid)                           AS min#,
-                MAX(recid)                           AS max# 
+                COUNT(1)                             AS archived##,
+                MIN(recid)                           AS min##,
+                MAX(recid)                           AS max## 
             FROM
                 gv$log_history
             GROUP BY
@@ -273,7 +273,7 @@
         ),
         lg AS (
             SELECT
-                COUNT(1)                             AS members#,
+                COUNT(1)                             AS members##,
                 MAX(bytes) / 1024 / 1024             AS max_size, 
                 MIN(bytes) / 1024 / 1024             AS min_size,
                 AVG(bytes) / 1024 / 1024             AS avg_size
@@ -283,12 +283,12 @@
     SELECT
         lh.*,
         lg.*,
-        ROUND(lh.archived# * lg.avg_size)             AS daily_avg_size
+        ROUND(lh.archived## * lg.avg_size)             AS daily_avg_size
     FROM
         lh, lg;
 
 
-## Calculate a fragmentation factor for tablespaces
+### Calculate a fragmentation factor for tablespaces
 
 *Keywords*: aggregate functions, logical storage
 
@@ -304,7 +304,7 @@ It is calculated according to the following formula:
                          
                     =====        
          4_______   \            
-        \/blocks#    >    blocks 
+        \/blocks##    >    blocks 
                     /            
                     =====        
  
@@ -323,7 +323,7 @@ Cf. the book *Oracle Performance Troubleshooting*, by Robin Schumacher.
         tablespace_name;
 
 
-## Count number of segments for each order of magnitude
+### Count number of segments for each order of magnitude
 
 *Keywords*: DECODE function, analytic functions
 
@@ -349,7 +349,7 @@ IEC prefixes are used.
     ORDER BY TRUNC(LOG(1024, bytes));
 
 
-## Show last rebuild time for indexes
+### Show last rebuild time for indexes
 
 *Keywords*: DECODE
 
@@ -376,7 +376,7 @@ IEC prefixes are used.
         object_type = 'INDEX';
 
 
-## Give basic info about lob segments
+### Give basic info about lob segments
 
 *Keywords*: aggregate functions, lobs
 
@@ -400,7 +400,7 @@ IEC prefixes are used.
         segment_name;
 
 
-## Sort the object types by their average name length
+### Sort the object types by their average name length
 
 *Keywords*: aggregate functions, string functions
 
@@ -415,7 +415,7 @@ IEC prefixes are used.
         AVG(LENGTH(object_name)) DESC;
 
 
-## Count memory resize operations, by component and type
+### Count memory resize operations, by component and type
 
 *Keywords*: DECODE, dynamic views
 
@@ -435,13 +435,13 @@ IEC prefixes are used.
     ORDER BY component;
 
 
-## Show active sessions with SQL text
+### Show active sessions with SQL text
 
 *Keywords*: dynamic views, IN operator
 
     SELECT
         s.sid,
-        s.serial#,
+        s.serial##,
         sql.sql_text,
         s.username,
         s.machine
@@ -463,14 +463,14 @@ IEC prefixes are used.
         s.sid, sql.piece;
 
 
-## List some basic I/O statistics for each user session
+### List some basic I/O statistics for each user session
 
 *Keywords*: dynamic views, outer join
 
     SELECT
         s.inst_id,
         s.sid,
-        s.serial#,
+        s.serial##,
         p.spid,
         s.status,
         logon_time,
@@ -488,17 +488,17 @@ IEC prefixes are used.
     WHERE
         s.osuser IS NOT NULL AND s.username IS NOT NULL
     ORDER BY
-        inst_id, sid, serial#;
+        inst_id, sid, serial##;
         
 
-## List some basic CPU statistics for each user session
+### List some basic CPU statistics for each user session
 
 *Keywords*: dynamic views, outer join
 
     SELECT
         s.inst_id,
         s.sid,
-        s.serial#,
+        s.serial##,
         p.spid,
         s.status,
         logon_time,
@@ -512,17 +512,17 @@ IEC prefixes are used.
         LEFT JOIN gv$session_wait w  ON s.inst_id = w.inst_id AND s.sid   = w.sid
         JOIN gv$process p            ON s.inst_id = p.inst_id AND s.paddr = p.addr
         JOIN gv$sesstat t            ON s.inst_id = t.inst_id AND s.sid   = t.sid
-        JOIN gv$statname n           USING (statistic#)
+        JOIN gv$statname n           USING (statistic##)
     WHERE
         (w.event IS NULL OR 'SQL*Net message from client' = w.event)
         AND s.osuser   IS NOT NULL
         AND s.username IS NOT NULL
         AND n.name     LIKE '%cpu%'
     ORDER BY
-        inst_id, sid, serial#, parameter;
+        inst_id, sid, serial##, parameter;
 
 
-## Show the instance name and number and the schema or database user name relative to the current session
+### Show the instance name and number and the schema or database user name relative to the current session
 
 *Keywords*: WITH clause, SYS_CONTEXT
 
@@ -545,7 +545,7 @@ IEC prefixes are used.
         gv$instance i ON UPPER(ctx.instance_name) = UPPER(i.instance_name);
 
 
-## Exercises
+### Exercises
 
 * List foreign constraints associated to their reference columns.
 

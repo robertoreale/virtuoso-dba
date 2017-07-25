@@ -1,23 +1,23 @@
-# Drawing
+## Drawing
 
-## Generate a histogram for the length of objects’ names
+### Generate a histogram for the length of objects’ names
 
 *Keywords*: formatting, analytic functions, aggregate functions, logical storage
 
     SELECT
         LENGTH(object_name),
-        LPAD('#',
+        LPAD('##',
             CEIL(RATIO_TO_REPORT(
                 APPROX_COUNT_DISTINCT(object_name)) OVER () * 100
             ),
-            '#') AS histogram
+            '##') AS histogram
     FROM
         dba_objects
     GROUP BY LENGTH(object_name)
     ORDER BY LENGTH(object_name);
 
 
-## Build a histogram for the order of magnitude of segments’ sizes
+### Build a histogram for the order of magnitude of segments’ sizes
 
 *Keywords*: formatting, analytic functions, aggregate functions, physical storage
 
@@ -35,17 +35,17 @@
             8, 'YiB',
             'UNKNOWN'
         )           AS order_of_magnitude,
-        LPAD('#',
+        LPAD('##',
             CEIL(RATIO_TO_REPORT(
                 APPROX_COUNT_DISTINCT(SEGMENT_NAME)) OVER () * 100
             ),
-            '#')    AS histogram
+            '##')    AS histogram
     FROM
         dba_segments
     GROUP BY TRUNC(LOG(1024, bytes))
     ORDER BY TRUNC(LOG(1024, bytes));
 
 
-## Exercises
+### Exercises
 
 <!-- vim: set fenc=utf-8 spell spl=en ts=4 sw=4 et filetype=markdown : -->

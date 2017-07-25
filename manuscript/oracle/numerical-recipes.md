@@ -1,13 +1,13 @@
-# Numerical Recipes
+## Numerical Recipes
 
-## Calculate the sum of a geometric series
+### Calculate the sum of a geometric series
 
 *Keywords*: CONNECT BY, numerical recipes
 
     SELECT SUM(POWER(2, -level)) sum FROM dual CONNECT BY level < &n;
 
 
-## Solve Besel's problem
+### Solve Besel's problem
 
 *Keywords*: CONNECT BY, numerical recipes
 
@@ -19,7 +19,7 @@
     CONNECT BY level < &n;
 
 
-## Generate Fibonacci sequence
+### Generate Fibonacci sequence
 
 *Keywords*: recursive CTE, numerical recipes
 
@@ -50,7 +50,7 @@ At least 11g R2 is required for the recursive CTE to work.
         fibonacci;
 
 
-## Verify that the sum of the reciprocals of factorials converge to e
+### Verify that the sum of the reciprocals of factorials converge to e
 
 *Keywords*: recursive CTE, numerical recipes
 
@@ -75,7 +75,7 @@ At least 11g R2 is required for the recursive CTE to work.
         factorial;
 
 
-## Verify that the sum of the reciprocals of factorials converge to e, alternative method
+### Verify that the sum of the reciprocals of factorials converge to e, alternative method
 
 *Keywords*: doubly increasing sequence, non-equi join
 
@@ -91,7 +91,7 @@ At least 11g R2 is required for the recursive CTE to work.
         s1.n;
 
 
-## Verify that the cosine function has a fixed point
+### Verify that the cosine function has a fixed point
 
 *Keywords*: recursive CTE, numerical recipes, analytic functions, random values
 
@@ -124,6 +124,6 @@ A fixed point is a point x_0 such that x_0 = cos(x_0).
         iter;
 
 
-## Exercises
+### Exercises
 
 <!-- vim: set fenc=utf-8 spell spl=en ts=4 sw=4 et filetype=markdown : -->

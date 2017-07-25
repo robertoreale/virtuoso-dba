@@ -1,6 +1,6 @@
-# Internals
+## Internals
 
-## Count the number of trace files generated each day
+### Count the number of trace files generated each day
 
 *Keywords*: x$ interface
 
@@ -14,7 +14,7 @@
         ORDER BY 2 DESC;
 
 
-## Display hidden/undocumented initialization parameters
+### Display hidden/undocumented initialization parameters
 
 *Keywords*: DECODE function, x$ interface
 
@@ -42,15 +42,15 @@
         name;
 
 
-## Display the number of ASM allocated and free allocation units
+### Display the number of ASM allocated and free allocation units
 
 *Keywords*: PIVOT emulation, x$ interface, asm
 
 *Reference*: MOS Doc ID 351117.1
 
     SELECT
-        group_kfdat                                       AS group#,
-        number_kfdat                                      AS disk#,
+        group_kfdat                                       AS group##,
+        number_kfdat                                      AS disk##,
         --  emulate the PIVOT functions which is missing in 10g
         SUM(CASE WHEN v_kfdat = 'V' THEN 1 ELSE 0 END)    AS alloc_au,
         SUM(CASE WHEN v_kfdat = 'F' THEN 1 ELSE 0 END)    AS free_au
@@ -60,7 +60,7 @@
         group_kfdat, number_kfdat;
 
 
-## Display the count of allocation units per ASM file by file alias (for metadata only)
+### Display the count of allocation units per ASM file by file alias (for metadata only)
 
 *Keywords*: x$interface, asm
 
@@ -68,8 +68,8 @@
 
     SELECT
         COUNT(xnum_kffxp)    AS au_count,
-        number_kffxp         AS file#,
-        group_kffxp          AS dg#
+        number_kffxp         AS file##,
+        group_kffxp          AS dg##
     FROM
         x$kffxp
     WHERE
@@ -80,7 +80,7 @@
         COUNT(xnum_kffxp);
 
 
-## Display the count of allocation units per ASM file by file alias
+### Display the count of allocation units per ASM file by file alias
 
 *Keywords*: x$interface, asm
 
@@ -103,7 +103,7 @@
         group_kffxp, number_kffxp;
 
 
-## Show file utilization
+### Show file utilization
 
 *Keywords*: x$interface, asm
 
@@ -125,6 +125,6 @@
         f.group_number, f.file_number;
 
 
-## Exercises
+### Exercises
 
 <!-- vim: set fenc=utf-8 spell spl=en ts=4 sw=4 et filetype=markdown : -->

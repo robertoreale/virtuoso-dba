@@ -1,6 +1,6 @@
-# Data Analytics
+## Data Analytics
 
-## Rank all the tables in the system based on their cardinality
+### Rank all the tables in the system based on their cardinality
 
 *Keywords*: analytical functions
 
@@ -22,7 +22,7 @@ We partition the result set by tablespace.
         tablespace_name;
 
 
-## List the objects in the recycle bin, sorting by the version
+### List the objects in the recycle bin, sorting by the version
 
 *Keywords*: analytical functions
 
@@ -39,7 +39,7 @@ We partition the result set by tablespace.
         dba_recyclebin;
 
 
-## Show I/O stats on datafiles
+### Show I/O stats on datafiles
 
 *Keywords*: dynamic views, analytical functions
 
@@ -54,12 +54,12 @@ We partition the result set by tablespace.
         gv$datafile df,
         gv$filestat fs
     WHERE
-        df.file# = fs.file#
+        df.file## = fs.file#
     ORDER BY
         fs.phyblkrd + fs.phyblkwrt DESC;
     
     
-## Show the progressive growth in backup sets
+### Show the progressive growth in backup sets
 
 *Keywords*: analytics functions, aggregate functions, dynamic views, rman
 
@@ -87,7 +87,7 @@ We use percentiles to exclude outliers.
         percentile BETWEEN 10 AND 90;
 
 
-## For each schema, calculate the correlation between the size of the tables both in bytes and as a product rows times columns
+### For each schema, calculate the correlation between the size of the tables both in bytes and as a product rows times columns
 
 *Keywords*: aggregate functions, subqueries, logical and physical storage
 
@@ -127,7 +127,7 @@ We use percentiles to exclude outliers.
     ORDER BY owner;
 
 
-## List statspack snapshots
+### List statspack snapshots
 
 *Keywords*: analytics functions, statspack
 
@@ -143,7 +143,7 @@ We use percentiles to exclude outliers.
         stats$snapshot;
 
 
-## List top-10 CPU-intensive queries
+### List top-10 CPU-intensive queries
 
 *References*: https://community.oracle.com/thread/1101381
 
@@ -248,7 +248,7 @@ We use percentiles to exclude outliers.
         nr <= &m;
 
 
-## Show how much is tablespace usage growing
+### Show how much is tablespace usage growing
 
 *Keywords*: regression models, dynamic views, logical storage
 
@@ -259,13 +259,13 @@ We use percentiles to exclude outliers.
     FROM
         dba_hist_tbspc_space_usage h=
         JOIN gv$database d USING(dbid)
-        JOIN gv$tablespace t ON (h.tablespace_id = t.ts#)
+        JOIN gv$tablespace t ON (h.tablespace_id = t.ts##)
     GROUP BY
         d.name, t.name
     ORDER BY
         db, tablespace_name;
 
 
-## Exercises
+### Exercises
 
 <!-- vim: set fenc=utf-8 spell spl=en ts=4 sw=4 et filetype=markdown : -->

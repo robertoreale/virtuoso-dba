@@ -1,6 +1,6 @@
-# Enter Imperative Thinking
+## Enter Imperative Thinking
 
-## Show all Oracle error codes and messages
+### Show all Oracle error codes and messages
 
 *Keywords*: LIKE, CONNECT BY, function in WITH clause, SQLERRM
 
@@ -19,6 +19,6 @@
     CONNECT BY LEVEL < 100000;
 
 
-## Exercises
+### Exercises
 
 <!-- vim: set fenc=utf-8 spell spl=en ts=4 sw=4 et filetype=markdown : -->

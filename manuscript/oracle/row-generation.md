@@ -1,13 +1,13 @@
-# Row Generation
+## Row Generation
 
-## List all integers between 00 and FF, hexadecimal
+### List all integers between 00 and FF, hexadecimal
 
 *Keywords*: CONNECT BY, TO_CHAR
 
     SELECT TO_CHAR(level - 1, '0X') AS n FROM dual CONNECT BY level <= 256;
 
 
-## List all integers between 00000000 and 11111111, hexadecimal
+### List all integers between 00000000 and 11111111, hexadecimal
 
 *Keywords*: CONNECT BY, DECODE, bitwise operations
 
@@ -25,7 +25,7 @@
     CONNECT BY level <= 256;
 
 
-## Generate the integers between 1 and 256
+### Generate the integers between 1 and 256
 
 *Keywords*: GROUP BY CUBE
 
@@ -39,7 +39,7 @@
         );
 
 
-## Generate the integers between 1 and 100, in random order
+### Generate the integers between 1 and 100, in random order
 
 *Keywords*: CONNECT BY, DBMS_RANDOM
 
@@ -51,7 +51,7 @@
     ORDER BY DBMS_RANDOM.VALUE;
 
 
-## Generate the English alphabet
+### Generate the English alphabet
 
 *Keywords*: CONNECT BY, ASCII
 
@@ -63,7 +63,7 @@
         );
 
 
-## Print the Sonnet XVIII by Shakespeare
+### Print the Sonnet XVIII by Shakespeare
 
 *Keywords*: UNPIVOT
 
@@ -108,7 +108,7 @@
         );
 
 
-## List the next seven week days
+### List the next seven week days
 
 *Keywords*: JSON
 
@@ -127,6 +127,6 @@
         )  days;
 
 
-## Exercises
+### Exercises
 
 <!-- vim: set fenc=utf-8 spell spl=en ts=4 sw=4 et filetype=markdown : -->

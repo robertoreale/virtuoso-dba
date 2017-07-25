@@ -1,6 +1,6 @@
-# The MODEL Clause
+## The MODEL Clause
 
-## Generate the even integers between -100 and 100, inclusive
+### Generate the even integers between -100 and 100, inclusive
 
 *Keywords*: MODEL
 
@@ -21,6 +21,6 @@
         );
 
 
-## Exercises
+### Exercises
 
 <!-- vim: set fenc=utf-8 spell spl=en ts=4 sw=4 et filetype=markdown : -->
