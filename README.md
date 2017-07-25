@@ -19,6 +19,7 @@ This work is licensed under a <a rel="license" href="http://creativecommons.org/
 - [Introduction](#introduction)
 - [First Steps](#first-steps)
   * [Show database role (primary, standby, etc.)](#show-database-role-primary-standby-etc)
+  * [Get local host name and local IP address of the database server](#get-local-host-name-and-local-ip-address-of-the-database-server)
   * [Show database block size](#show-database-block-size)
   * [List user Data Pump jobs](#list-user-data-pump-jobs)
   * [Calculate the average number of redo log switches per hour](#calculate-the-average-number-of-redo-log-switches-per-hour)
@@ -137,6 +138,17 @@ Working as a DBA requires improving skills in at least two key areas: SQL and da
 *Keywords*: dynamic views, data guard
 
     SELECT database_role FROM gv$database;
+
+
+## Get local host name and local IP address of the database server
+
+*Keywords*: UTL_* api
+
+    SELECT
+        UTL_INADDR.GET_HOST_NAME    hostname,
+        UTL_INADDR.GET_HOST_ADDRESS ip_addr
+    FROM
+        dual;
 
 
 ## Show database block size
@@ -667,6 +679,8 @@ IEC prefixes are used.
 
 
 ## Exercises
+
+* List foreign constraints associated to their reference columns.
 
 # String Manipulation
 
