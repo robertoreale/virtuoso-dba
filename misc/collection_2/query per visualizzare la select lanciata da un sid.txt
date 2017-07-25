@@ -1,0 +1,6 @@
+Undef sid
+Undef inst_id
+Select nvl(sql_text,'<none>') as SQL_TEXT from gv$sqltext a, gv$session s
+Where a.ADDRESS=s.SQL_ADDRESS and a.HASH_VALUE=s.SQL_HASH_VALUE and a.inst_id = s.inst_id
+  And sid=&&SID and s.inst_id=&&INST_ID order by piece;
+

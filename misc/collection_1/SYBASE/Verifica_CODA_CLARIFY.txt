@@ -1,0 +1,33 @@
+Host : rmdtwh01
+User : sybase ( S1_3sAb! )
+
+
+----verificare code.
+----isql -Usa -SDCRMCLAP_RS -w400
+----Lanciare: admin who,sqm (memorizzare il valore delle code)
+
+
+THREAD DOWN / CODA CLARIFY ... insomma SYBASE check Replication Server.
+
+*** Verifica processi UP running o sleeping ***
+admin who
+go
+
+*** Verifica “thread down” *******************************
+
+admin who_is_down
+go
+
+In caso di down di un DSI
+resume connection to CRMREPP.P_CLARIFY
+
+per sospendere il DSI
+suspend connection to CRMREPP.P_CLARIFY
+
+*** Verifica CODE di Replica *****************************
+admin who,sqm
+go
+
+Nel caso di P_CLARIFY … 
+Verificare la coda di nome DCREAMP.P_CLARIFY
+

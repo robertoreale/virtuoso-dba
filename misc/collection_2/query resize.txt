@@ -1,0 +1,9 @@
+select file_name, hwm, blocks total_blocks, blocks-hwm+1 shrinkage_possible
+from dba_data_files a,
+( select file_id, max(block_id+blocks) hwm
+from dba_extents
+group by file_id ) b
+where a.file_id = b.file_id
+-- and a.tablespace_name  like '%STCRTSBL0001D_010P%'
+;
+

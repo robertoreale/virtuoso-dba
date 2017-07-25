@@ -1,0 +1,66 @@
+set lines 80
+set trimspool on
+set embedded off
+set feedback off
+spool spool_ctrl_bck_rm9i_31032009_115800.log
+select NAME,
+TO_CHAR(BCK_DATE,'DD-MON-YYYY,HH24:MI:SS') LAST_DATE,
+round(sum(SIZEOF)/1024/1024/1024,2) GB_SIZE
+from (
+select NAME, B.blocks*B.block_size SIZEOF, C3 BCK_DATE
+from RC_BACKUP_DATAFILE B,
+-- ###################################################
+( select NAME, MAX(D3) C3
+from (
+select I.NAME, MAX(CHECKPOINT_TIME) D3
+from RC_BACKUP_DATAFILE B,
+RC_DATAFILE        F,
+RC_DATABASE_INCARNATION        I
+where B.FILE# = F.FILE#
+and B.DB_NAME = F.DB_NAME
+and B.DB_KEY=F.DB_KEY
+and B.DBINC_KEY=F.DBINC_KEY
+and I.DB_KEY=B.DB_KEY(+)
+and I.DBINC_KEY=B.DBINC_KEY(+)
+and I.NAME = B.DB_NAME(+)
+and F.TABLESPACE_NAME='SYSTEM'
+and I.CURRENT_INCARNATION='YES'
+group by I.NAME,I.DB_KEY,I.DBINC_KEY,I.DBID
+union
+select I.NAME, MIN(I.RESETLOGS_TIME) D3
+from RC_DATABASE_INCARNATION        I
+group by I.NAME )
+group by NAME )  MAXDATE
+-- ###################################################
+where MAXDATE.NAME=B.DB_NAME
+and CHECKPOINT_TIME >= MAXDATE.C3 - 1
+and CHECKPOINT_TIME <= MAXDATE.C3 + 1
+union
+select NAME, 0 ,MAX(D3) C3
+from (
+select I.NAME, MAX(CHECKPOINT_TIME) D3
+from RC_BACKUP_DATAFILE B,
+RC_DATAFILE        F,
+RC_DATABASE_INCARNATION        I
+where B.FILE# = F.FILE#
+and B.DB_NAME = F.DB_NAME
+and B.DB_KEY=F.DB_KEY
+and B.DBINC_KEY=F.DBINC_KEY
+and I.DB_KEY=B.DB_KEY(+)
+and I.DBINC_KEY=B.DBINC_KEY(+)
+and I.NAME = B.DB_NAME(+)
+and F.TABLESPACE_NAME='SYSTEM'
+and I.CURRENT_INCARNATION='YES'
+group by I.NAME,I.DB_KEY,I.DBINC_KEY,I.DBID
+union
+select I.NAME, MIN(I.RESETLOGS_TIME) D3
+from RC_DATABASE_INCARNATION        I
+group by I.NAME )
+group by NAME )
+group by NAME, BCK_DATE
+having BCK_DATE < sysdate - 30
+and NAME NOT IN ('FNETTEST', 'FMDPROD', 'STGT1B', 'PWD', 'CRP','FMDTEST','ETGPROD', 'PBS1P', 'PBS2P','SCHEDP','PREBSP','GISP','RAMPROD','TIVEDO','HELPD','SCMSPR
+VA','PBSS01','PBSS02','PBSS03','MAGINTER','MAGIPORT','SCMSPROD','FNETPROD','VAIP','OSS2','NDBGW','CRAMER5P','CFGPROD')
+order by BCK_DATE ASC
+;
+spool off

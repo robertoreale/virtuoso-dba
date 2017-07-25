@@ -1,0 +1,1 @@
+select trunc(sum(bytes)/1024/1024) from dba_segments where owner='WBM_APPPPRD';

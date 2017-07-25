@@ -1,0 +1,65 @@
+exec dbms_workload_repository.create_baseline (997, 1005, 'CPM_baseline');
+
+BEGIN
+  DBMS_SQLTUNE.CREATE_SQLSET(
+    sqlset_name => 'CPM_tuning_set', 
+    description  => 'CPM query performance');
+END;
+
+--tuning sulle top 10 query per elapsed time
+DECLARE
+ baseline_cursor DBMS_SQLTUNE.SQLSET_CURSOR;
+BEGIN
+ OPEN baseline_cursor FOR
+    SELECT VALUE(p)
+    FROM TABLE (DBMS_SQLTUNE.SELECT_WORKLOAD_REPOSITORY(
+                  'CPM_baseline',
+                   NULL, NULL,
+                   'elapsed_time',
+                   NULL, NULL, NULL,
+                   10)) p;
+
+    DBMS_SQLTUNE.LOAD_SQLSET(
+             sqlset_name     => 'CPM_tuning_set',
+             populate_cursor => baseline_cursor);
+END;
+/
+
+
+DECLARE
+  l_sql_tune_task_id  VARCHAR2(100);
+BEGIN
+  l_sql_tune_task_id := DBMS_SQLTUNE.create_tuning_task (
+                          sqlset_name => 'CPM_tuning_set',
+                          scope       => DBMS_SQLTUNE.scope_comprehensive,
+                          time_limit  => 1200,
+                          task_name   => 'sqlset_tuning_task',
+                          description => 'Tuning task for an SQL tuning set.');
+  DBMS_OUTPUT.put_line('l_sql_tune_task_id: ' || l_sql_tune_task_id);
+END;
+/
+
+
+BEGIN
+  DBMS_SQLTUNE.EXECUTE_TUNING_TASK( task_name => 'sqlset_tuning_task' );
+END;
+
+
+SELECT DBMS_SQLTUNE.REPORT_TUNING_TASK( 'sqlset_tuning_task')
+  FROM DUAL;
+
+
+
+SELECT task_name, status FROM dba_advisor_log WHERE task_name = 'sqlset_tuning_task';
+
+
+
+BEGIN
+  DBMS_SQLTUNE.DROP_TUNING_TASK( 'sqlset_tuning_task');
+END;
+
+
+
+BEGIN
+  DBMS_SQLTUNE.DROP_SQLSET( sqlset_name => 'CPM_tuning_set' );
+END;

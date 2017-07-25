@@ -1,0 +1,8 @@
+database FUADCOL
+
+su FUADCOL come sys
+
+@?/rdbms/admin/utlrp.sql   (compila oggetti invalidi)
+
+@?/rdbms/admin/utlrp.sql
+

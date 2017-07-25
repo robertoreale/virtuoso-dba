@@ -1,0 +1,24 @@
+SQL> alter tablespace MPRM_CACC_IDX offline;
+
+Tablespace altered.
+
+SQL> !cp -p /dbmprm/dbmprm03/mprm_ctbf_idx/MPRM_CTBF_IDX02.dbf  /dbmprm/dbmprm03/mprm_cacc_idx/MPRM_CACC_IDX02.dbf
+
+SQL> alter tablespace MPRM_CACC_IDX rename datafile
+'  2  /dbmprm/dbmprm03/mprm_ctbf_idx/MPRM_CTBF_IDX02.dbf' to
+  3  '/dbmprm/dbmprm03/mprm_cacc_idx/MPRM_CACC_IDX02.dbf';
+
+Tablespace altered.
+
+SQL> alter tablespace MPRM_CACC_IDX online;
+
+Tablespace altered.
+
+SQL> select * from v$recover_file;
+
+no rows selected
+
+SQL> !fuser /dbmprm/dbmprm03/mprm_ctbf_idx/MPRM_CTBF_IDX02.dbf
+/dbmprm/dbmprm03/mprm_ctbf_idx/MPRM_CTBF_IDX02.dbf:
+
+SQL> !rm /dbmprm/dbmprm03/mprm_ctbf_idx/MPRM_CTBF_IDX02.dbf

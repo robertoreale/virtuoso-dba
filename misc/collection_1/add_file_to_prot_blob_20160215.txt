@@ -1,0 +1,4 @@
+alter tablespace PROTO_BLOB add datafile '/p206/ora92p2a/oradata/PROT/proto_blob164.dbf' size 2048M autoextend OFF
+/
+alter tablespace PROTO_BLOB add datafile '/p206/ora92p2a/oradata/PROT/proto_blob165.dbf' size 2048M autoextend OFF
+/

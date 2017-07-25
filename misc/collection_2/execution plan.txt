@@ -1,0 +1,9 @@
+set autotrace traceonly explain
+query;
+
+oppure:
+
+explain plan for                                                                                                                                                                                                                               
+(query)                                                                                                                                                                                                                                        
+select plan_table_output from table(dbms_xplan.display('plan_table',null,'serial'));
+

@@ -1,0 +1,4 @@
+dbv FILE= '/dbmgonline/dbmgonline06/200904/Indexfile_20090412_5.dbf' blocksize =  32768  LOGFILE = dbv_mgonline_14042009.log
+
+SELECT tablespace_name, segment_type, owner, segment_name FROM dba_extents
+WHERE file_id = 616 and 113440 between block_id AND block_id + blocks - 1;

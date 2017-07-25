@@ -1,0 +1,1 @@
+select table_owner||'.'||table_name||':'||partition_name||',' from dba_tab_partitions where table_owner='STCR_APPPRD' and table_name='STCRMTB601P' order by partition_name

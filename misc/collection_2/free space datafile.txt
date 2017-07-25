@@ -1,0 +1,23 @@
+SELECT 
+   a.tablespace_name, 
+   a.file_name, 
+   a.bytes allocated_bytes, 
+   b.free_bytes
+FROM 
+   dba_data_files a, 
+   (SELECT file_id, SUM(bytes) free_bytes
+    FROM dba_free_space b GROUP BY file_id) b
+WHERE 
+   a.file_id=b.file_id
+ORDER BY 
+   a.tablespace_name;
+
+
+SELECT SUBSTR (df.NAME, 1, 40) file_name,dfs.tablespace_name, df.bytes/1024/1024 allocated_mb,
+((df.bytes/1024/1024) - NVL(SUM(dfs.bytes)/1024/1024, 0))
+used_mb,
+NVL(SUM(dfs.bytes)/1024/1024, 0) free_space_mb
+FROM v$datafile df, dba_free_space dfs
+WHERE df.file# = dfs.file_id(+)
+GROUP BY dfs.file_id, df.NAME, df.file#, df.bytes,dfs.tablespace_name
+ORDER BY file_name;

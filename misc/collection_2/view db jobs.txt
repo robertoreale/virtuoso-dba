@@ -1,0 +1,3 @@
+select OWNER, JOB_NAME, ENABLED from dba_scheduler_jobs order by JOB_NAME;
+
+select OWNER, JOB_NAME, ENABLED, START_DATE, REPEAT_INTERVAL, END_DATE from dba_scheduler_jobs order by JOB_NAME

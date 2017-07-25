@@ -1,0 +1,37 @@
+undef SID
+undef USERNAME
+undef MACHINE
+undef PROGRAM
+col kill for a18
+col spid for a5
+col username for a13
+col osuser for a6 wrap
+col machine for a10 wrap
+col program for a16
+col type for a4 wrap
+col event for a30 wrap
+col waiting_since for a24 wrap
+select '!kill -9 '|| p.SPID ||' #' as kill, --substr(a.inst_id,1,1) as i,
+       a.USERNAME, STATUS, substr(OSUSER,1,6) OSUSER, substr(MACHINE,1,10) MACHINE, substr(a.PROGRAM,1,16) as PROGRAM, TYPE,
+       w.EVENT,
+       DECODE( SIGN( (sysdate-(w.SECONDS_IN_WAIT/86400)-trunc(sysdate)) ),
+       1, TO_CHAR(sysdate-(w.SECONDS_IN_WAIT/86400),'HH24:MI:SS') ,
+       TO_CHAR(sysdate-(w.SECONDS_IN_WAIT/86400),'DAY DD/MM HH24:MI:SS')
+       ) WAITING_SINCE
+from v$session a,
+     v$process p,
+     v$session_wait w
+where a.username is not null
+  and a.username <> 'DBSNMP' -- and a.username <> 'SYS'
+  and a.program <> 'ORACLE.EXE'
+  and p.ADDR (+)= a.pADDR
+--  and p.inst_id (+)= a.inst_id
+  and w.sid (+) = a.sid
+--  and w.inst_id (+)= a.inst_id
+  and nvl(to_char(a.sid),'*') like ('%&&SID%')
+  and nvl(lower(a.username),'*') like lower('%&&USERNAME%')
+  and nvl(lower(a.machine),'*') like lower('%&&MACHINE%')
+  and nvl(lower(a.program),'*') like lower('%&&PROGRAM%')
+--  and (last_call_et/60) > 10*60
+order by w.SECONDS_IN_WAIT DESC
+/

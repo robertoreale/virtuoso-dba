@@ -1,0 +1,5 @@
+ALTER SYSTEM SET cursor_sharing='EXACT' SCOPE=BOTH;
+
+ALTER SYSTEM SET cursor_sharing='SIMILAR' SCOPE=BOTH;
+
+ALTER SYSTEM SET cursor_sharing='FORCE' SCOPE=BOTH;

@@ -1,0 +1,21 @@
+--Statement che usano la temp:
+        SELECT USER,SQLADDR,SQLHASH,SQL_ID,TABLESPACE,CONTENTS,SEGTYPE,EXTENTS,BLOCKS, SEGBLK# FROM      v$tempseg_usage;
+
+-- quali user usano la temp
+        select s.sid,s.machine,s.username, u."USER", s.program,u.tablespace, u.contents, u.extents, u.blocks
+        from   sys.v_$session s, sys.v_$sort_usage u
+        where  s.saddr = u.session_addr
+        /
+        
+        select s.sid,s.machine,s.process,s.username, u."USER", s.program, sum(u.extents)
+        from   sys.v_$session s, sys.v_$sort_usage u
+        where  s.saddr = u.session_addr
+        group by s.sid,s.machine,s.username,s.process, u."USER", s.program
+        /
+
+select s.sid,s.machine,s.process,s.username, u."USER", s.program, sum(u.extents)
+        from   sys.v_$session s, sys.v_$sort_usage u
+        where  s.saddr = u.session_addr
+        group by s.sid,s.machine,s.username,s.process, u."USER", s.program
+        /
+

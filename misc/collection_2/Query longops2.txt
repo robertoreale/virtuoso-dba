@@ -1,0 +1,12 @@
+Col i for 9
+Col opname for a24
+Col target for a30
+Col time_remaining for a14
+Col elapsed_so_far for a14
+Col progress for 999
+Select inst_id as I, sid, opname, target, start_time, last_update_time,
+Decode(time_remaining,null,'????????',trunc(time_remaining/3600)||'h '||trunc(mod(time_remaining,3600)/60)||'m '||mod(time_remaining,60)||'s') time_remaining,
+Trunc(elapsed_seconds/3600)||'h '||trunc(mod(elapsed_seconds,3600)/60)||'m '||mod(elapsed_seconds,60)||'s' elapsed_so_far,
+Trunc(sofar/totalwork*100) progress
+From gv$session_longops where (nvl(time_remaining,0) > 0) or(nvl(totalwork,0) > 0 and nvl(sofar,0) < nvl(totalwork,0))
+Order by last_update_time ;

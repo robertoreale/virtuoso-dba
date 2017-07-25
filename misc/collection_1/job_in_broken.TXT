@@ -1,0 +1,33 @@
+*********** JOB IN BROKEN ... rischedulato alla next_date X. ***********
+exec dbms_job.broken (1681553, FALSE,to_date('17/05/2007 14:15','dd/mm/yyyy hh24:mi'));
+
+select to_char(sysdate, 'yyyymmdd hh24:mi') from dual;
+
+1 ) *** VERIFICA DELLO SCHEMA DI APPARTENENZA DEL JOB ed altre caratteristiche ***
+set lines 200
+select job, schema_user, what, to_char(last_date,'dd/mm/yyyy hh24:mi') LAST_DATE, 
+       to_char(next_date,'dd/mm/yyyy hh24:mi') NEXT_DATE, broken, failures, interval
+from dba_jobs
+where job = &job_num;
+
+2) Connessione al DB con l'utente proprietario.
+3) Verifica presenza di job running :
+select * from dba_jobs_running;
+
+4) Messa in broken del job
+exec dbms_job.broken (11741,TRUE,to_date('01/01/4000 00:00','dd/mm/yyyy hh24:mi'));
+exec dbms_job.broken (42,TRUE,to_date('01/01/4000 00:00','dd/mm/yyyy hh24:mi'));
+exec dbms_job.broken (568944,TRUE,to_date('01/01/4000 00:00','dd/mm/yyyy hh24:mi'));
+
+exec dbms_job.broken (1,TRUE,to_date('01/01/4000 00:00','dd/mm/yyyy hh24:mi'));
+
+5) FARE COMMIT!!!! Altrimenti è visibile solo sulla user_jobs.
+
+6) *** VERIFICA nuove caratteristiche del job alterato ***
+
+set lines 200
+select job, schema_user, what, to_char(last_date,'dd/mm/yyyy hh24:mi') LAST_DATE, 
+       to_char(next_date,'dd/mm/yyyy hh24:mi') NEXT_DATE, broken, failures, interval
+from dba_jobs
+where job = &job_num;
+

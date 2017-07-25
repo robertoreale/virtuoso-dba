@@ -1,0 +1,81 @@
+Ricostruzione Indici
+di Emanuela Marottoli 
+
+-> Procedura di Ricostruzione Indici
+
+
+Gli indici sono oggetti della basedati di ORACLE che forniscono un metodo veloce e efficiente di richiamo dei dati dalle tabelle. Gli indirizzi fisici delle righe richieste possono essere richiamati molto più efficientemente dagli indici anzichè leggere l' intera tabella provocando miglioramenti significativi alle prestazioni di SQL. La struttura di default degli indici è il B-Tree (Balanced tree). 
+Un indice B-tree ha una struttura gerarchica di tipo albero con nodi e fogli. Ogni nodo di tale albero rappresenta una chiave di ricerca, che contiene a sua volta una serie di intervalli. L'indice lo si può immaginare come un oggetto che divide la tabella in blocchi, ognuno dei quali contiene una lista dei valori chiave e indirizzi fisici (ROWIDs) delle righe nella basedati. 
+Quando viene cancellata una riga da una tabella, Oracle non riscrive il corrispondente spazio occupato dall'indice a meno che l'indice non venga ricreato. Se ciò accade, gli indici diventano frammentati, specialmente nelle tabelle molto dinamiche in cui vengono eseguiti frequentemente comandi DML. 
+
+La vista di USER_INDEXES contiene le informazioni statistiche che vengono inserite ogni volta che il comando ANALYZE INDEX viene eseguito: 
+
+analyze index NOME_INDICE compute statistics; 
+
+La vista USER_INDEXES viene usata dall'ottimizzatore Oracle, tramite il metodo CBO(Cost Based Optimizer), per fornire le informazioni necessarie a determinare il percorso ottimale di esecuzione del comando SQL d'interesse. 
+Quindi purtroppo non conserva le statistiche sulla condizione interna degli indici di ORACLE. 
+Questo può avvenire solo utilizzando il comando ANALYZE INDEX seguito dalla clausola VALIDATE STRUCTURE che non cambia le statistiche nella vista USER_INDEXES; quindi potrebbe essere eseguita con sicurezza senza interessare i CBO. 
+La sintassi è la seguente: 
+
+analyze index NOME_INDICE validate_structure; 
+
+Esso popola la vista SYS.INDEX_STATS che può essere associata a un sinonimo pubblico INDEX_STATS. Questa vista fornisce informazioni su di un solo indice per volta, difatti non può contenere più di una riga. 
+Si osservino i dati della INDEX_STATS: 
+
+select name,
+         height,
+         lf_rows,
+         del_lf_rows
+from INDEX_STATS; 
+
+Il risultato della query è il seguente:
+
+NAME               HEIGHT  LF_ROWS    DEL_LF_ROWS 
+--------------  -------- ----------- ------------------- 
+NOME_INDICE    2          4784          1980 
+
+Il campo HEIGHT si riferisce al numero massimo dei livelli incontrati all'interno dell' indice. 
+Il campo LF_ROWS si riferisce al numero di righe appartenenti a quell'indice. 
+Il campo DEL_LF_ROWS si riferisce al numero di righe che sono state cancellate. 
+
+La prima regola è che un indice con un HEIGHT maggiore di 3 ha buone possibilità di essere ricreato. Ovviamente esistono delle eccezioni ma, 
+generalmente, tabelle con HEIGHT di 4 o più possono causare letture non necessarie dell'indice e quindi per ottenere benefici 
+sarebbe opportuna la ricreazione dell'indice stesso. 
+La seconda regola è che il campo DEL_LF_ROWS dovrebbe essere sempre inferiore al 20% del campo LF_ROWS poiché 
+significherebbe che la tabella è stata soggetta a numerose cancellazioni, quindi anche in questo caso sarebbe necessaria la ricostruzione dell'indice. 
+
+Nell'esempio riportato DEL_LF_ROWS è uguale a 1980, LF_ROWS è uguale a 4784, il rapporto è: 
+(1980*100) / 4784 = 41.38%. 
+L'indice in questo caso sarebbe assolutamente da ricostruire!! 
+
+Prima della versione 7.3 di Oracle l'unico modo per ricostruire un indice consisteva nella cancellazione e la ricostruzione dello stesso, 
+dalla 7.3 in poi è possibile utilizzare il comando ALTER_INDEX REBIULT che utilizza l'indice già esistente come oggetto su cui 
+creare il nuovo indice e non la tabella come il primo caso. La sintassi è la seguente: 
+
+alter index NOME_INDICE rebuild; 
+
+Mentre il nuovo indice viene ricreato, esisterà simultaneamente nella base di dati con il vecchio indice. Di conseguenza, ci deve essere 
+abbastanza spazio disponibile per memorizzare sia il vecchio che il nuovo indice nella basedati per poter usare questo comando. 
+Quando l'indice viene ricostruito, esso diventa disponibile, il vecchio viene automaticamente cancellato e il relativo spazio 
+viene rioccupato. Ci sono alcune opzioni disponibili con questa comando, una delle quali è rappresentato dalla seguente sintassi: 
+
+alter index NOME_INDICE rebuild 
+parallel nologging compute statistics tablespace NOME_TABLESPACE; 
+
+La clausola PARALLEL induce ORACLE a selezionare un grado di parallelismo Numero di processi di lettura e ordinamento avviati per una query). 
+La clausola NOLOGGING permette di ricostruire l' indice più velocemente perché le operazioni non verranno salvate in un file di log. 
+La clausola COMPUTE STATISTICS permette di raccogliere statistiche dall'ottimizzatore, incidendo relativamente poco sulle prestazioni, durante la ricostruzione di un indice. 
+La clausola di TABLESPACE specifica la tablespace in cui la ricostruzione e la partizione dell'indice ricostruito sarà memorizzato. 
+
+Si noti la statistica dell'indice dopo la ricostruzione: 
+
+analyze index NOME_INDICE validate structure; 
+
+NAME               HEIGHT  LF_ROWS    DEL_LF_ROWS 
+--------------  -------- ----------- ------------------- 
+NOME_INDICE    2          2804          0 
+
+Il risultato mostra come il totale delle righe siano passate da 4784 a 2804, la cui differenza di 1980 sono le righe cancellate. 
+
+-> Procedura di Ricostruzione Indici
+

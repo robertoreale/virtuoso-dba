@@ -1,0 +1,18 @@
+21956478
+
+C:\oracle\product\10.2.0\client_1\NETWORK\ADMIN
+
+expdp system directory=DBA_EXTERNAL_EVA dumpfile=FTBC_APPPRD.dmp logfile=FTBC_APPPRD.log schemas=FTBC_APPPRD exclude=statistics
+
+select 'ALTER SYSTEM DISCONNECT SESSION '''||sid||','||serial#||',@'||inst_id||''' IMMEDIATE;'
+from gv$Session
+where 1=1
+and username like '%FTBC_APPPRD_2%';  
+
+
+drop user FTBC_APPPRD_2 cascade;
+
+impdp system directory=DBA_EXTERNAL_EVA dumpfile=FTBC_APPPRD.dmp logfile=FTBC_APPPRD_imp.log remap_schema=FTBC_APPPRD:FTBC_APPPRD_2
+
+impdp system directory=giordani dumpfile=SL.dmp logfile=SL.imp.log
+

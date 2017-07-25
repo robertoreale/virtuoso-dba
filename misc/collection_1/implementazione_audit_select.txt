@@ -1,0 +1,127 @@
+Buongiorno,
+la presente per chiedere il monitoraggio delle sessioni che accedono in lettura alle tabelle 
+REQ_SMS_ACT_DD_MM_YY_hh_mm sullo schema SMSADM@SDMPROD.
+Il monitoraggio, necessario per un periodo di almeno un mese, ha lo scopo di individuare
+tutti gli eventuali fruitori dei dati storici relativi ai processi SMSDP.
+
+Attendiamo un vostro cortese riscontro
+
+Saluti
+
+Passi Operativi da effettuare sui DATABASE
+ 
+
+********** Se no spfile **********
+ 
+Settare parametro nell'init
+ 
+ 
+AUDIT_TRAIL = DB  
+ 
+o 
+ 
+AUDIT_TRAIL = DB, EXTENDED
+ 
+
+reboot del database
+ 
+
+*********** Se si spfile ************
+ 
+alter system set AUDIT_TRAIL = DB scope=spfile;
+ 
+ 
+ 
+Se non si specifica  WHEN SUCCESSFUL o WHEN NOT SUCCESSFUL tutte le azioni vengono tracciate.
+ 
+ 
+ 
+Creare nuovo tablespace
+ 
+ 
+ 
+CREATE TABLESPACE AUDIT_DATA LOGGING 
+DATAFILE '/dbsdmprod/dbsdmprod22/audit_data/audit_data_01.dbf' 
+SIZE 128M AUTOEXTEND ON NEXT 64M MAXSIZE 2048M
+extent management local autoallocate;
+ 
+ 
+ 
+ 
+ 
+Spostare  la tabella sul tablespace AUDIT_DATA
+ 
+ 
+ 
+create table temp_audit
+tablespace audit_data
+as select * from aud$;
+ 
+ 
+ 
+drop table aud$;
+ 
+ 
+ 
+rename temp_audit to aud$;
+ 
+ 
+ 
+CREATE INDEX I_AUD1 ON AUD$
+ (SESSIONID, SES$TID)
+TABLESPACE audit_data;
+ 
+ 
+ 
+GRANT DELETE ON AUD$ TO DELETE_CATALOG_ROLE;
+ 
+ 
+ 
+Attivare auditing statement (by session)
+ 
+ 
+ 
+AUDIT ALL;
+ 
+ 
+ 
+Attivare auditing privilege (by session)
+ 
+ 
+ 
+AUDIT ALL PRIVILEGE;
+ 
+ 
+ 
+Disattivare l’auditing 
+ 
+ 
+ 
+-- statement                   
+ 
+NOAUDIT ALL;
+ 
+ 
+ 
+-- privilege
+ 
+NOAUDIT ALL PRIVILEGE;
+ 
+ 
+ 
+ 
+ 
+esempio CRESO
+ 
+ 
+ 
+AUDIT ALTER USER by session
+ 
+AUDIT ALL PRIVILEGE;
+
+
+
+audit on SMSADM.   by session;
+
+select 'audit select on SMSADM.'||table_name||' by session;' from dba_tables where
+owner = 'SMSADM' and table_name like 'REQ_SMS_ACT_%';

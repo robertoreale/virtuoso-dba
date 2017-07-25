@@ -1,0 +1,34 @@
+list backup of archivelog from sequence xxxxx until sequence xxxxx;
+
+change archivelog all validate;
+
+report need backup days = 1;
+
+------sessioni rman
+select s.sid, s.serial#, s.username, s.last_call_et, s.program 
+from v$session s, V$process p
+where s.program like '%rman%'
+and s.paddr = p.addr;
+
+-----sessioni rman in coda sul control file
+SELECT s.SID, s.serial#, s.paddr, s.status, USERNAME AS "User", PROGRAM, MODULE, ACTION,
+ to_char(LOGON_TIME, 'DD/MM/YYYY HH24:MI') "Logon", l.* 
+FROM V$SESSION s, 
+V$ENQUEUE_LOCK l WHERE l.SID = s.SID AND l.TYPE = 'CF' AND l.ID1 = 0 AND l.ID2 = 2;
+
+
+
+-----sessioni rman in wait
+COLUMN EVENT FORMAT a10
+COLUMN SECONDS_IN_WAIT FORMAT 999
+COLUMN STATE FORMAT a20
+COLUMN CLIENT_INFO FORMAT a30
+
+SELECT s.sid,s.serial#,s.program, p.SPID, sw.SECONDS_IN_WAIT, to_char(s.logon_time, 'DD/MM/YY HH24:MI:SS'),
+       sw.STATE, CLIENT_INFO
+FROM V$SESSION_WAIT sw, V$SESSION s, V$PROCESS p
+WHERE  lower(s.program) like '%rman%'
+       AND s.SID=sw.SID
+       AND s.PADDR=p.ADDR
+;
+

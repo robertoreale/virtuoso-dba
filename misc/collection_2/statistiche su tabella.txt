@@ -1,0 +1,1 @@
+exec dbms_stats.gather_table_stats(ownname=> 'STVC_APPPRD' , estimate_percent => 20, cascade => true, granularity => 'ALL', degree =>32, block_sample=> TRUE, method_opt => 'FOR ALL COLUMNS SIZE AUTO',tabname => 'STVCSTB100N');

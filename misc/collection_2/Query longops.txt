@@ -1,0 +1,6 @@
+SELECT sid, inst_id,serial#, context, sofar, totalwork,
+round(sofar/totalwork*100,2) "% Complete",message
+FROM gv$session_longops
+WHERE totalwork != 0
+AND sofar <> totalwork;
+

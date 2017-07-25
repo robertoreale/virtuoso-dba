@@ -1,0 +1,8 @@
+set pages 2000
+set lines 222
+col VALUE for a20
+col INST_ID for 999
+col SID for a30
+col NAME for a30
+select INST_ID,sid,NAME,VALUE,ISSPECIFIED from gv$spparameter where name like '%group%' order by 1,2,3
+/

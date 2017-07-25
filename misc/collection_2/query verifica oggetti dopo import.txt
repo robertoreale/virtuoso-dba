@@ -1,0 +1,6 @@
+select OWNER,object_type,count(*) from dba_objects
+
+where owner like 'ION_APPPRD_TFA'
+
+group by OWNER,object_type order by OWNER,object_type ;
+

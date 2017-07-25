@@ -1,0 +1,1 @@
+select DAT.TS#, DAT.NAME NAMEDF, DAT.FILE#, TAB.TS#, TAB.NAME NAMETS FROM v$tablespace TAB, v$datafile DAT where DAT.TS#=TAB.TS#

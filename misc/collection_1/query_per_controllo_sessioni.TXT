@@ -1,0 +1,4 @@
+select s.sid, s.serial#, s.username, s.PROGRAM, to_char(s.LOGON_TIME, 'DD/MM/YYYY HH24:MI:SS'), s.LAST_CALL_ET,
+s.STATUS, s.OSUSER, p.SQL_TEXT, p.EXECUTIONS, p.PARSE_CALLS from v$session s, v$sql p
+where s.sql_address = p.address
+and s.sid in (27,63,77,99,114,119,163,147,150,151,153,15);
