@@ -14,6 +14,8 @@ oracle/enter-imperative-thinking.md
 oracle/model-clause.md
 oracle/stochastic-world.md
 oracle/internals.md
+sqlserver/sqlserver.md
+sqlserver/row-generation.md
 postgresql/postgresql.md
 postgresql/first-steps.md
 mysql/mysql.md
