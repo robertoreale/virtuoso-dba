@@ -1,6 +1,6 @@
 ## Numerical Recipes
 
-Generate Fibonacci sequence (OEIS A000045), recursive version
+### Generate Fibonacci sequence (OEIS A000045), recursive version
 
 *Reference*: http://stackoverflow.com/questions/21746100/
 
