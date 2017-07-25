@@ -1,6 +1,0 @@
-[sybase@rmcrmf11] >isql -Usa -SCRMCLAP -w500
-
-1> use tempdb
-2> go
-1> sp_helpsegment logsegment
-2> go
