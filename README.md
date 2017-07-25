@@ -133,6 +133,10 @@ This work is licensed under a <a rel="license" href="http://creativecommons.org/
     + [Display table index usage rates](#display-table-index-usage-rates)
     + [Show running queries](#show-running-queries)
     + [Generate the Fibonacci sequence, recursively](#generate-the-fibonacci-sequence-recursively)
+- [MySQL](#mysql)
+  * [First Steps](#first-steps-2)
+    + [Show aggregated size per schema per engine](#show-aggregated-size-per-schema-per-engine)
+    + [Show aggregated index size per table](#show-aggregated-index-size-per-table)
 - [Working with R](#working-with-r)
 - [A non-relational Database](#a-non-relational-database)
 
@@ -2104,6 +2108,45 @@ The NUMERIC type is mandatory when doing arbitrary-precision math.
     FROM
         fibonacci
     LIMIT 100;
+
+
+# MySQL
+
+## First Steps
+
+### Show aggregated size per schema per engine
+
+*Reference*: http://code.openark.org/blog/mysql/useful-database-analysis-queries-with-information_schema
+
+    SELECT
+        table_schema,
+        engine,
+        COUNT(*)                          AS tables,
+        SUM(data_length + index_length)   AS size,
+        SUM(index_length)                 AS index_size
+    FROM
+        information_schema.tables
+    WHERE
+        table_schema NOT IN ('mysql', 'INFORMATION_SCHEMA') AND engine IS NOT NULL
+    GROUP BY
+        table_schema, engine;
+
+### Show aggregated index size per table
+
+*Reference*: http://code.openark.org/blog/mysql/useful-database-analysis-queries-with-information_schema
+
+    SELECT
+        table_schema,
+        table_name,
+        engine, 
+        SUM(data_length + index_length)   AS size,
+        SUM(index_length)                 AS index_size
+    FROM
+        information_schema.tables
+    WHERE
+        table_schema NOT IN ('mysql', 'INFORMATION_SCHEMA') AND ENGINE IS NOT NULL
+    GROUP BY
+        table_schema, table_name;
 
 
 # Working with R
