@@ -7,6 +7,17 @@
     SELECT database_role FROM gv$database;
 
 
+## Get local host name and local IP address of the database server
+
+*Keywords*: UTL_* api
+
+    SELECT
+        UTL_INADDR.GET_HOST_NAME    hostname,
+        UTL_INADDR.GET_HOST_ADDRESS ip_addr
+    FROM
+        dual;
+
+
 ## Show database block size
 
 *Keywords*: dynamic views, parameters
