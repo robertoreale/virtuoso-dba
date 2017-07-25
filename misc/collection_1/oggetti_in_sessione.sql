@@ -38,7 +38,6 @@ select a.sid, b.owner ,a.object, b.table_name, b.tablespace_name
  from v$access a, dba_tables b where a.object = 'FACT' and a.type = 'TABLE'
 and a.OBJECT = b.table_name
 
-FK_SALA_AF_EDIFICIO_CENTRALE
 
 
 select a.sid, b.owner ,a.object, b.table_name, b.tablespace_name
