@@ -125,6 +125,9 @@ This work is licensed under a <a rel="license" href="http://creativecommons.org/
     + [Display the count of allocation units per ASM file by file alias](#display-the-count-of-allocation-units-per-asm-file-by-file-alias)
     + [Show file utilization](#show-file-utilization)
     + [Exercises](#exercises-13)
+- [SQL Server](#sql-server)
+  * [Row Generation](#row-generation-1)
+    + [Generate integer numbers from 1 to 65536](#generate-integer-numbers-from-1-to-65536)
 - [PostgreSQL](#postgresql)
   * [First Steps](#first-steps-1)
     + [Show the size of all the databases](#show-the-size-of-all-the-databases)
@@ -2004,6 +2007,27 @@ Verify the law of large numbers by rolling a die n times, with n >> 0
 
 
 ### Exercises
+
+# SQL Server
+
+
+## Row Generation
+
+### Generate integer numbers from 1 to 65536 
+
+*Reference*: http://dwaincsql.com/2014/03/30/calendar-tables-in-t-sql/
+
+    WITH 
+        e1(n)  AS (SELECT 1 UNION ALL SELECT 1), --2 rows
+        e2(n)  AS (SELECT 1 FROM e1 a, e1 b),    --4 rows
+        e4(n)  AS (SELECT 1 FROM e2 a, e2 b),    --16 rows
+        e8(n)  AS (SELECT 1 FROM e4 a, e4 b),    --256 rows
+        e16(n) AS (SELECT 1 FROM e8 a, e8 b)     --65536 rows
+    SELECT
+        ROW_NUMBER() OVER (ORDER BY (SELECT NULL))  [n]
+    FROM
+        e16;
+
 
 # PostgreSQL
 
