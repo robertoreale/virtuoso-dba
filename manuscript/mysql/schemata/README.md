@@ -1,5 +1,0 @@
-MySQL and MariaDB
-===
-
-Schemata
----
