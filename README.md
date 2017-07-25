@@ -17,113 +17,114 @@ This work is licensed under a <a rel="license" href="http://creativecommons.org/
 <!-- toc -->
 
 - [Introduction](#introduction)
-- [First Steps](#first-steps)
-  * [Show database role (primary, standby, etc.)](#show-database-role-primary-standby-etc)
-  * [Get local host name and local IP address of the database server](#get-local-host-name-and-local-ip-address-of-the-database-server)
-  * [Show database block size](#show-database-block-size)
-  * [List user Data Pump jobs](#list-user-data-pump-jobs)
-  * [Calculate the average number of redo log switches per hour](#calculate-the-average-number-of-redo-log-switches-per-hour)
-  * [List the top-n largest segments](#list-the-top-n-largest-segments)
-  * [Show the total, used, and free space database-wise](#show-the-total-used-and-free-space-database-wise)
-  * [Display the findings discovered by all advisors in the database](#display-the-findings-discovered-by-all-advisors-in-the-database)
-  * [Associate blocking and blocked sessions](#associate-blocking-and-blocked-sessions)
-  * [Show basic info about log files](#show-basic-info-about-log-files)
-  * [Calculate the size of the temporary tablespaces](#calculate-the-size-of-the-temporary-tablespaces)
-  * [Calculate the high-water and excess allocated size for datafiles](#calculate-the-high-water-and-excess-allocated-size-for-datafiles)
-  * [Display parent-child pairs between tables, based on reference constraints](#display-parent-child-pairs-between-tables-based-on-reference-constraints)
-  * [Compute a count of archived logs and their average size](#compute-a-count-of-archived-logs-and-their-average-size)
-  * [Calculate a fragmentation factor for tablespaces](#calculate-a-fragmentation-factor-for-tablespaces)
-  * [Count number of segments for each order of magnitude](#count-number-of-segments-for-each-order-of-magnitude)
-  * [Show last rebuild time for indexes](#show-last-rebuild-time-for-indexes)
-  * [Give basic info about lob segments](#give-basic-info-about-lob-segments)
-  * [Sort the object types by their average name length](#sort-the-object-types-by-their-average-name-length)
-  * [Count memory resize operations, by component and type](#count-memory-resize-operations-by-component-and-type)
-  * [Show active sessions with SQL text](#show-active-sessions-with-sql-text)
-  * [List some basic I/O statistics for each user session](#list-some-basic-io-statistics-for-each-user-session)
-  * [List some basic CPU statistics for each user session](#list-some-basic-cpu-statistics-for-each-user-session)
-  * [Show the instance name and number and the schema or database user name relative to the current session](#show-the-instance-name-and-number-and-the-schema-or-database-user-name-relative-to-the-current-session)
-  * [Exercises](#exercises)
-- [String Manipulation](#string-manipulation)
-  * [Count the client sessions with a FQDN](#count-the-client-sessions-with-a-fqdn)
-  * [Calculate the edit distance between a table name and the names of dependent indexes](#calculate-the-edit-distance-between-a-table-name-and-the-names-of-dependent-indexes)
-  * [Calculate the minimum, median, and maximum edit distances between a table's name and the names of its indexes](#calculate-the-minimum-median-and-maximum-edit-distances-between-a-tables-name-and-the-names-of-its-indexes)
-  * [Get the number of total waits for each event type, with pretty formatting](#get-the-number-of-total-waits-for-each-event-type-with-pretty-formatting)
-  * [Exercises](#exercises-1)
-- [Data Analytics](#data-analytics)
-  * [Rank all the tables in the system based on their cardinality](#rank-all-the-tables-in-the-system-based-on-their-cardinality)
-  * [List the objects in the recycle bin, sorting by the version](#list-the-objects-in-the-recycle-bin-sorting-by-the-version)
-  * [Show I/O stats on datafiles](#show-io-stats-on-datafiles)
-  * [Show the progressive growth in backup sets](#show-the-progressive-growth-in-backup-sets)
-  * [For each schema, calculate the correlation between the size of the tables both in bytes and as a product rows times columns](#for-each-schema-calculate-the-correlation-between-the-size-of-the-tables-both-in-bytes-and-as-a-product-rows-times-columns)
-  * [List statspack snapshots](#list-statspack-snapshots)
-  * [List top-10 CPU-intensive queries](#list-top-10-cpu-intensive-queries)
-  * [Show how much is tablespace usage growing](#show-how-much-is-tablespace-usage-growing)
-  * [Exercises](#exercises-2)
-- [Graphs and Trees](#graphs-and-trees)
-  * [List all users to which a given role is granted, even indirectly](#list-all-users-to-which-a-given-role-is-granted-even-indirectly)
-  * [List privileges granted to each user, even indirectly](#list-privileges-granted-to-each-user-even-indirectly)
-  * [Display reference graph between tables](#display-reference-graph-between-tables)
-  * [Exercises](#exercises-3)
-- [Grouping & Reporting](#grouping--reporting)
-  * [Count the data files for each tablespaces and for each filesystem location](#count-the-data-files-for-each-tablespaces-and-for-each-filesystem-location)
-  * [Exercises](#exercises-4)
-- [Drawing](#drawing)
-  * [Generate a histogram for the length of objects’ names](#generate-a-histogram-for-the-length-of-objects-names)
-  * [Build a histogram for the order of magnitude of segments’ sizes](#build-a-histogram-for-the-order-of-magnitude-of-segments-sizes)
-  * [Exercises](#exercises-5)
-- [Time Functions](#time-functions)
-  * [Show the first and last day of the current month](#show-the-first-and-last-day-of-the-current-month)
-  * [Show the first and last day of the current year](#show-the-first-and-last-day-of-the-current-year)
-  * [Show the maximum possible date](#show-the-maximum-possible-date)
-  * [Show the minimum possible date](#show-the-minimum-possible-date)
-  * [List leap years from 1 AD](#list-leap-years-from-1-ad)
-  * [Count audit records for the last hour](#count-audit-records-for-the-last-hour)
-  * [Count log file switches, day by day, hour by hour](#count-log-file-switches-day-by-day-hour-by-hour)
-  * [Calculate the calendar date of Easter, from 1583 to 2999](#calculate-the-calendar-date-of-easter-from-1583-to-2999)
-  * [Exercises](#exercises-6)
-- [Row Generation](#row-generation)
-  * [List all integers between 00 and FF, hexadecimal](#list-all-integers-between-00-and-ff-hexadecimal)
-  * [List all integers between 00000000 and 11111111, hexadecimal](#list-all-integers-between-00000000-and-11111111-hexadecimal)
-  * [Generate the integers between 1 and 256](#generate-the-integers-between-1-and-256)
-  * [Generate the integers between 1 and 100, in random order](#generate-the-integers-between-1-and-100-in-random-order)
-  * [Generate the English alphabet](#generate-the-english-alphabet)
-  * [Print the Sonnet XVIII by Shakespeare](#print-the-sonnet-xviii-by-shakespeare)
-  * [List the next seven week days](#list-the-next-seven-week-days)
-  * [Exercises](#exercises-7)
-- [Numerical Recipes](#numerical-recipes)
-  * [Calculate the sum of a geometric series](#calculate-the-sum-of-a-geometric-series)
-  * [Solve Besel's problem](#solve-besels-problem)
-  * [Generate Fibonacci sequence](#generate-fibonacci-sequence)
-  * [Verify that the sum of the reciprocals of factorials converge to e](#verify-that-the-sum-of-the-reciprocals-of-factorials-converge-to-e)
-  * [Verify that the sum of the reciprocals of factorials converge to e, alternative method](#verify-that-the-sum-of-the-reciprocals-of-factorials-converge-to-e-alternative-method)
-  * [Verify that the cosine function has a fixed point](#verify-that-the-cosine-function-has-a-fixed-point)
-  * [Exercises](#exercises-8)
-- [XML Database 101](#xml-database-101)
-  * [Return the total number of installed patches](#return-the-total-number-of-installed-patches)
-  * [List user passwords (hashed, of course...)](#list-user-passwords-hashed-of-course)
-  * [Return patch details such as patch and inventory location](#return-patch-details-such-as-patch-and-inventory-location)
-  * [Show patch inventory](#show-patch-inventory)
-  * [Show patch inventory, part 2](#show-patch-inventory-part-2)
-  * [Show bugs fixed by each installed patch](#show-bugs-fixed-by-each-installed-patch)
-  * [Exercises](#exercises-9)
-- [Enter Imperative Thinking](#enter-imperative-thinking)
-  * [Show all Oracle error codes and messages](#show-all-oracle-error-codes-and-messages)
-  * [Exercises](#exercises-10)
-- [The MODEL Clause](#the-model-clause)
-  * [Generate the even integers between -100 and 100, inclusive](#generate-the-even-integers-between--100-and-100-inclusive)
-  * [Exercises](#exercises-11)
-- [A Stochastic World](#a-stochastic-world)
-  * [Verify the law of large numbers](#verify-the-law-of-large-numbers)
-  * [For each tablespace T, find the probability of segments in T to be smaller than or equal to a given size](#for-each-tablespace-t-find-the-probability-of-segments-in-t-to-be-smaller-than-or-equal-to-a-given-size)
-  * [Exercises](#exercises-12)
-- [Internals](#internals)
-  * [Count the number of trace files generated each day](#count-the-number-of-trace-files-generated-each-day)
-  * [Display hidden/undocumented initialization parameters](#display-hiddenundocumented-initialization-parameters)
-  * [Display the number of ASM allocated and free allocation units](#display-the-number-of-asm-allocated-and-free-allocation-units)
-  * [Display the count of allocation units per ASM file by file alias (for metadata only)](#display-the-count-of-allocation-units-per-asm-file-by-file-alias-for-metadata-only)
-  * [Display the count of allocation units per ASM file by file alias](#display-the-count-of-allocation-units-per-asm-file-by-file-alias)
-  * [Show file utilization](#show-file-utilization)
-  * [Exercises](#exercises-13)
+- [Oracle Database](#oracle-database)
+  * [First Steps](#first-steps)
+    + [Show database role (primary, standby, etc.)](#show-database-role-primary-standby-etc)
+    + [Get local host name and local IP address of the database server](#get-local-host-name-and-local-ip-address-of-the-database-server)
+    + [Show database block size](#show-database-block-size)
+    + [List user Data Pump jobs](#list-user-data-pump-jobs)
+    + [Calculate the average number of redo log switches per hour](#calculate-the-average-number-of-redo-log-switches-per-hour)
+    + [List the top-n largest segments](#list-the-top-n-largest-segments)
+    + [Show the total, used, and free space database-wise](#show-the-total-used-and-free-space-database-wise)
+    + [Display the findings discovered by all advisors in the database](#display-the-findings-discovered-by-all-advisors-in-the-database)
+    + [Associate blocking and blocked sessions](#associate-blocking-and-blocked-sessions)
+    + [Show basic info about log files](#show-basic-info-about-log-files)
+    + [Calculate the size of the temporary tablespaces](#calculate-the-size-of-the-temporary-tablespaces)
+    + [Calculate the high-water and excess allocated size for datafiles](#calculate-the-high-water-and-excess-allocated-size-for-datafiles)
+    + [Display parent-child pairs between tables, based on reference constraints](#display-parent-child-pairs-between-tables-based-on-reference-constraints)
+    + [Compute a count of archived logs and their average size](#compute-a-count-of-archived-logs-and-their-average-size)
+    + [Calculate a fragmentation factor for tablespaces](#calculate-a-fragmentation-factor-for-tablespaces)
+    + [Count number of segments for each order of magnitude](#count-number-of-segments-for-each-order-of-magnitude)
+    + [Show last rebuild time for indexes](#show-last-rebuild-time-for-indexes)
+    + [Give basic info about lob segments](#give-basic-info-about-lob-segments)
+    + [Sort the object types by their average name length](#sort-the-object-types-by-their-average-name-length)
+    + [Count memory resize operations, by component and type](#count-memory-resize-operations-by-component-and-type)
+    + [Show active sessions with SQL text](#show-active-sessions-with-sql-text)
+    + [List some basic I/O statistics for each user session](#list-some-basic-io-statistics-for-each-user-session)
+    + [List some basic CPU statistics for each user session](#list-some-basic-cpu-statistics-for-each-user-session)
+    + [Show the instance name and number and the schema or database user name relative to the current session](#show-the-instance-name-and-number-and-the-schema-or-database-user-name-relative-to-the-current-session)
+    + [Exercises](#exercises)
+  * [String Manipulation](#string-manipulation)
+    + [Count the client sessions with a FQDN](#count-the-client-sessions-with-a-fqdn)
+    + [Calculate the edit distance between a table name and the names of dependent indexes](#calculate-the-edit-distance-between-a-table-name-and-the-names-of-dependent-indexes)
+    + [Calculate the minimum, median, and maximum edit distances between a table's name and the names of its indexes](#calculate-the-minimum-median-and-maximum-edit-distances-between-a-tables-name-and-the-names-of-its-indexes)
+    + [Get the number of total waits for each event type, with pretty formatting](#get-the-number-of-total-waits-for-each-event-type-with-pretty-formatting)
+    + [Exercises](#exercises-1)
+  * [Data Analytics](#data-analytics)
+    + [Rank all the tables in the system based on their cardinality](#rank-all-the-tables-in-the-system-based-on-their-cardinality)
+    + [List the objects in the recycle bin, sorting by the version](#list-the-objects-in-the-recycle-bin-sorting-by-the-version)
+    + [Show I/O stats on datafiles](#show-io-stats-on-datafiles)
+    + [Show the progressive growth in backup sets](#show-the-progressive-growth-in-backup-sets)
+    + [For each schema, calculate the correlation between the size of the tables both in bytes and as a product rows times columns](#for-each-schema-calculate-the-correlation-between-the-size-of-the-tables-both-in-bytes-and-as-a-product-rows-times-columns)
+    + [List statspack snapshots](#list-statspack-snapshots)
+    + [List top-10 CPU-intensive queries](#list-top-10-cpu-intensive-queries)
+    + [Show how much is tablespace usage growing](#show-how-much-is-tablespace-usage-growing)
+    + [Exercises](#exercises-2)
+  * [Graphs and Trees](#graphs-and-trees)
+    + [List all users to which a given role is granted, even indirectly](#list-all-users-to-which-a-given-role-is-granted-even-indirectly)
+    + [List privileges granted to each user, even indirectly](#list-privileges-granted-to-each-user-even-indirectly)
+    + [Display reference graph between tables](#display-reference-graph-between-tables)
+    + [Exercises](#exercises-3)
+  * [Grouping & Reporting](#grouping--reporting)
+    + [Count the data files for each tablespaces and for each filesystem location](#count-the-data-files-for-each-tablespaces-and-for-each-filesystem-location)
+    + [Exercises](#exercises-4)
+  * [Drawing](#drawing)
+    + [Generate a histogram for the length of objects’ names](#generate-a-histogram-for-the-length-of-objects-names)
+    + [Build a histogram for the order of magnitude of segments’ sizes](#build-a-histogram-for-the-order-of-magnitude-of-segments-sizes)
+    + [Exercises](#exercises-5)
+  * [Time Functions](#time-functions)
+    + [Show the first and last day of the current month](#show-the-first-and-last-day-of-the-current-month)
+    + [Show the first and last day of the current year](#show-the-first-and-last-day-of-the-current-year)
+    + [Show the maximum possible date](#show-the-maximum-possible-date)
+    + [Show the minimum possible date](#show-the-minimum-possible-date)
+    + [List leap years from 1 AD](#list-leap-years-from-1-ad)
+    + [Count audit records for the last hour](#count-audit-records-for-the-last-hour)
+    + [Count log file switches, day by day, hour by hour](#count-log-file-switches-day-by-day-hour-by-hour)
+    + [Calculate the calendar date of Easter, from 1583 to 2999](#calculate-the-calendar-date-of-easter-from-1583-to-2999)
+    + [Exercises](#exercises-6)
+  * [Row Generation](#row-generation)
+    + [List all integers between 00 and FF, hexadecimal](#list-all-integers-between-00-and-ff-hexadecimal)
+    + [List all integers between 00000000 and 11111111, hexadecimal](#list-all-integers-between-00000000-and-11111111-hexadecimal)
+    + [Generate the integers between 1 and 256](#generate-the-integers-between-1-and-256)
+    + [Generate the integers between 1 and 100, in random order](#generate-the-integers-between-1-and-100-in-random-order)
+    + [Generate the English alphabet](#generate-the-english-alphabet)
+    + [Print the Sonnet XVIII by Shakespeare](#print-the-sonnet-xviii-by-shakespeare)
+    + [List the next seven week days](#list-the-next-seven-week-days)
+    + [Exercises](#exercises-7)
+  * [Numerical Recipes](#numerical-recipes)
+    + [Calculate the sum of a geometric series](#calculate-the-sum-of-a-geometric-series)
+    + [Solve Besel's problem](#solve-besels-problem)
+    + [Generate Fibonacci sequence](#generate-fibonacci-sequence)
+    + [Verify that the sum of the reciprocals of factorials converge to e](#verify-that-the-sum-of-the-reciprocals-of-factorials-converge-to-e)
+    + [Verify that the sum of the reciprocals of factorials converge to e, alternative method](#verify-that-the-sum-of-the-reciprocals-of-factorials-converge-to-e-alternative-method)
+    + [Verify that the cosine function has a fixed point](#verify-that-the-cosine-function-has-a-fixed-point)
+    + [Exercises](#exercises-8)
+  * [XML Database 101](#xml-database-101)
+    + [Return the total number of installed patches](#return-the-total-number-of-installed-patches)
+    + [List user passwords (hashed, of course...)](#list-user-passwords-hashed-of-course)
+    + [Return patch details such as patch and inventory location](#return-patch-details-such-as-patch-and-inventory-location)
+    + [Show patch inventory](#show-patch-inventory)
+    + [Show patch inventory, part 2](#show-patch-inventory-part-2)
+    + [Show bugs fixed by each installed patch](#show-bugs-fixed-by-each-installed-patch)
+    + [Exercises](#exercises-9)
+  * [Enter Imperative Thinking](#enter-imperative-thinking)
+    + [Show all Oracle error codes and messages](#show-all-oracle-error-codes-and-messages)
+    + [Exercises](#exercises-10)
+  * [The MODEL Clause](#the-model-clause)
+    + [Generate the even integers between -100 and 100, inclusive](#generate-the-even-integers-between--100-and-100-inclusive)
+    + [Exercises](#exercises-11)
+  * [A Stochastic World](#a-stochastic-world)
+    + [Verify the law of large numbers](#verify-the-law-of-large-numbers)
+    + [For each tablespace T, find the probability of segments in T to be smaller than or equal to a given size](#for-each-tablespace-t-find-the-probability-of-segments-in-t-to-be-smaller-than-or-equal-to-a-given-size)
+    + [Exercises](#exercises-12)
+  * [Internals](#internals)
+    + [Count the number of trace files generated each day](#count-the-number-of-trace-files-generated-each-day)
+    + [Display hidden/undocumented initialization parameters](#display-hiddenundocumented-initialization-parameters)
+    + [Display the number of ASM allocated and free allocation units](#display-the-number-of-asm-allocated-and-free-allocation-units)
+    + [Display the count of allocation units per ASM file by file alias (for metadata only)](#display-the-count-of-allocation-units-per-asm-file-by-file-alias-for-metadata-only)
+    + [Display the count of allocation units per ASM file by file alias](#display-the-count-of-allocation-units-per-asm-file-by-file-alias)
+    + [Show file utilization](#show-file-utilization)
+    + [Exercises](#exercises-13)
 
 <!-- tocstop -->
 
@@ -133,16 +134,19 @@ Working as a DBA requires improving skills in at least two key areas: SQL and da
 
 Solved exercises can be found at https://github.com/robertoreale/virtuosodba/blob/master/EXERCISES.md.
 
-# First Steps
+# Oracle Database
 
-## Show database role (primary, standby, etc.)
+
+## First Steps
+
+### Show database role (primary, standby, etc.)
 
 *Keywords*: dynamic views, data guard
 
     SELECT database_role FROM gv$database;
 
 
-## Get local host name and local IP address of the database server
+### Get local host name and local IP address of the database server
 
 *Keywords*: UTL_* api
 
@@ -153,7 +157,7 @@ Solved exercises can be found at https://github.com/robertoreale/virtuosodba/blo
         dual;
 
 
-## Show database block size
+### Show database block size
 
 *Keywords*: dynamic views, parameters
 
@@ -166,7 +170,7 @@ Solved exercises can be found at https://github.com/robertoreale/virtuosodba/blo
         name = 'db_block_size';
     
 
-## List user Data Pump jobs
+### List user Data Pump jobs
 
 *Keywords*: LIKE, data pump
 
@@ -183,13 +187,13 @@ Solved exercises can be found at https://github.com/robertoreale/virtuosodba/blo
         job_name NOT LIKE 'BIN$%';
 
 
-## Calculate the average number of redo log switches per hour
+### Calculate the average number of redo log switches per hour
 
 *Keywords*: dynamic views, aggregate functions
 
     SELECT
         inst_id,
-        thread#,
+        thread##,
         TRUNC(first_time)              AS day,
         COUNT(*)                       AS switches,
         COUNT(*) / 24                  AS avg_switches_per_hour
@@ -197,13 +201,13 @@ Solved exercises can be found at https://github.com/robertoreale/virtuosodba/blo
         gv$loghist
     GROUP BY
         inst_id,
-        thread#,
+        thread##,
         TRUNC(first_time)
     ORDER BY
         day;
 
 
-## List the top-n largest segments
+### List the top-n largest segments
 
 *Keywords*: limiting query result, physical storage
 
@@ -219,7 +223,7 @@ Solved exercises can be found at https://github.com/robertoreale/virtuosodba/blo
     ) WHERE ROWNUM <= &n;
 
 
-## Show the total, used, and free space database-wise
+### Show the total, used, and free space database-wise
 
 *Keywords*: subqueries, physical storage
 
@@ -236,7 +240,7 @@ Solved exercises can be found at https://github.com/robertoreale/virtuosodba/blo
         );
 
 
-## Display the findings discovered by all advisors in the database
+### Display the findings discovered by all advisors in the database
 
 *Keywords*: addm, nested queries
 
@@ -269,7 +273,7 @@ Solved exercises can be found at https://github.com/robertoreale/virtuosodba/blo
         );
 
 
-## Associate blocking and blocked sessions
+### Associate blocking and blocked sessions
 
 *Keywords*: self join, locking
 
@@ -282,16 +286,16 @@ Solved exercises can be found at https://github.com/robertoreale/virtuosodba/blo
         l1.block = 1 AND l2.request > 0;
 
 
-## Show basic info about log files
+### Show basic info about log files
 
 *Keywords*: self join, redo logs
 
 *Reference*: http://dba.stackexchange.com/questions/21805/
 
     SELECT
-        lg.group#             AS group#,
-        lg.thread#            AS thread#,
-        lg.sequence#          AS sequence#,
+        lg.group##             AS group#,
+        lg.thread##            AS thread#,
+        lg.sequence##          AS sequence#,
         lg.archived           AS archived,
         lg.status             AS status,
         lf.member             AS file_name,
@@ -301,12 +305,12 @@ Solved exercises can be found at https://github.com/robertoreale/virtuosodba/blo
     JOIN
         gv$logfile lf
     ON
-        lg.group# = lf.group# 
+        lg.group## = lf.group# 
     ORDER BY
-        lg.group# ASC;
+        lg.group## ASC;
 
 
-## Calculate the size of the temporary tablespaces
+### Calculate the size of the temporary tablespaces
 
 *Keywords*: aggregate functions, dynamic views, logical storage
 
@@ -320,12 +324,12 @@ Solved exercises can be found at https://github.com/robertoreale/virtuosodba/blo
     JOIN
         gv$tempfile tmpf
     USING
-        (inst_id, ts#)
+        (inst_id, ts##)
     GROUP BY
         inst_id, ts.name, tmpf.block_size;
 
 
-## Calculate the high-water and excess allocated size for datafiles
+### Calculate the high-water and excess allocated size for datafiles
 
 *Keywords*: WITH clause, NVL, aggregate functions, physical storage
 
@@ -362,7 +366,7 @@ Solved exercises can be found at https://github.com/robertoreale/virtuosodba/blo
     USING (file_id);
 
 
-## Display parent-child pairs between tables, based on reference constraints
+### Display parent-child pairs between tables, based on reference constraints
 
 *Keywords*: WITH clause, constraints
 
@@ -389,7 +393,7 @@ Solved exercises can be found at https://github.com/robertoreale/virtuosodba/blo
         1, 2, 3, 4;
 
 
-## Compute a count of archived logs and their average size
+### Compute a count of archived logs and their average size
 
 *Keywords*: dynamic views, WITH clause
 
@@ -397,9 +401,9 @@ Solved exercises can be found at https://github.com/robertoreale/virtuosodba/blo
         lh AS (
             SELECT
                 TO_CHAR(first_time, 'YYYY-MM-DD')    AS day,
-                COUNT(1)                             AS archived#,
-                MIN(recid)                           AS min#,
-                MAX(recid)                           AS max# 
+                COUNT(1)                             AS archived##,
+                MIN(recid)                           AS min##,
+                MAX(recid)                           AS max## 
             FROM
                 gv$log_history
             GROUP BY
@@ -408,7 +412,7 @@ Solved exercises can be found at https://github.com/robertoreale/virtuosodba/blo
         ),
         lg AS (
             SELECT
-                COUNT(1)                             AS members#,
+                COUNT(1)                             AS members##,
                 MAX(bytes) / 1024 / 1024             AS max_size, 
                 MIN(bytes) / 1024 / 1024             AS min_size,
                 AVG(bytes) / 1024 / 1024             AS avg_size
@@ -418,12 +422,12 @@ Solved exercises can be found at https://github.com/robertoreale/virtuosodba/blo
     SELECT
         lh.*,
         lg.*,
-        ROUND(lh.archived# * lg.avg_size)             AS daily_avg_size
+        ROUND(lh.archived## * lg.avg_size)             AS daily_avg_size
     FROM
         lh, lg;
 
 
-## Calculate a fragmentation factor for tablespaces
+### Calculate a fragmentation factor for tablespaces
 
 *Keywords*: aggregate functions, logical storage
 
@@ -439,7 +443,7 @@ It is calculated according to the following formula:
                          
                     =====        
          4_______   \            
-        \/blocks#    >    blocks 
+        \/blocks##    >    blocks 
                     /            
                     =====        
  
@@ -458,7 +462,7 @@ Cf. the book *Oracle Performance Troubleshooting*, by Robin Schumacher.
         tablespace_name;
 
 
-## Count number of segments for each order of magnitude
+### Count number of segments for each order of magnitude
 
 *Keywords*: DECODE function, analytic functions
 
@@ -484,7 +488,7 @@ IEC prefixes are used.
     ORDER BY TRUNC(LOG(1024, bytes));
 
 
-## Show last rebuild time for indexes
+### Show last rebuild time for indexes
 
 *Keywords*: DECODE
 
@@ -511,7 +515,7 @@ IEC prefixes are used.
         object_type = 'INDEX';
 
 
-## Give basic info about lob segments
+### Give basic info about lob segments
 
 *Keywords*: aggregate functions, lobs
 
@@ -535,7 +539,7 @@ IEC prefixes are used.
         segment_name;
 
 
-## Sort the object types by their average name length
+### Sort the object types by their average name length
 
 *Keywords*: aggregate functions, string functions
 
@@ -550,7 +554,7 @@ IEC prefixes are used.
         AVG(LENGTH(object_name)) DESC;
 
 
-## Count memory resize operations, by component and type
+### Count memory resize operations, by component and type
 
 *Keywords*: DECODE, dynamic views
 
@@ -570,13 +574,13 @@ IEC prefixes are used.
     ORDER BY component;
 
 
-## Show active sessions with SQL text
+### Show active sessions with SQL text
 
 *Keywords*: dynamic views, IN operator
 
     SELECT
         s.sid,
-        s.serial#,
+        s.serial##,
         sql.sql_text,
         s.username,
         s.machine
@@ -598,14 +602,14 @@ IEC prefixes are used.
         s.sid, sql.piece;
 
 
-## List some basic I/O statistics for each user session
+### List some basic I/O statistics for each user session
 
 *Keywords*: dynamic views, outer join
 
     SELECT
         s.inst_id,
         s.sid,
-        s.serial#,
+        s.serial##,
         p.spid,
         s.status,
         logon_time,
@@ -623,17 +627,17 @@ IEC prefixes are used.
     WHERE
         s.osuser IS NOT NULL AND s.username IS NOT NULL
     ORDER BY
-        inst_id, sid, serial#;
+        inst_id, sid, serial##;
         
 
-## List some basic CPU statistics for each user session
+### List some basic CPU statistics for each user session
 
 *Keywords*: dynamic views, outer join
 
     SELECT
         s.inst_id,
         s.sid,
-        s.serial#,
+        s.serial##,
         p.spid,
         s.status,
         logon_time,
@@ -647,17 +651,17 @@ IEC prefixes are used.
         LEFT JOIN gv$session_wait w  ON s.inst_id = w.inst_id AND s.sid   = w.sid
         JOIN gv$process p            ON s.inst_id = p.inst_id AND s.paddr = p.addr
         JOIN gv$sesstat t            ON s.inst_id = t.inst_id AND s.sid   = t.sid
-        JOIN gv$statname n           USING (statistic#)
+        JOIN gv$statname n           USING (statistic##)
     WHERE
         (w.event IS NULL OR 'SQL*Net message from client' = w.event)
         AND s.osuser   IS NOT NULL
         AND s.username IS NOT NULL
         AND n.name     LIKE '%cpu%'
     ORDER BY
-        inst_id, sid, serial#, parameter;
+        inst_id, sid, serial##, parameter;
 
 
-## Show the instance name and number and the schema or database user name relative to the current session
+### Show the instance name and number and the schema or database user name relative to the current session
 
 *Keywords*: WITH clause, SYS_CONTEXT
 
@@ -680,13 +684,13 @@ IEC prefixes are used.
         gv$instance i ON UPPER(ctx.instance_name) = UPPER(i.instance_name);
 
 
-## Exercises
+### Exercises
 
 * List foreign constraints associated to their reference columns.
 
-# String Manipulation
+## String Manipulation
 
-## Count the client sessions with a FQDN
+### Count the client sessions with a FQDN
 
 *Keywords*: regular expressions, dynamic views
 
@@ -700,7 +704,7 @@ Assume a FQDN has the form N_1.N_2.....N_t, where t > 1 and each N_i can contain
         REGEXP_LIKE(machine, '^([[:alnum:]]+\.)+[[:alnum:]-]+$');
 
 
-## Calculate the edit distance between a table name and the names of dependent indexes
+### Calculate the edit distance between a table name and the names of dependent indexes
 
 *Keywords*: edit distance for strings
 
@@ -715,7 +719,7 @@ Assume a FQDN has the form N_1.N_2.....N_t, where t > 1 and each N_i can contain
         generated = 'N';
 
 
-## Calculate the minimum, median, and maximum edit distances between a table's name and the names of its indexes
+### Calculate the minimum, median, and maximum edit distances between a table's name and the names of its indexes
 
 *Keywords*: edit distance for strings, ROLLUP
 
@@ -731,7 +735,7 @@ Assume a FQDN has the form N_1.N_2.....N_t, where t > 1 and each N_i can contain
     ORDER BY         owner, table_name;
 
 
-## Get the number of total waits for each event type, with pretty formatting
+### Get the number of total waits for each event type, with pretty formatting
 
 *Keywords*: formatting, analytic functions, dynamic views
 
@@ -745,11 +749,11 @@ Assume a FQDN has the form N_1.N_2.....N_t, where t > 1 and each N_i can contain
         se;
 
 
-## Exercises
+### Exercises
 
-# Data Analytics
+## Data Analytics
 
-## Rank all the tables in the system based on their cardinality
+### Rank all the tables in the system based on their cardinality
 
 *Keywords*: analytical functions
 
@@ -771,7 +775,7 @@ We partition the result set by tablespace.
         tablespace_name;
 
 
-## List the objects in the recycle bin, sorting by the version
+### List the objects in the recycle bin, sorting by the version
 
 *Keywords*: analytical functions
 
@@ -788,7 +792,7 @@ We partition the result set by tablespace.
         dba_recyclebin;
 
 
-## Show I/O stats on datafiles
+### Show I/O stats on datafiles
 
 *Keywords*: dynamic views, analytical functions
 
@@ -803,12 +807,12 @@ We partition the result set by tablespace.
         gv$datafile df,
         gv$filestat fs
     WHERE
-        df.file# = fs.file#
+        df.file## = fs.file#
     ORDER BY
         fs.phyblkrd + fs.phyblkwrt DESC;
     
     
-## Show the progressive growth in backup sets
+### Show the progressive growth in backup sets
 
 *Keywords*: analytics functions, aggregate functions, dynamic views, rman
 
@@ -836,7 +840,7 @@ We use percentiles to exclude outliers.
         percentile BETWEEN 10 AND 90;
 
 
-## For each schema, calculate the correlation between the size of the tables both in bytes and as a product rows times columns
+### For each schema, calculate the correlation between the size of the tables both in bytes and as a product rows times columns
 
 *Keywords*: aggregate functions, subqueries, logical and physical storage
 
@@ -876,7 +880,7 @@ We use percentiles to exclude outliers.
     ORDER BY owner;
 
 
-## List statspack snapshots
+### List statspack snapshots
 
 *Keywords*: analytics functions, statspack
 
@@ -892,7 +896,7 @@ We use percentiles to exclude outliers.
         stats$snapshot;
 
 
-## List top-10 CPU-intensive queries
+### List top-10 CPU-intensive queries
 
 *References*: https://community.oracle.com/thread/1101381
 
@@ -997,7 +1001,7 @@ We use percentiles to exclude outliers.
         nr <= &m;
 
 
-## Show how much is tablespace usage growing
+### Show how much is tablespace usage growing
 
 *Keywords*: regression models, dynamic views, logical storage
 
@@ -1008,18 +1012,18 @@ We use percentiles to exclude outliers.
     FROM
         dba_hist_tbspc_space_usage h=
         JOIN gv$database d USING(dbid)
-        JOIN gv$tablespace t ON (h.tablespace_id = t.ts#)
+        JOIN gv$tablespace t ON (h.tablespace_id = t.ts##)
     GROUP BY
         d.name, t.name
     ORDER BY
         db, tablespace_name;
 
 
-## Exercises
+### Exercises
 
-# Graphs and Trees
+## Graphs and Trees
 
-## List all users to which a given role is granted, even indirectly
+### List all users to which a given role is granted, even indirectly
 
 *Keywords*: hierarchical queries, security
 
@@ -1036,7 +1040,7 @@ We use percentiles to exclude outliers.
         dba_users;
 
 
-## List privileges granted to each user, even indirectly
+### List privileges granted to each user, even indirectly
 
 *Keywords*: hierarchical queries, security
 
@@ -1048,14 +1052,14 @@ We use percentiles to exclude outliers.
     FROM
         sysauth$ sa
     JOIN
-        user$ u1 ON (u1.user# = grantee#)
+        user$ u1 ON (u1.user## = grantee#)
     JOIN
-        user$ u2 ON (u2.user# = sa.privilege#)
-    CONNECT BY PRIOR privilege# = grantee#
+        user$ u2 ON (u2.user## = sa.privilege#)
+    CONNECT BY PRIOR privilege## = grantee#
     ORDER BY level, grantee, privilege;
 
 
-## Display reference graph between tables
+### Display reference graph between tables
 
 *Keywords*: hierarchical queries, constraints
 
@@ -1097,11 +1101,11 @@ We use percentiles to exclude outliers.
         depth, path;
 
 
-## Exercises
+### Exercises
 
-# Grouping & Reporting
+## Grouping & Reporting
 
-## Count the data files for each tablespaces and for each filesystem location
+### Count the data files for each tablespaces and for each filesystem location
 
 *Keywords*: grouping, regular expressions
 
@@ -1125,28 +1129,28 @@ Assume a Unix filesystem, don’t follow symlinks.  Moreover, generate subtotals
     ORDER BY tablespace_name, dirname;
 
 
-## Exercises
+### Exercises
 
-# Drawing
+## Drawing
 
-## Generate a histogram for the length of objects’ names
+### Generate a histogram for the length of objects’ names
 
 *Keywords*: formatting, analytic functions, aggregate functions, logical storage
 
     SELECT
         LENGTH(object_name),
-        LPAD('#',
+        LPAD('##',
             CEIL(RATIO_TO_REPORT(
                 APPROX_COUNT_DISTINCT(object_name)) OVER () * 100
             ),
-            '#') AS histogram
+            '##') AS histogram
     FROM
         dba_objects
     GROUP BY LENGTH(object_name)
     ORDER BY LENGTH(object_name);
 
 
-## Build a histogram for the order of magnitude of segments’ sizes
+### Build a histogram for the order of magnitude of segments’ sizes
 
 *Keywords*: formatting, analytic functions, aggregate functions, physical storage
 
@@ -1164,22 +1168,22 @@ Assume a Unix filesystem, don’t follow symlinks.  Moreover, generate subtotals
             8, 'YiB',
             'UNKNOWN'
         )           AS order_of_magnitude,
-        LPAD('#',
+        LPAD('##',
             CEIL(RATIO_TO_REPORT(
                 APPROX_COUNT_DISTINCT(SEGMENT_NAME)) OVER () * 100
             ),
-            '#')    AS histogram
+            '##')    AS histogram
     FROM
         dba_segments
     GROUP BY TRUNC(LOG(1024, bytes))
     ORDER BY TRUNC(LOG(1024, bytes));
 
 
-## Exercises
+### Exercises
 
-# Time Functions
+## Time Functions
 
-## Show the first and last day of the current month
+### Show the first and last day of the current month
 
 *Keywords*: time functions
 
@@ -1190,7 +1194,7 @@ Assume a Unix filesystem, don’t follow symlinks.  Moreover, generate subtotals
         dual;
 
 
-## Show the first and last day of the current year
+### Show the first and last day of the current year
 
 *Keywords*: time functions
 
@@ -1203,7 +1207,7 @@ Assume a Unix filesystem, don’t follow symlinks.  Moreover, generate subtotals
         dual;
 
 
-## Show the maximum possible date
+### Show the maximum possible date
 
 *Keywords*: time functions
 
@@ -1220,7 +1224,7 @@ December 31, 9999 CE, one second to midnight.
         dual;
 
 
-## Show the minimum possible date
+### Show the minimum possible date
 
 *Keywords*: time functions
 
@@ -1232,7 +1236,7 @@ December 31, 9999 CE, one second to midnight.
         dual;
 
 
-## List leap years from 1 AD
+### List leap years from 1 AD
 
 *Keywords*: time functions
 
@@ -1244,7 +1248,7 @@ December 31, 9999 CE, one second to midnight.
     CONNECT BY LEVEL < 10000;
 
 
-## Count audit records for the last hour
+### Count audit records for the last hour
 
 *Keywords*: time functions, audit
 
@@ -1253,11 +1257,11 @@ December 31, 9999 CE, one second to midnight.
     FROM
         sys.aud$
     WHERE
-        CAST((FROM_TZ(ntimestamp#, '00:00') AT local) AS date)
+        CAST((FROM_TZ(ntimestamp##, '00:00') AT local) AS date)
             < SYSDATE - INTERVAL '1' HOUR;
 
 
-## Count log file switches, day by day, hour by hour
+### Count log file switches, day by day, hour by hour
 
 *Keywords*: time functions, PIVOT, dynamic views
 
@@ -1279,7 +1283,7 @@ December 31, 9999 CE, one second to midnight.
         );
 
 
-## Calculate the calendar date of Easter, from 1583 to 2999
+### Calculate the calendar date of Easter, from 1583 to 2999
 
 *Keywords*: time functions, multiple WITH clauses
 
@@ -1404,18 +1408,18 @@ December 31, 9999 CE, one second to midnight.
         t7;
 
 
-## Exercises
+### Exercises
 
-# Row Generation
+## Row Generation
 
-## List all integers between 00 and FF, hexadecimal
+### List all integers between 00 and FF, hexadecimal
 
 *Keywords*: CONNECT BY, TO_CHAR
 
     SELECT TO_CHAR(level - 1, '0X') AS n FROM dual CONNECT BY level <= 256;
 
 
-## List all integers between 00000000 and 11111111, hexadecimal
+### List all integers between 00000000 and 11111111, hexadecimal
 
 *Keywords*: CONNECT BY, DECODE, bitwise operations
 
@@ -1433,7 +1437,7 @@ December 31, 9999 CE, one second to midnight.
     CONNECT BY level <= 256;
 
 
-## Generate the integers between 1 and 256
+### Generate the integers between 1 and 256
 
 *Keywords*: GROUP BY CUBE
 
@@ -1447,7 +1451,7 @@ December 31, 9999 CE, one second to midnight.
         );
 
 
-## Generate the integers between 1 and 100, in random order
+### Generate the integers between 1 and 100, in random order
 
 *Keywords*: CONNECT BY, DBMS_RANDOM
 
@@ -1459,7 +1463,7 @@ December 31, 9999 CE, one second to midnight.
     ORDER BY DBMS_RANDOM.VALUE;
 
 
-## Generate the English alphabet
+### Generate the English alphabet
 
 *Keywords*: CONNECT BY, ASCII
 
@@ -1471,7 +1475,7 @@ December 31, 9999 CE, one second to midnight.
         );
 
 
-## Print the Sonnet XVIII by Shakespeare
+### Print the Sonnet XVIII by Shakespeare
 
 *Keywords*: UNPIVOT
 
@@ -1516,7 +1520,7 @@ December 31, 9999 CE, one second to midnight.
         );
 
 
-## List the next seven week days
+### List the next seven week days
 
 *Keywords*: JSON
 
@@ -1535,18 +1539,18 @@ December 31, 9999 CE, one second to midnight.
         )  days;
 
 
-## Exercises
+### Exercises
 
-# Numerical Recipes
+## Numerical Recipes
 
-## Calculate the sum of a geometric series
+### Calculate the sum of a geometric series
 
 *Keywords*: CONNECT BY, numerical recipes
 
     SELECT SUM(POWER(2, -level)) sum FROM dual CONNECT BY level < &n;
 
 
-## Solve Besel's problem
+### Solve Besel's problem
 
 *Keywords*: CONNECT BY, numerical recipes
 
@@ -1558,7 +1562,7 @@ December 31, 9999 CE, one second to midnight.
     CONNECT BY level < &n;
 
 
-## Generate Fibonacci sequence
+### Generate Fibonacci sequence
 
 *Keywords*: recursive CTE, numerical recipes
 
@@ -1589,7 +1593,7 @@ At least 11g R2 is required for the recursive CTE to work.
         fibonacci;
 
 
-## Verify that the sum of the reciprocals of factorials converge to e
+### Verify that the sum of the reciprocals of factorials converge to e
 
 *Keywords*: recursive CTE, numerical recipes
 
@@ -1614,7 +1618,7 @@ At least 11g R2 is required for the recursive CTE to work.
         factorial;
 
 
-## Verify that the sum of the reciprocals of factorials converge to e, alternative method
+### Verify that the sum of the reciprocals of factorials converge to e, alternative method
 
 *Keywords*: doubly increasing sequence, non-equi join
 
@@ -1630,7 +1634,7 @@ At least 11g R2 is required for the recursive CTE to work.
         s1.n;
 
 
-## Verify that the cosine function has a fixed point
+### Verify that the cosine function has a fixed point
 
 *Keywords*: recursive CTE, numerical recipes, analytic functions, random values
 
@@ -1663,11 +1667,11 @@ A fixed point is a point x_0 such that x_0 = cos(x_0).
         iter;
 
 
-## Exercises
+### Exercises
 
-# XML Database 101
+## XML Database 101
 
-## Return the total number of installed patches
+### Return the total number of installed patches
 
 *Keywords*: XML database, patches
 
@@ -1677,7 +1681,7 @@ A fixed point is a point x_0 such that x_0 = cos(x_0).
         dual;
 
 
-## List user passwords (hashed, of course...)
+### List user passwords (hashed, of course...)
 
 *Keywords*: XML database, security
 
@@ -1694,7 +1698,7 @@ From 11g onwards, password hashes do not appear in dba_users anymore.  Of course
         dba_users;
 
 
-## Return patch details such as patch and inventory location
+### Return patch details such as patch and inventory location
 
 *Keywords*: XML database, patches
 
@@ -1708,7 +1712,7 @@ From 11g onwards, password hashes do not appear in dba_users anymore.  Of course
         dual;
 
 
-## Show patch inventory
+### Show patch inventory
 
 *Keywords*: XML database, patches
 
@@ -1722,7 +1726,7 @@ From 11g onwards, password hashes do not appear in dba_users anymore.  Of course
         dual;
 
 
-## Show patch inventory, part 2
+### Show patch inventory, part 2
 
 *Keywords*: XML database, patches
 
@@ -1748,7 +1752,7 @@ From 11g onwards, password hashes do not appear in dba_users anymore.  Of course
         ) patches;
 
 
-## Show bugs fixed by each installed patch
+### Show bugs fixed by each installed patch
 
 *Keywords*: XML database, patches
 
@@ -1769,11 +1773,11 @@ From 11g onwards, password hashes do not appear in dba_users anymore.  Of course
     SELECT * FROM bugs;
 
 
-## Exercises
+### Exercises
 
-# Enter Imperative Thinking
+## Enter Imperative Thinking
 
-## Show all Oracle error codes and messages
+### Show all Oracle error codes and messages
 
 *Keywords*: LIKE, CONNECT BY, function in WITH clause, SQLERRM
 
@@ -1792,11 +1796,11 @@ From 11g onwards, password hashes do not appear in dba_users anymore.  Of course
     CONNECT BY LEVEL < 100000;
 
 
-## Exercises
+### Exercises
 
-# The MODEL Clause
+## The MODEL Clause
 
-## Generate the even integers between -100 and 100, inclusive
+### Generate the even integers between -100 and 100, inclusive
 
 *Keywords*: MODEL
 
@@ -1817,11 +1821,11 @@ From 11g onwards, password hashes do not appear in dba_users anymore.  Of course
         );
 
 
-## Exercises
+### Exercises
 
-# A Stochastic World
+## A Stochastic World
 
-## Verify the law of large numbers
+### Verify the law of large numbers
 
 *Keywords*: CONNECT BY, analytic functions, random values, subqueries, ODCI
 functions, TABLE function, numerical recipes
@@ -1843,7 +1847,7 @@ Verify the law of large numbers by rolling a die n times, with n >> 0
         dual;
 
 
-## For each tablespace T, find the probability of segments in T to be smaller than or equal to a given size
+### For each tablespace T, find the probability of segments in T to be smaller than or equal to a given size
 
 *Keywords*: probability distributions, logical storage
 
@@ -1856,11 +1860,11 @@ Verify the law of large numbers by rolling a die n times, with n >> 0
         tablespace_name;
 
 
-## Exercises
+### Exercises
 
-# Internals
+## Internals
 
-## Count the number of trace files generated each day
+### Count the number of trace files generated each day
 
 *Keywords*: x$ interface
 
@@ -1874,7 +1878,7 @@ Verify the law of large numbers by rolling a die n times, with n >> 0
         ORDER BY 2 DESC;
 
 
-## Display hidden/undocumented initialization parameters
+### Display hidden/undocumented initialization parameters
 
 *Keywords*: DECODE function, x$ interface
 
@@ -1902,15 +1906,15 @@ Verify the law of large numbers by rolling a die n times, with n >> 0
         name;
 
 
-## Display the number of ASM allocated and free allocation units
+### Display the number of ASM allocated and free allocation units
 
 *Keywords*: PIVOT emulation, x$ interface, asm
 
 *Reference*: MOS Doc ID 351117.1
 
     SELECT
-        group_kfdat                                       AS group#,
-        number_kfdat                                      AS disk#,
+        group_kfdat                                       AS group##,
+        number_kfdat                                      AS disk##,
         --  emulate the PIVOT functions which is missing in 10g
         SUM(CASE WHEN v_kfdat = 'V' THEN 1 ELSE 0 END)    AS alloc_au,
         SUM(CASE WHEN v_kfdat = 'F' THEN 1 ELSE 0 END)    AS free_au
@@ -1920,7 +1924,7 @@ Verify the law of large numbers by rolling a die n times, with n >> 0
         group_kfdat, number_kfdat;
 
 
-## Display the count of allocation units per ASM file by file alias (for metadata only)
+### Display the count of allocation units per ASM file by file alias (for metadata only)
 
 *Keywords*: x$interface, asm
 
@@ -1928,8 +1932,8 @@ Verify the law of large numbers by rolling a die n times, with n >> 0
 
     SELECT
         COUNT(xnum_kffxp)    AS au_count,
-        number_kffxp         AS file#,
-        group_kffxp          AS dg#
+        number_kffxp         AS file##,
+        group_kffxp          AS dg##
     FROM
         x$kffxp
     WHERE
@@ -1940,7 +1944,7 @@ Verify the law of large numbers by rolling a die n times, with n >> 0
         COUNT(xnum_kffxp);
 
 
-## Display the count of allocation units per ASM file by file alias
+### Display the count of allocation units per ASM file by file alias
 
 *Keywords*: x$interface, asm
 
@@ -1963,7 +1967,7 @@ Verify the law of large numbers by rolling a die n times, with n >> 0
         group_kffxp, number_kffxp;
 
 
-## Show file utilization
+### Show file utilization
 
 *Keywords*: x$interface, asm
 
@@ -1985,5 +1989,5 @@ Verify the law of large numbers by rolling a die n times, with n >> 0
         f.group_number, f.file_number;
 
 
-## Exercises
+### Exercises
 
