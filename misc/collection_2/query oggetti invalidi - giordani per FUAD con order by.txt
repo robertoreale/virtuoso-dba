@@ -1,7 +1,0 @@
-set lines 128
-set pages 1500
-col owner for a20
-col object_name for a40
-col OBJECT_TYPE for a20
-col status for a20
-select owner,object_name,object_type,status from dba_objects where status like 'INVALID' and owner like '%APPPRD%' order by OBJECT_NAME;
