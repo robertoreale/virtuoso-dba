@@ -1,3 +1,5 @@
+cover.md
+toc.md
 intro.md
 first-steps.md
 string-manipulation.md
