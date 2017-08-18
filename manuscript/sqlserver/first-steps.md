@@ -178,6 +178,8 @@
 
 ### Show the sizes of every object in a database
 
+*Keywords*: aggregate functions
+
 *Reference*: http://stackoverflow.com/questions/2094436/
 
 
@@ -194,9 +196,9 @@
     FROM 
         sys.tables t
     INNER JOIN      
-        sys.indexes i ON t.object_id = i.object_id
+        sys.indexes i           ON t.object_id = i.object_id
     INNER JOIN 
-        sys.partitions p ON i.object_id = p.object_id AND i.index_id = p.index_id
+        sys.partitions p        ON i.object_id = p.object_id AND i.index_id = p.index_id
     INNER JOIN 
         sys.allocation_units au ON p.partition_id = au.container_id
     GROUP BY 
