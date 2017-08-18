@@ -71,6 +71,30 @@
         sess.spid = conn.session_id;
 
 
+### Show sizes of tables
+
+    SELECT
+        tbl.name                                            [Table Name],
+        scm.name                                            [Schema Name],
+        prt.rows                                            [Row Counts],
+        8 *  SUM(alu.total_pages)                           [Total Size (KiB)],
+        8 *  SUM(alu.used_pages)                            [Used Size (KiB)],
+        8 * (SUM(alu.total_pages) - SUM(alu.used_pages))    [Free Size (KiB)]
+    FROM
+        sys.tables tbl
+    INNER JOIN
+        sys.indexes idx ON tbl.object_id = idx.object_id
+    INNER JOIN
+        sys.partitions prt
+        ON idx.object_id = prt.object_id AND idx.index_id = prt.index_id
+    INNER JOIN
+        sys.allocation_units alu ON prt.partition_id = alu.container_id
+    LEFT OUTER JOIN
+        sys.schemas scm ON tbl.schema_id = scm.schema_id
+    GROUP BY
+        tbl.name, scm.name, prt.rows;
+
+
 ### Show the sizes of every object in a database
 
 *Keywords*: aggregate functions
@@ -205,32 +229,6 @@
     INNER JOIN 
         sys.tables  tbl
     ON idx.object_id = tbl.object_id;
-
-
-
-
-### Show sizes of tables
-
-    SELECT
-        tbl.name                                            [Table Name],
-        scm.name                                            [Schema Name],
-        prt.rows                                            [Row Counts],
-        8 *  SUM(alu.total_pages)                           [Total Size (KiB)],
-        8 *  SUM(alu.used_pages)                            [Used Size (KiB)],
-        8 * (SUM(alu.total_pages) - SUM(alu.used_pages))    [Free Size (KiB)]
-    FROM
-        sys.tables tbl
-    INNER JOIN
-        sys.indexes idx ON tbl.object_id = idx.object_id
-    INNER JOIN
-        sys.partitions prt
-        ON idx.object_id = prt.object_id AND idx.index_id = prt.index_id
-    INNER JOIN
-        sys.allocation_units alu ON prt.partition_id = alu.container_id
-    LEFT OUTER JOIN
-        sys.schemas scm ON tbl.schema_id = scm.schema_id
-    GROUP BY
-        tbl.name, scm.name, prt.rows;
 
 
 ### Exercises
