@@ -17,9 +17,9 @@ oracle/internals.md
 sqlserver/sqlserver.md
 sqlserver/first-steps.md
 sqlserver/data-analytics.md
-sqlserver/numerical-recipes.md
 sqlserver/time-functions.md
 sqlserver/row-generation.md
+sqlserver/numerical-recipes.md
 sqlserver/enter-imperative-thinking.md
 postgresql/postgresql.md
 postgresql/first-steps.md
