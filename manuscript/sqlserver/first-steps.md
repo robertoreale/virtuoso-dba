@@ -207,28 +207,6 @@
     ON idx.object_id = tbl.object_id;
 
 
-### Show basic aggregate performance statistics for cached query plans
-
-    USE master
-    GO
-
-    SELECT DISTINCT TOP 10
-        sql.text                                                         [Query Text],
-        stats.execution_count                                            [Execution Count],
-        stats.max_elapsed_time                                           [Max Elapsed Time],
-        ISNULL(stats.total_elapsed_time
-               / stats.execution_count, 0)                               [Avg Elapsed Time],
-        stats.creation_time                                              [Plan Compiled On],
-        ISNULL(stats.execution_count
-               / DATEDIFF(second, stats.creation_time, GETDATE()), 0)    [Frequency]
-    FROM
-        sys.dm_exec_query_stats stats
-    CROSS APPLY
-        sys.dm_exec_sql_text(stats.sql_handle) sql
-    ORDER BY
-        stats.max_elapsed_time DESC;
-
-
 ### Show last execution time of all queries
 
 
