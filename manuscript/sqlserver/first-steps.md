@@ -71,49 +71,6 @@
         sess.spid = conn.session_id;
 
 
-### Return information about each request that is executing within the database server, including the SQL text
-
-*Keywords*: CROSS APPLY
-
-    USE master
-    GO
-
-    SELECT
-        req.session_id            [Session ID],
-        req.status                [Status],
-        req.command               [Command],
-        req.cpu_time              [CPU Time],
-        req.total_elapsed_time    [Elapsed Time],
-        sqltext.text              [SQL Text]
-    FROM
-        sys.dm_exec_requests             req
-    CROSS APPLY
-        sys.dm_exec_sql_text(sql_handle) sqltext;
-
-
-### Show last executed queries by session
-
-*Keywords*: JOIN, CROSS APPLY
-
-    USE master
-    GO
-
-    SELECT
-        conn.session_id    [Session ID],
-        sql.text           [Query Text],
-        sess.login_name    [Login Name],
-        sess.login_time    [Login Time],
-        sess.status        [Session Status]
-    FROM
-        sys.dm_exec_connections conn
-    INNER JOIN
-        sys.dm_exec_sessions    sess 
-    ON
-        conn.session_id = sess.session_id
-    CROSS APPLY
-        sys.dm_exec_sql_text(most_recent_sql_handle) sql;
-
-
 ### Show transaction isolation level for each session
 
 *Keywords*: CASE
