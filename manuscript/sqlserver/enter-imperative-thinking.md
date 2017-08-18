@@ -45,6 +45,8 @@
 
 ### Show basic aggregate performance statistics for cached query plans
 
+*Keywords*: JOIN, CROSS APPLY, time functions
+
     USE master
     GO
 
