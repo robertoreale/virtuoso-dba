@@ -163,8 +163,7 @@
         sys.master_files;
 
 
---  Purpose:   staleness of index statistics
-
+### Show staleness of index statistics
 
     SELECT
         tbl.name                                   [Table Name],
@@ -177,8 +176,9 @@
     ON idx.object_id = tbl.object_id;
 
 
---  Purpose:   shows the sizes of every object in a database
---  Reference: http://stackoverflow.com/questions/2094436/
+### Show the sizes of every object in a database
+
+*Reference*: http://stackoverflow.com/questions/2094436/
 
 
     SELECT
@@ -205,8 +205,7 @@
         OBJECT_NAME(i.object_id);
 
 
---  Purpose:   basic aggregate performance statistics for cached query plans
-
+### Show basic aggregate performance statistics for cached query plans
 
     USE master
     GO
@@ -228,14 +227,7 @@
         stats.max_elapsed_time DESC;
 
 
---------------------------------------------------------------------------------
---
---  The SQL Diaries
--- 
---  Phylum:    SQL Server
---  Module:    queries
---  Submodule: qry_last_exec_time
---  Purpose:   last execution time of all queries
+### Show last execution time of all queries
 
 
     USE master
@@ -251,8 +243,7 @@
         sys.dm_exec_sql_text(stats.sql_handle) sql;
 
 
---  Purpose:   sizes of tables
-
+### Show sizes of tables
 
     SELECT
         tbl.name                                            [Table Name],
