@@ -20,6 +20,7 @@ sqlserver/data-analytics.md
 sqlserver/numerical-recipes.md
 sqlserver/time-functions.md
 sqlserver/row-generation.md
+sqlserver/enter-imperative-thinking.md
 postgresql/postgresql.md
 postgresql/first-steps.md
 mysql/mysql.md
