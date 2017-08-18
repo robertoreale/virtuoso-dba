@@ -16,6 +16,7 @@ oracle/stochastic-world.md
 oracle/internals.md
 sqlserver/sqlserver.md
 sqlserver/first-steps.md
+sqlserver/data-analytics.md
 sqlserver/numerical-recipes.md
 sqlserver/row-generation.md
 postgresql/postgresql.md
