@@ -20,6 +20,22 @@
         sys.dm_exec_sql_text(sql_handle) sqltext;
 
 
+### Show last execution time of all queries
+
+
+    USE master
+    GO
+
+    SELECT
+        stats.last_execution_time    [Last Exec Time],
+        sql.text                     [Query Text],
+        DB_NAME(sql.dbid)            [Database]
+    FROM
+        sys.dm_exec_query_stats stats
+    CROSS APPLY
+        sys.dm_exec_sql_text(stats.sql_handle) sql;
+
+
 ### Show last executed queries by session
 
 *Keywords*: JOIN, CROSS APPLY
