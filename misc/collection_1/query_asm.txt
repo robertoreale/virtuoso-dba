@@ -1,5 +1,0 @@
-select name, GROUP_NUMBER, TOTAL_MB, FREE_MB, state, mount_status, HEADER_STATUS from v$asm_disk
-order by name;
-
-select name, GROUP_NUMBER, type, total_mb, free_mb, required_mirror_free_mb,
-usable_file_mb from v$asm_diskgroup;
