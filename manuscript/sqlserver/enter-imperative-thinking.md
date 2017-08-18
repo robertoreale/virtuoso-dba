@@ -22,6 +22,7 @@
 
 ### Show last execution time of all queries
 
+*Keywords*: CROSS APPLY
 
     USE master
     GO
