@@ -163,165 +163,71 @@
         sys.master_files;
 
 
-### Exercises
-
-
-<!-- vim: set fenc=utf-8 spell spl=en ts=4 sw=4 et filetype=markdown : -->
---------------------------------------------------------------------------------
---
---  The SQL Diaries
--- 
---  Phylum:    SQL Server
---  Module:    indexes
---  Submodule: idx_stats_staleness
 --  Purpose:   staleness of index statistics
---  Tested:    2012
---
---  Copyright (c) 2014-5 Roberto Reale
---  
---  Permission is hereby granted, free of charge, to any person obtaining a
---  copy of this software and associated documentation files (the "Software"),
---  to deal in the Software without restriction, including without limitation
---  the rights to use, copy, modify, merge, publish, distribute, sublicense,
---  and/or sell copies of the Software, and to permit persons to whom the
---  Software is furnished to do so, subject to the following conditions:
---  
---  The above copyright notice and this permission notice shall be included in
---  all copies or substantial portions of the Software.
---  
---  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
---  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
---  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
---  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
---  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
---  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
---  DEALINGS IN THE SOFTWARE.
--- 
---------------------------------------------------------------------------------
 
 
-SELECT
-    tbl.name                                   [Table Name],
-    idx.name                                   [Index Name],
-    STATS_DATE(idx.object_id, idx.index_id)    [Last Updated]
-FROM 
-    sys.indexes idx
-INNER JOIN 
-    sys.tables  tbl
-ON idx.object_id = tbl.object_id;
+    SELECT
+        tbl.name                                   [Table Name],
+        idx.name                                   [Index Name],
+        STATS_DATE(idx.object_id, idx.index_id)    [Last Updated]
+    FROM 
+        sys.indexes idx
+    INNER JOIN 
+        sys.tables  tbl
+    ON idx.object_id = tbl.object_id;
 
---  ex: ts=4 sw=4 et filetype=sql
---------------------------------------------------------------------------------
---
---  The SQL Diaries
--- 
---  Phylum:    SQL Server
---  Module:    objects
---  Submodule: obj_sizes
+
 --  Purpose:   shows the sizes of every object in a database
 --  Reference: http://stackoverflow.com/questions/2094436/
---  Tested:    2012
---
---  Copyright (c) 2015 Roberto Reale
---  
---  Permission is hereby granted, free of charge, to any person obtaining a
---  copy of this software and associated documentation files (the "Software"),
---  to deal in the Software without restriction, including without limitation
---  the rights to use, copy, modify, merge, publish, distribute, sublicense,
---  and/or sell copies of the Software, and to permit persons to whom the
---  Software is furnished to do so, subject to the following conditions:
---  
---  The above copyright notice and this permission notice shall be included in
---  all copies or substantial portions of the Software.
---  
---  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
---  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
---  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
---  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
---  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
---  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
---  DEALINGS IN THE SOFTWARE.
--- 
---------------------------------------------------------------------------------
 
 
-SELECT
-    t.name                            [Table Name],
-    i.name                            [Index Name],
-    SUM(p.rows)                       [Row Count],
-    SUM(au.total_pages)               [Total Pages], 
-    SUM(au.used_pages)                [Used Pages], 
-    SUM(au.data_pages)                [Data Pages],
-    SUM(au.total_pages) * 8 / 1024    [TotalSpace (MiB)], 
-    SUM(au.used_pages)  * 8 / 1024    [UsedSpace (MiB)], 
-    SUM(au.data_pages)  * 8 / 1024    [DataSpace (MiB)]
-FROM 
-    sys.tables t
-INNER JOIN      
-    sys.indexes i ON t.object_id = i.object_id
-INNER JOIN 
-    sys.partitions p ON i.object_id = p.object_id AND i.index_id = p.index_id
-INNER JOIN 
-    sys.allocation_units au ON p.partition_id = au.container_id
-GROUP BY 
-    t.name, i.object_id, i.index_id, i.name 
-ORDER BY 
-    OBJECT_NAME(i.object_id);
+    SELECT
+        t.name                            [Table Name],
+        i.name                            [Index Name],
+        SUM(p.rows)                       [Row Count],
+        SUM(au.total_pages)               [Total Pages], 
+        SUM(au.used_pages)                [Used Pages], 
+        SUM(au.data_pages)                [Data Pages],
+        SUM(au.total_pages) * 8 / 1024    [TotalSpace (MiB)], 
+        SUM(au.used_pages)  * 8 / 1024    [UsedSpace (MiB)], 
+        SUM(au.data_pages)  * 8 / 1024    [DataSpace (MiB)]
+    FROM 
+        sys.tables t
+    INNER JOIN      
+        sys.indexes i ON t.object_id = i.object_id
+    INNER JOIN 
+        sys.partitions p ON i.object_id = p.object_id AND i.index_id = p.index_id
+    INNER JOIN 
+        sys.allocation_units au ON p.partition_id = au.container_id
+    GROUP BY 
+        t.name, i.object_id, i.index_id, i.name 
+    ORDER BY 
+        OBJECT_NAME(i.object_id);
 
---  ex: ts=4 sw=4 et filetype=sql
---------------------------------------------------------------------------------
---
---  The SQL Diaries
--- 
---  Phylum:    SQL Server
---  Module:    queries
---  Submodule: qry_basic_stats
+
 --  Purpose:   basic aggregate performance statistics for cached query plans
---  Tested:    2012
---
---  Copyright (c) 2014-5 Roberto Reale
---  
---  Permission is hereby granted, free of charge, to any person obtaining a
---  copy of this software and associated documentation files (the "Software"),
---  to deal in the Software without restriction, including without limitation
---  the rights to use, copy, modify, merge, publish, distribute, sublicense,
---  and/or sell copies of the Software, and to permit persons to whom the
---  Software is furnished to do so, subject to the following conditions:
---  
---  The above copyright notice and this permission notice shall be included in
---  all copies or substantial portions of the Software.
---  
---  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
---  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
---  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
---  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
---  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
---  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
---  DEALINGS IN THE SOFTWARE.
--- 
---------------------------------------------------------------------------------
 
 
-USE master
-GO
+    USE master
+    GO
 
-SELECT DISTINCT TOP 10
-    sql.text                                                         [Query Text],
-    stats.execution_count                                            [Execution Count],
-    stats.max_elapsed_time                                           [Max Elapsed Time],
-    ISNULL(stats.total_elapsed_time
-           / stats.execution_count, 0)                               [Avg Elapsed Time],
-    stats.creation_time                                              [Plan Compiled On],
-    ISNULL(stats.execution_count
-           / DATEDIFF(second, stats.creation_time, GETDATE()), 0)    [Frequency]
-FROM
-    sys.dm_exec_query_stats stats
-CROSS APPLY
-    sys.dm_exec_sql_text(stats.sql_handle) sql
-ORDER BY
-    stats.max_elapsed_time DESC;
+    SELECT DISTINCT TOP 10
+        sql.text                                                         [Query Text],
+        stats.execution_count                                            [Execution Count],
+        stats.max_elapsed_time                                           [Max Elapsed Time],
+        ISNULL(stats.total_elapsed_time
+               / stats.execution_count, 0)                               [Avg Elapsed Time],
+        stats.creation_time                                              [Plan Compiled On],
+        ISNULL(stats.execution_count
+               / DATEDIFF(second, stats.creation_time, GETDATE()), 0)    [Frequency]
+    FROM
+        sys.dm_exec_query_stats stats
+    CROSS APPLY
+        sys.dm_exec_sql_text(stats.sql_handle) sql
+    ORDER BY
+        stats.max_elapsed_time DESC;
 
---  ex: ts=4 sw=4 et filetype=sql
+
 --------------------------------------------------------------------------------
 --
 --  The SQL Diaries
@@ -330,96 +236,47 @@ ORDER BY
 --  Module:    queries
 --  Submodule: qry_last_exec_time
 --  Purpose:   last execution time of all queries
---  Tested:    2012
---
---  Copyright (c) 2014-5 Roberto Reale
---  
---  Permission is hereby granted, free of charge, to any person obtaining a
---  copy of this software and associated documentation files (the "Software"),
---  to deal in the Software without restriction, including without limitation
---  the rights to use, copy, modify, merge, publish, distribute, sublicense,
---  and/or sell copies of the Software, and to permit persons to whom the
---  Software is furnished to do so, subject to the following conditions:
---  
---  The above copyright notice and this permission notice shall be included in
---  all copies or substantial portions of the Software.
---  
---  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
---  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
---  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
---  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
---  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
---  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
---  DEALINGS IN THE SOFTWARE.
--- 
---------------------------------------------------------------------------------
 
 
-USE master
-GO
+    USE master
+    GO
 
-SELECT
-	stats.last_execution_time    [Last Exec Time],
-    sql.text                     [Query Text],
-    DB_NAME(sql.dbid)            [Database]
-FROM
-    sys.dm_exec_query_stats stats
-CROSS APPLY
-    sys.dm_exec_sql_text(stats.sql_handle) sql;
+    SELECT
+        stats.last_execution_time    [Last Exec Time],
+        sql.text                     [Query Text],
+        DB_NAME(sql.dbid)            [Database]
+    FROM
+        sys.dm_exec_query_stats stats
+    CROSS APPLY
+        sys.dm_exec_sql_text(stats.sql_handle) sql;
 
---  ex: ts=4 sw=4 et filetype=sql
---------------------------------------------------------------------------------
---
---  The SQL Diaries
--- 
---  Phylum:    SQL Server
---  Module:    tables
---  Submodule: tbl_sizes
+
 --  Purpose:   sizes of tables
---  Tested:    2012
---
---  Copyright (c) 2014-5 Roberto Reale
---  
---  Permission is hereby granted, free of charge, to any person obtaining a
---  copy of this software and associated documentation files (the "Software"),
---  to deal in the Software without restriction, including without limitation
---  the rights to use, copy, modify, merge, publish, distribute, sublicense,
---  and/or sell copies of the Software, and to permit persons to whom the
---  Software is furnished to do so, subject to the following conditions:
---  
---  The above copyright notice and this permission notice shall be included in
---  all copies or substantial portions of the Software.
---  
---  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
---  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
---  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
---  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
---  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
---  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
---  DEALINGS IN THE SOFTWARE.
--- 
---------------------------------------------------------------------------------
 
 
-SELECT
-    tbl.name                                            [Table Name],
-    scm.name                                            [Schema Name],
-    prt.rows                                            [Row Counts],
-    8 *  SUM(alu.total_pages)                           [Total Size (KiB)],
-    8 *  SUM(alu.used_pages)                            [Used Size (KiB)],
-    8 * (SUM(alu.total_pages) - SUM(alu.used_pages))    [Free Size (KiB)]
-FROM
-    sys.tables tbl
-INNER JOIN
-    sys.indexes idx ON tbl.object_id = idx.object_id
-INNER JOIN
-    sys.partitions prt
-    ON idx.object_id = prt.object_id AND idx.index_id = prt.index_id
-INNER JOIN
-    sys.allocation_units alu ON prt.partition_id = alu.container_id
-LEFT OUTER JOIN
-    sys.schemas scm ON tbl.schema_id = scm.schema_id
-GROUP BY
-    tbl.name, scm.name, prt.rows;
+    SELECT
+        tbl.name                                            [Table Name],
+        scm.name                                            [Schema Name],
+        prt.rows                                            [Row Counts],
+        8 *  SUM(alu.total_pages)                           [Total Size (KiB)],
+        8 *  SUM(alu.used_pages)                            [Used Size (KiB)],
+        8 * (SUM(alu.total_pages) - SUM(alu.used_pages))    [Free Size (KiB)]
+    FROM
+        sys.tables tbl
+    INNER JOIN
+        sys.indexes idx ON tbl.object_id = idx.object_id
+    INNER JOIN
+        sys.partitions prt
+        ON idx.object_id = prt.object_id AND idx.index_id = prt.index_id
+    INNER JOIN
+        sys.allocation_units alu ON prt.partition_id = alu.container_id
+    LEFT OUTER JOIN
+        sys.schemas scm ON tbl.schema_id = scm.schema_id
+    GROUP BY
+        tbl.name, scm.name, prt.rows;
 
---  ex: ts=4 sw=4 et filetype=sql
+
+### Exercises
+
+
+<!-- vim: set fenc=utf-8 spell spl=en ts=4 sw=4 et filetype=markdown : -->
