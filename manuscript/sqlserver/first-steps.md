@@ -2,6 +2,8 @@
 
 ### Show blocked sessions
 
+*Keywords*: system tables
+
     USE master
     GO
 
@@ -9,7 +11,10 @@
         FROM sys.sysprocesses
         WHERE blocked > 0;
 
+
 ### Show how many physical and logical cpus are available on the system
+
+*Keywords*: system tables
 
     USE master
     GO
@@ -19,7 +24,10 @@
         cpu_count                       [Logical CPUs]
     FROM sys.dm_os_sys_info;
 
+
 ### Show active sessions per user
+
+*Keywords*: system tables, group by
 
     USE master
     GO
@@ -38,7 +46,7 @@
 
 ### Correlate sessions with connections
 
-*Keywords*: JOIN
+*Keywords*: system tables, JOIN
 
     USE master
     GO
@@ -256,7 +264,6 @@ SELECT
 FROM
     sys.master_files;
 
---  ex: ts=4 sw=4 et filetype=sql
 
 ### Exercises
 
