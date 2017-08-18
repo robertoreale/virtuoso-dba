@@ -25,6 +25,21 @@
     FROM sys.dm_os_sys_info;
 
 
+### Show staleness of index statistics
+
+*Keywords*: system tables, join, statistics
+
+    SELECT
+        tbl.name                                   [Table Name],
+        idx.name                                   [Index Name],
+        STATS_DATE(idx.object_id, idx.index_id)    [Last Updated]
+    FROM 
+        sys.indexes idx
+    INNER JOIN 
+        sys.tables  tbl
+    ON idx.object_id = tbl.object_id;
+
+
 ### Show active sessions per user
 
 *Keywords*: system tables, group by
@@ -218,19 +233,6 @@
         physical_name                                 [File Physical Name]
     FROM
         sys.master_files;
-
-
-### Show staleness of index statistics
-
-    SELECT
-        tbl.name                                   [Table Name],
-        idx.name                                   [Index Name],
-        STATS_DATE(idx.object_id, idx.index_id)    [Last Updated]
-    FROM 
-        sys.indexes idx
-    INNER JOIN 
-        sys.tables  tbl
-    ON idx.object_id = tbl.object_id;
 
 
 ### Exercises
