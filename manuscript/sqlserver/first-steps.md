@@ -71,6 +71,37 @@
         sess.spid = conn.session_id;
 
 
+### Show the sizes of every object in a database
+
+*Keywords*: aggregate functions
+
+*Reference*: http://stackoverflow.com/questions/2094436/
+
+
+    SELECT
+        t.name                            [Table Name],
+        i.name                            [Index Name],
+        SUM(p.rows)                       [Row Count],
+        SUM(au.total_pages)               [Total Pages], 
+        SUM(au.used_pages)                [Used Pages], 
+        SUM(au.data_pages)                [Data Pages],
+        SUM(au.total_pages) * 8 / 1024    [TotalSpace (MiB)], 
+        SUM(au.used_pages)  * 8 / 1024    [UsedSpace (MiB)], 
+        SUM(au.data_pages)  * 8 / 1024    [DataSpace (MiB)]
+    FROM 
+        sys.tables t
+    INNER JOIN      
+        sys.indexes i           ON t.object_id = i.object_id
+    INNER JOIN 
+        sys.partitions p        ON i.object_id = p.object_id AND i.index_id = p.index_id
+    INNER JOIN 
+        sys.allocation_units au ON p.partition_id = au.container_id
+    GROUP BY 
+        t.name, i.object_id, i.index_id, i.name 
+    ORDER BY 
+        OBJECT_NAME(i.object_id);
+
+
 ### Show transaction isolation level for each session
 
 *Keywords*: CASE
@@ -174,37 +205,6 @@
     INNER JOIN 
         sys.tables  tbl
     ON idx.object_id = tbl.object_id;
-
-
-### Show the sizes of every object in a database
-
-*Keywords*: aggregate functions
-
-*Reference*: http://stackoverflow.com/questions/2094436/
-
-
-    SELECT
-        t.name                            [Table Name],
-        i.name                            [Index Name],
-        SUM(p.rows)                       [Row Count],
-        SUM(au.total_pages)               [Total Pages], 
-        SUM(au.used_pages)                [Used Pages], 
-        SUM(au.data_pages)                [Data Pages],
-        SUM(au.total_pages) * 8 / 1024    [TotalSpace (MiB)], 
-        SUM(au.used_pages)  * 8 / 1024    [UsedSpace (MiB)], 
-        SUM(au.data_pages)  * 8 / 1024    [DataSpace (MiB)]
-    FROM 
-        sys.tables t
-    INNER JOIN      
-        sys.indexes i           ON t.object_id = i.object_id
-    INNER JOIN 
-        sys.partitions p        ON i.object_id = p.object_id AND i.index_id = p.index_id
-    INNER JOIN 
-        sys.allocation_units au ON p.partition_id = au.container_id
-    GROUP BY 
-        t.name, i.object_id, i.index_id, i.name 
-    ORDER BY 
-        OBJECT_NAME(i.object_id);
 
 
 ### Show basic aggregate performance statistics for cached query plans
