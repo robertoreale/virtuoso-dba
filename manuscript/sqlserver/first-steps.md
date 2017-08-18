@@ -73,6 +73,8 @@
 
 ### Show sizes of tables
 
+*Keywords*: aggregate functions
+
     SELECT
         tbl.name                                            [Table Name],
         scm.name                                            [Schema Name],
