@@ -167,3 +167,8 @@
 
 
 <!-- vim: set fenc=utf-8 spell spl=en ts=4 sw=4 et filetype=markdown : -->
+./indexes/idx_stats_staleness.sql
+./objects/obj_sizes.sql
+./queries/qry_basic_stats.sql
+./queries/qry_last_exec_time.sql
+./tables/tbl_sizes.sql
