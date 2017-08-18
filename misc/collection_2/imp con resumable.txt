@@ -1,1 +1,0 @@
-imp system file=expSTROWTB003N18042012.dmp log=expSTROWTB003N18042012.dmp.log fromuser=STST_APPPRD touser=STST_APPPRD ignore=yes buffer=2000000 tables=STROWTB003N:STROWTB003N_201202_PT,STROWTB003N:STROWTB003N_201203_PT resumable=y resumable_name=riccardo2012 resumable_timeout=86400

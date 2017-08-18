@@ -1,3 +1,0 @@
-alter index SL_APPPRD.SLWTB030N_PK rebuild 
-
-alter index SL_APPPRD_ISP."SLWTB030N_DBA1" rebuild storage (initial 0);
