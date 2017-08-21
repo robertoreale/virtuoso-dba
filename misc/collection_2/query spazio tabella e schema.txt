@@ -1,5 +1,0 @@
-SELECT segment_name,trunc(sum(BYTES/1024/1024)) MB FROM DBA_SEGMENTS WHERE SEGMENT_NAME like '%STROWTB003N%' and
-segment_type like 'TABLE%' group by segment_name;
-
-query occupazione spazio schema:
-select trunc(sum(BYTES/1024/1024)) from dba_segments where owner='SCHEMA'
