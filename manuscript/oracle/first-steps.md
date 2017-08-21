@@ -101,6 +101,30 @@
         );
 
 
+### Show total allocated blocks and possibile shrinkage for data files
+
+*Keywords*: subqueries, physical storage
+
+    SELECT
+        file_name,
+        hwm,
+        blocks            AS total_blocks,
+        blocks - hwm + 1  AS shrinkage_possible
+    FROM
+        dba_data_files df,
+        (
+            SELECT
+                file_id,
+                MAX(block_id + blocks) hwm
+            FROM
+                dba_extents c GROUP BY file_id
+        ) de
+    WHERE
+        df.file_id = dd.file_id
+    ORDER BY
+        shrinkage_possible;
+   
+   
 ### Display the findings discovered by all advisors in the database
 
 *Keywords*: addm, nested queries

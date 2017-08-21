@@ -1,9 +1,0 @@
-    select /*+ parallel (a 16) parallel (b 16)*/file_name, hwm, blocks total_blocks, blocks-hwm+1 shrinkage_possible
-    from dba_data_files a,
-    ( select /*+ parallel (c 16)*/file_id, max(block_id+blocks) hwm
-    from dba_extents c
-    group by file_id ) b
-   where a.file_id = b.file_id
-   order by shrinkage_possible
-   
-   
