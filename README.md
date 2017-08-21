@@ -26,6 +26,7 @@ This work is licensed under a <a rel="license" href="http://creativecommons.org/
     + [Calculate the average number of redo log switches per hour](#calculate-the-average-number-of-redo-log-switches-per-hour)
     + [List the top-n largest segments](#list-the-top-n-largest-segments)
     + [Show the total, used, and free space database-wise](#show-the-total-used-and-free-space-database-wise)
+    + [Show total allocated blocks and possibile shrinkage for data files](#show-total-allocated-blocks-and-possibile-shrinkage-for-data-files)
     + [Display the findings discovered by all advisors in the database](#display-the-findings-discovered-by-all-advisors-in-the-database)
     + [Associate blocking and blocked sessions](#associate-blocking-and-blocked-sessions)
     + [Show basic info about log files](#show-basic-info-about-log-files)
@@ -35,6 +36,7 @@ This work is licensed under a <a rel="license" href="http://creativecommons.org/
     + [Compute a count of archived logs and their average size](#compute-a-count-of-archived-logs-and-their-average-size)
     + [Calculate a fragmentation factor for tablespaces](#calculate-a-fragmentation-factor-for-tablespaces)
     + [Count number of segments for each order of magnitude](#count-number-of-segments-for-each-order-of-magnitude)
+  * [Show locked objects](#show-locked-objects)
     + [Show last rebuild time for indexes](#show-last-rebuild-time-for-indexes)
     + [Give basic info about lob segments](#give-basic-info-about-lob-segments)
     + [Sort the object types by their average name length](#sort-the-object-types-by-their-average-name-length)
@@ -286,6 +288,30 @@ Solved exercises can be found at https://github.com/robertoreale/virtuosodba/blo
         );
 
 
+### Show total allocated blocks and possibile shrinkage for data files
+
+*Keywords*: subqueries, physical storage
+
+    SELECT
+        file_name,
+        hwm,
+        blocks            AS total_blocks,
+        blocks - hwm + 1  AS shrinkage_possible
+    FROM
+        dba_data_files df,
+        (
+            SELECT
+                file_id,
+                MAX(block_id + blocks) hwm
+            FROM
+                dba_extents c GROUP BY file_id
+        ) de
+    WHERE
+        df.file_id = dd.file_id
+    ORDER BY
+        shrinkage_possible;
+   
+   
 ### Display the findings discovered by all advisors in the database
 
 *Keywords*: addm, nested queries
@@ -532,6 +558,34 @@ IEC prefixes are used.
         dba_segments
     GROUP BY TRUNC(LOG(1024, bytes))
     ORDER BY TRUNC(LOG(1024, bytes));
+
+
+## Show locked objects
+
+*Keywords*: DECODE
+
+    SELECT
+        lo.session_id                        AS sid,
+        NVL(lo.oracle_username, '(oracle)')  AS username,
+        o.owner                              AS object_owner,
+        o.object_name,
+        DECODE(
+            lo.locked_mode,
+            0, 'None',
+            1, 'Null (NULL)',
+            2, 'Row-S (SS)',
+            3, 'Row-X (SX)',
+            4, 'Share (S)',
+            5, 'S/Row-X (SSX)',
+            6, 'Exclusive (X)',
+            lo.locked_mode)                  AS locked_mode,
+        lo.os_user_name
+    FROM
+        dba_objects      o,
+        gv$locked_object lo
+    WHERE
+        o.object_id = lo.object_id
+    ORDER BY 1, 2, 3, 4;
 
 
 ### Show last rebuild time for indexes
