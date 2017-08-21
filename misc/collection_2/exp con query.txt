@@ -1,6 +1,0 @@
-file=/dba_external_boito/STROWTB003N17042012.dmp
-log=/dba_external_boito/STROWTB003N17042012.log
-tables=(
-STST_APPPRD.STROWTB003N
-)
-query="where dta_pubblz between TO_DATE('01032012','ddmmyyyy') and TO_DATE('07032012','ddmmyyyy')"
