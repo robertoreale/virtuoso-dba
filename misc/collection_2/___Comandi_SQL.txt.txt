@@ -1,20 +1,3 @@
-++++++++++++++++++++++++++++++++++++++
-expdp e impdp
-++++++++++++++++++++++++++++++++++++++
-expdp scott/tiger@db10g schemas=SCOTT include=TABLE:"IN ('EMP', 'DEPT')" directory=TEST_DIR dumpfile=SCOTT.dmp logfile=expdpSCOTT.log
-expdp scott/tiger@db10g schemas=SCOTT exclude=TABLE:"= 'BONUS'" directory=TEST_DIR dumpfile=SCOTT.dmp logfile=expdpSCOTT.log
-create directory DBA_MNT     as   '/mnt';
-expdp system/oracle TABLES=ARRO_APPPRD.ROTB281N:P01_2009,ARRO_APPPRD.ROTB281N:P12_2008,ARRO_APPPRD.ROTB281N:P11_2008,ARRO_APPPRD.ROTB281N:P10_2008,ARRO_APPPRD.ROTB281N:P09_2008,ARRO_APPPRD.ROTB281N:P08_2008,ARRO_APPPRD.ROTB281N:P07_2008,ARRO_APPPRD.ROTB281N:P06_2008,ARRO_APPPRD.ROTB281N:P05_2008,ARRO_APPPRD.ROTB281N:P04_2008,ARRO_APPPRD.ROTB281N:P03_2008,ARRO_APPPRD.ROTB281N:P02_2008,ARRO_APPPRD.ROTB281N:P01_2008,ARRO_APPPRD.ROTB281N:P12_2007,ARRO_APPPRD.ROTB281N:P11_2007,ARRO_APPPRD.ROTB281N:P10_2007,ARRO_APPPRD.ROTB281N:P09_2007,ARRO_APPPRD.ROTB281N:P08_2007,ARRO_APPPRD.ROTB281N:P07_2007,ARRO_APPPRD.ROTB281N:P06_2007,ARRO_APPPRD.ROTB281N:P05_2007,ARRO_APPPRD.ROTB281N:P04_2007,ARRO_APPPRD.ROTB281N:P03_2007,ARRO_APPPRD.ROTB281N:P02_2007,ARRO_APPPRD.ROTB281N:P01_2007,ARRO_APPPRD.ROTB281N:P12_2006,ARRO_APPPRD.ROTB281N:P11_2006,ARRO_APPPRD.ROTB281N:P10_2006 directory=DBA_SFOLTIMENTO parallel=8 DUMPFILE=ARRO_APPPRD.ROTB281N%u.dmp
-expdp syexpdp system/oracle schemas=RCG_APPPRD directory=STE dumpfile=rcg%u.dmp parallel=4 stem/oracle schemas=RCG_APPPRD directory=GIORDANI dumpfile=rcg%u.dmp parallel=4 
-
-impdp system/nettuno77 schemas=RCG_APPPRD directory=STE dumpfile=rcg%u.dmp parallel=4 
-impdp system/nettuno77 remap_schema=RCG_APPPRD:SUPPORT DUMPFILE=STRCGDTB011P%u.dmp directory=DBA_DIR
-impdp system/nettuno77@s1prd remap_schema=STCC_OWB102G:STE remap_tablespace=STRTOWB10GD:STE DUMPFILE=stcc%u.dmp directory=PEPPE
-impdp system/nettuno77 directory=GIORDANI dumpfile=RCG.dmp schemas=RCG_APPPRD INCLUDE=TABLE TABLE_EXISTS_ACTION=REPLACE
-
-impdp system/nettuno77 directory=GIORDANI dumpfile=RCG.dmp schemas=RCG_APPPRD PARALLEL=2
-
-
 expdp 
 select vp.spid PID, vs.SID SID, vs.serial# SERIAL#, vs.program PROG , vs.osuser OSUSER, vs.machine MACHINE
 from v$session vs, v$process vp
@@ -131,44 +114,6 @@ FROM v$session a, v$sqlarea c
 where c.address= a.sql_address
 and c.hash_value = a.sql_hash_value
 
-#### RAC CRSD ####
- export DISPLAY=10.202.29.93:0.0
- sleep 1;xterm -geometry 140x10-100+20   -T CSSrrdbbo01fp -bg black -fg red          -e "ssh rrdbbo01fp tail -f /sw/oracle/crs/log/rrdbbo01fp/cssd/ocssd.log" &
- sleep 1;xterm -geometry 140x10-100+100  -T CSSrrdbbo01fp -bg black -fg yellow       -e "ssh rrdbbo01fp tail -f /sw/oracle/crs/log/rrdbbo01fp/cssd/ocssd.log" &
- sleep 1;xterm -geometry 140x10-100+180  -T CSSrrdbbo01fp -bg black -fg green        -e "ssh rrdbbo01fp tail -f /sw/oracle/crs/log/rrdbbo01fp/cssd/ocssd.log" &
- sleep 1;xterm -geometry 140x10-100+260  -T CSSrrdbsc01fp -bg black -fg cyan         -e "ssh rrdbsc01fp tail -f /sw/oracle/crs/log/rrdbsc01fp/cssd/ocssd.log" &
- sleep 1;xterm -geometry 140x10-100+320  -T CSSrrdbsc02fp -bg black -fg magenta      -e "ssh rrdbsc02fp tail -f /sw/oracle/crs/log/rrdbsc02fp/cssd/ocssd.log" &
- sleep 1;xterm -geometry 140x10-100+400  -T CSSrrdbsc03fp -bg black -fg orange       -e "ssh rrdbsc03fp tail -f /sw/oracle/crs/log/rrdbsc03fp/cssd/ocssd.log" &
-
-
- #### DB STDWHPRD ####
- export DISPLAY=10.202.104.109:1.0
- sleep 1;xterm -geometry 120x10-100+20   -T CRSrrdbbo01fp -bg black -fg red          -e "ssh rrdbbo01fp tail -f /sw/oracle/admin/STDWHPRD/bdump/aler*log" &
- sleep 1;xterm -geometry 120x10-100+100  -T CRSrrdbbo02fp -bg black -fg yellow       -e "ssh rrdbbo03fp tail -f /sw/oracle/admin/STDWHPRD/bdump/aler*log" &
- sleep 1;xterm -geometry 120x10-100+180  -T CRSrrdbbo03fp -bg black -fg green        -e "ssh rrdbbo03fp tail -f /sw/oracle/admin/STDWHPRD/bdump/aler*log" &
- sleep 1;xterm -geometry 120x10-100+260  -T CRSrrdbsc01fp -bg black -fg cyan         -e "ssh rrdbsc01fp tail -f /sw/oracle/admin/STDWHPRD/bdump/aler*log" &
- sleep 1;xterm -geometry 120x10-100+320  -T CRSrrdbsc02fp -bg black -fg magenta      -e "ssh rrdbsc02fp tail -f /sw/oracle/admin/STDWHPRD/bdump/aler*log" &
- sleep 1;xterm -geometry 120x10-100+400  -T CRSrrdbsc03fp -bg black -fg orange       -e "ssh rrdbsc03fp tail -f /sw/oracle/admin/STDWHPRD/bdump/aler*log" &
- 
-
- ### Sistema Operativo ####
- export DISPLAY=10.202.29.93:0.0
- sleep 1;xterm -geometry 120x10-25+20  -T SYSrrdbbo01fp -bg black -fg red     -e "ssh rrdbbo01fp tail -f /var/log/messages" &
- sleep 1;xterm -geometry 120x10-25+100 -T SYSrrdbbo01fp -bg black -fg yellow  -e "ssh rrdbbo02fp tail -f /var/log/messages"   &
- sleep 1;xterm -geometry 120x10-25+180 -T SYSrrdbbo01fp -bg black -fg green   -e "ssh rrdbbo03fp tail -f /var/log/messages"    &
- sleep 1;xterm -geometry 120x10-25+260 -T SYSrrdbsc01fp -bg black -fg cyan    -e "ssh rrdbsc01fp tail -f /var/log/messages"     &
- sleep 1;xterm -geometry 120x10-25+320 -T SYSrrdbsc02fp -bg black -fg magenta -e "ssh rrdbsc02fp tail -f /var/log/messages"  &
- sleep 1;xterm -geometry 120x10-25+400 -T SYSrrdbsc03fp -bg black -fg orange  -e "ssh rrdbsc03fp tail -f /var/log/messages"   &
-
-
-
-
-### Sistema Operativo  ADAPTER APPSERVER####
- export DISPLAY=10.202.29.93:0.0
- sleeaddp 1;xterm -geometry 120x10-25+20  -T rradbo01fp -bg black -fg red     -e "ssh rradbo01fp tail -f /var/log/messages" &
- sleep 1;xterm -geometry 120x10-25+100 -T rradbo01fp -bg black -fg yellow  -e "ssh rradbo01fp tail -f /var/log/messages"   &
- sleep 1;xterm -geometry 120x10-25+180 -T rrapbo01fp -bg black -fg green   -e "ssh rrapbo01fp tail -f /var/log/messages"    &
- sleep 1;xterm -geometry 120x10-25+260 -T rrapsc01fp -bg black -fg cyan    -e "ssh rrapsc01fp tail -f /var/log/messages"     &
 
 
 ## AWR ####
@@ -315,53 +260,6 @@ c008++++++++++++
 ++++++++++++
    ACTION
 ++++++++++++
-
-_____________________________  create NEW DiskGroup ______________________________
-
-/* available disk */
-        FORMER       ORCL:ASMDISK_2_7
-        FORMER       ORCL:ASMDISK_1_7
-
-
-CREATE DISKGROUP db_mytest NORMAL REDUNDANCY 
-FAILGROUP controller_boito DISK
-'ORCL:ASMDISK_2_7'
-FAILGROUP controller_scala DISK
-'ORCL:ASMDISK_1_7';
-
-
-
-alter DISKGROUP DG_DOFSVL 
-add DISK
-'ORCL:ASMDISK_BO_BO_0808_143GB'
-;
-
-
-!!!!!! IMPORTANTE !!!!!!!
-
-
-i dischi si chiamano ORCL:ASMDISK_1_7 e quindi non si capisce su quale SAN sono.
-la naming convention deve identicare la SAN
-Volendo si PUO' usare la definizione di FAILGROUP, in modo da specificare la SAN
-
-
-
-________________________  Drop diskgroup ________________________
-drop DISKGROUP DATAINFRA; /* il diskgroup deve essere monted */
-
->> asmcmd lsdg
-State    Type    Rebal  Unbal  Sector  Block       AU  Total_MB  Free_MB  Req_mir_free_MB  Usable_file_MB  Offline_disks  Name
-MOUNTED  NORMAL  N      N         512   4096  1048576    143988    87530                0           43765              0  ARCHROMO/
-MOUNTED  NORMAL  N      N         512   4096  1048576     32766    32048                0           16024              0  DATAINFRA/
-MOUNTED  NORMAL  N      N         512   4096  1048576    719940   441670            71994          184838              0  DATAROMO/
-
-ALTER DISKGROUP DATAINFRA DISMOUNT; /* su gli altri nodi del cluster, lasciando solo attivo il nodo da cui si lancia il comando*/
-drop DISKGROUP DATAINFRA including contents;
-	ERROR at line 1:
-	ORA-15039: diskgroup not dropped
-	ORA-15001: diskgroup "ARCHROMO" does not exist or is not mounted
-	SOLUZIONE >> [oracle@c2dbbo02fs ~]$ crs_stop ora.c2dbbo02fs.ASM2.asm /* altro nodo cluster */
-
 
 ----- Presi da documentazione di installazione ORACLE -----
 DATAINFRA                                 2 ORCL:ASMDISK_1_7               FG1
