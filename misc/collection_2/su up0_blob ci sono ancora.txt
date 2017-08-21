@@ -1,5 +1,0 @@
-select sum(dbms_lob.getlength(oggetto))/1024/1024/1024
-from protocollo.up0_blob
-where id_doc >= ( select min(id_doc)
-from protocollo.up0_blob
-where crc is null )
