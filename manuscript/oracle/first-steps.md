@@ -349,6 +349,34 @@ IEC prefixes are used.
     ORDER BY TRUNC(LOG(1024, bytes));
 
 
+## Show locked objects
+
+*Keywords*: DECODE
+
+    SELECT
+        lo.session_id                        AS sid,
+        NVL(lo.oracle_username, '(oracle)')  AS username,
+        o.owner                              AS object_owner,
+        o.object_name,
+        DECODE(
+            lo.locked_mode,
+            0, 'None',
+            1, 'Null (NULL)',
+            2, 'Row-S (SS)',
+            3, 'Row-X (SX)',
+            4, 'Share (S)',
+            5, 'S/Row-X (SSX)',
+            6, 'Exclusive (X)',
+            lo.locked_mode)                  AS locked_mode,
+        lo.os_user_name
+    FROM
+        dba_objects      o,
+        gv$locked_object lo
+    WHERE
+        o.object_id = lo.object_id
+    ORDER BY 1, 2, 3, 4;
+
+
 ### Show last rebuild time for indexes
 
 *Keywords*: DECODE
