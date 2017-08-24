@@ -1,5 +1,0 @@
-exec dbms_stats.GATHER_INDEX_STATS(ownname=> 'STCR_APPPRD' ,indname=> 'STCRMTB141P_DBA1' , partname=> 'STCRMTB141_20130510_PT', estimate_percent => 20, granularity => 'ALL');
-
-select TABLE_OWNER, TABLE_NAME, PARTITION_NAME from DBA_TAB_PARTITIONS where TABLE_NAME='STCRMTB141P';
-
-exec DBMS_STATS.GATHER_INDEX_STATS (ownname => 'STFS_APPPRD', indname => 'STFSMTB019P_IX1', estimate_percent => 20,degree => 24);
