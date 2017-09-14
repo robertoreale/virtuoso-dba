@@ -1,6 +1,6 @@
 # general configuration
 url: http://robertoreale.me
-baseurl: 'virtuosodba'
+baseurl: '/virtuosodba'
 
 # compass configuration
 compass:
