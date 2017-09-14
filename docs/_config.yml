@@ -1,6 +1,6 @@
 # general configuration
-url: http://excentris.net
-baseurl: ''
+url: http://robertoreale.me
+baseurl: 'virtuosodba'
 
 # compass configuration
 compass:
