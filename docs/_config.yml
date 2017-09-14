@@ -5,7 +5,7 @@ baseurl: '/virtuosodba'
 # compass configuration
 compass:
   # an avatar or logo (optional)
-  logo: "/images/compass.png"
+  logo: "/images/huge-left-outer-join.png"
   # author will appear under the avatar (optional)
   author: "The Virtuoso DBA"
   # tagline will appear under the title (optional)
