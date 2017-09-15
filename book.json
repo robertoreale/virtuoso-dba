@@ -1,0 +1,15 @@
+{
+    "gitbook": ">= 3.x.x",
+    "plugins": [],
+    "root": "./manuscript",
+    "structure": {
+        "readme": "README.md",
+        "summary": "SUMMARY.md"
+    },
+    "links": {
+        "sidebar": {
+            "Contact us / Support": "https://www.gitbook.com/contact"
+        }
+    },
+    "pluginsConfig": {}
+}

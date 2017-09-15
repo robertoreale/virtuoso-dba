@@ -14,7 +14,9 @@ install:
   # Install Jekyll and dependencies
   - bundle install
 
-script: bundle exec rake site:deploy --quiet --rakefile website/Rakefile
+script:
+  - bundle exec rake book:build  --quiet && mv _book book
+  - bundle exec rake site:deploy --quiet
 
 # Generate your secure token with the travis gem:
 # get Github token from your Travis CI profile page
