@@ -28,5 +28,5 @@
     * [First Steps](postgresql/first-steps.md)
 * [MySQL](mysql/README.md)
     * [First Steps](mysql/first-steps.md)
-* [R](r.md)
-* [MongoDB](mongodb.md)
+* [Working with R](r.md)
+* [A non-relational Database](mongodb.md)
