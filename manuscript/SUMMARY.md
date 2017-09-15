@@ -1,6 +1,7 @@
 # Summary
 
 * [Introduction](README.md)
+    * [License Notice](license-notice.md)
 * [Oracle Database](README.md)
     * [First Steps](oracle/first-steps.md)
     * [String Manipulation](oracle/string-manipulation.md)
