@@ -22,7 +22,7 @@ If you want to contribute to this book, please follow these simple rules:
 
 4. Make your changes.
 
-5. Don't forget to add yourself in [contributors.md].
+5. Don't forget to add yourself in [contributors.md](contributors.md).
 
 6. Commit and push your changes, then make a pull request from Github.
 
