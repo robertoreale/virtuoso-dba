@@ -1,8 +1,6 @@
 TODO
 ===
 
-* Continuous Integration
-
 * Cosa sono e a cosa servono gli undo segments. In un RAC sono condivisi o privati? Quali blocchi contengono? (Committed, Uncommitted, Expired, Unexpired, …) come funziona la retention?
 * RAC: dove stanno e a cosa servono i voting disk (membership), OCR, CRS?
 * AWR: che cos’è, a cosa serve e come funziona. Cosa sono gli Wait Events e quali sono i più importanti? Per esempio Scattered read, db file sequential real, log file sync, latch free, …
