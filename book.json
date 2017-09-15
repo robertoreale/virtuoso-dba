@@ -1,4 +1,7 @@
 {
+    "author": "Roberto Reale",
+    "title": "The Virtuoso DBA",
+    "description": "How to improve database administration skills through SQL mastery.",
     "gitbook": ">= 3.x.x",
     "plugins": [],
     "root": "./manuscript",
@@ -8,7 +11,9 @@
     },
     "links": {
         "sidebar": {
-            "Contact us / Support": "https://www.gitbook.com/contact"
+            "Source Code": "https://github.com/robertoreale/virtuosodba",
+            "Read on GitBook": "https://www.gitbook.com/book/robertoreale/virtuosodba",
+            "Printed Version": "https://leanpub.com/virtuosodba"
         }
     },
     "pluginsConfig": {}
