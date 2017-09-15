@@ -1,6 +1,6 @@
 # Summary
 
-* [Introduction](intro.md)
+* [Introduction](README.md)
 * [Oracle](oracle.md)
     * [First Steps](oracle/first-steps.md)
     * [String Manipulation](oracle/string-manipulation.md)
