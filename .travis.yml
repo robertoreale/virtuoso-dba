@@ -12,6 +12,7 @@ install:
   # - pandoc --version
 
   # Install Jekyll and dependencies
+  - npm install gitbook-cli -g
   - bundle install
 
 script:
