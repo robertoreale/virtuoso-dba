@@ -1,3 +1,0 @@
-cover.md
-license-notice.md
-toc.md
