@@ -1,7 +1,7 @@
 # Summary
 
 * [Introduction](README.md)
-* [Oracle](README.md)
+* [Oracle Database](README.md)
     * [First Steps](oracle/first-steps.md)
     * [String Manipulation](oracle/string-manipulation.md)
     * [Data Analytics](oracle/data-analytics.md)
@@ -13,7 +13,7 @@
     * [Numerical Recipes](oracle/numerical-recipes.md)
     * [XML Database 101](oracle/xml-database-101.md)
     * [Enter Imperative Thinking](oracle/enter-imperative-thinking.md)
-    * [MODEL Clause](oracle/model-clause.md)
+    * [The MODEL Clause](oracle/model-clause.md)
     * [A Stochastic World](oracle/stochastic-world.md)
     * [Internals](oracle/internals.md)
 * [SQL Server](README/sqlserver.md)

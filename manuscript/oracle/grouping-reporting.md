@@ -1,10 +1,10 @@
-## Grouping & Reporting
+## Grouping and Reporting
 
 ### Count the data files for each tablespaces and for each filesystem location
 
 *Keywords*: grouping, regular expressions
 
-Assume a Unix filesystem, don’t follow symlinks.  Moreover, generate subtotals for each of the two dimensions (*scil*. tablespace and filesystem location).
+Assume a Unix filesystem, donât follow symlinks.  Moreover, generate subtotals for each of the two dimensions (*scil*. tablespace and filesystem location).
  
     WITH df AS (
         SELECT
