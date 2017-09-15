@@ -4,5 +4,9 @@ _site
 
 *.swp
 
+# gitbook
+_book
+book
+
 # travis
 vendor
