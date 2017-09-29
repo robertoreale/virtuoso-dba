@@ -4,7 +4,7 @@
 
 Working as a DBA requires improving skills in at least two key areas: SQL and database administration.  Usually the paths to do so are separate: in this book we will try to unify them in a coherent manner.
 
-You can read either read the book [online](http://robertoreale.me/virtuosodba/book) or get a [printable version](https://leanpub.com/virtuosodba).
+You can read either read the book [online](https://robertoreale.me/virtuosodba/book) or get a [printable version](https://leanpub.com/virtuosodba).
 
 ## Questions/Suggestions
 
