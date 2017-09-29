@@ -1,7 +1,7 @@
 # The Virtuoso DBA
 
 [![Build Status](https://travis-ci.org/robertoreale/virtuosodba.svg?branch=master)](https://travis-ci.org/robertoreale/virtuosodba)
-[![Flattr this GitHub repo](http://api.flattr.com/button/flattr-badge-large.png)](https://flattr.com/submit/auto?user_id=robertoreale&url=https://github.com/robertoreale/virtuosodba&title=The Virtuoso DBA&language=&tags=github&category=software) 
+[![Flattr this GitHub repo](http://api.flattr.com/button/flattr-badge-large.png)](https://flattr.com/submit/auto?user_id=robertoreale&url=https://github.com/robertoreale/virtuosodba)
 
 Working as a DBA requires improving skills in at least two key areas: SQL and database administration.  Usually the paths to do so are separate: in this book we will try to unify them in a coherent manner.
 
