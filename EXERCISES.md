@@ -5,25 +5,6 @@
 
 <!-- toc -->
 
-- [Introduction](#introduction)
-- [Oracle Database](#oracle-database)
-  * [First Steps](#first-steps)
-    + [List foreign constraints associated to their reference columns.](#list-foreign-constraints-associated-to-their-reference-columns)
-  * [String Manipulation](#string-manipulation)
-  * [Data Analytics](#data-analytics)
-  * [Graphs and Trees](#graphs-and-trees)
-  * [Grouping & Reporting](#grouping--reporting)
-  * [Drawing](#drawing)
-  * [Time Functions](#time-functions)
-  * [Row Generation](#row-generation)
-  * [Numerical Recipes](#numerical-recipes)
-  * [XML Database 101](#xml-database-101)
-  * [Enter Imperative Thinking](#enter-imperative-thinking)
-  * [The MODEL Clause](#the-model-clause)
-  * [A Stochastic World](#a-stochastic-world)
-  * [Internals](#internals)
-
-<!-- tocstop -->
 
 # Introduction
 

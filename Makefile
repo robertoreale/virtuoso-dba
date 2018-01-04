@@ -10,7 +10,7 @@
 # should always be the "all" rule, so that "make" and "make all" are identical.
 all: README.md EXERCISES.md
 
-README.md: Makefile manuscript/*.md manuscript/oracle/*.md manuscript/sqlserver/*.md manuscript/postgresql/*.md
+README.md: Makefile manuscript/*.md manuscript/oracle/*.md manuscript/sqlserver/*.md
 	( cd manuscript && xargs cat < Book.txt ) | grep -v '^<!-- vim:' > README.md
 
 EXERCISES.md: Makefile exercises/*.md exercises/oracle/*.md

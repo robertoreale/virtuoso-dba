@@ -24,7 +24,5 @@
     * [Row Generation](sqlserver/row-generation.md)
     * [Numerical Recipes](sqlserver/numerical-recipes.md)
     * [Enter Imperative Thinking](sqlserver/enter-imperative-thinking.md)
-* [PostgreSQL](postgresql/README.md)
-    * [First Steps](postgresql/first-steps.md)
 * [Working with R](r.md)
 * [A non-relational Database](mongodb.md)

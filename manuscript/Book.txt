@@ -21,7 +21,5 @@ sqlserver/time-functions.md
 sqlserver/row-generation.md
 sqlserver/numerical-recipes.md
 sqlserver/enter-imperative-thinking.md
-postgresql/README.md
-postgresql/first-steps.md
 r.md
 mongodb.md
