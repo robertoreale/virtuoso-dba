@@ -23,7 +23,5 @@ sqlserver/numerical-recipes.md
 sqlserver/enter-imperative-thinking.md
 postgresql/README.md
 postgresql/first-steps.md
-mysql/README.md
-mysql/first-steps.md
 r.md
 mongodb.md

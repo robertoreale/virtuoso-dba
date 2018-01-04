@@ -26,7 +26,5 @@
     * [Enter Imperative Thinking](sqlserver/enter-imperative-thinking.md)
 * [PostgreSQL](postgresql/README.md)
     * [First Steps](postgresql/first-steps.md)
-* [MySQL](mysql/README.md)
-    * [First Steps](mysql/first-steps.md)
 * [Working with R](r.md)
 * [A non-relational Database](mongodb.md)
