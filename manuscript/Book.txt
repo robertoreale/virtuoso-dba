@@ -14,12 +14,5 @@ oracle/enter-imperative-thinking.md
 oracle/model-clause.md
 oracle/stochastic-world.md
 oracle/internals.md
-sqlserver/README.md
-sqlserver/first-steps.md
-sqlserver/data-analytics.md
-sqlserver/time-functions.md
-sqlserver/row-generation.md
-sqlserver/numerical-recipes.md
-sqlserver/enter-imperative-thinking.md
 r.md
 mongodb.md
