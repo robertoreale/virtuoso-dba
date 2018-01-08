@@ -1,7 +1,0 @@
-set pagesize 3333
-set line 200
-col table_name for a40
-select table_name,partition_name,num_rows,partition_position,compression,TRUNC((BLOCKS*16384)/(1024*1024)) MB from dba_tab_partitions
-where table_owner='SSL00_APPPRD' and table_name like 'SSL_DEAL_CASHFLOW'
-and compression = 'DISABLED'
-and partition_position not in (select max(partition_position)   from dba_tab_partitions where table_owner='SSL00_APPPRD' and table_name like 'SSL_DEAL_CASHFLOW') ;
