@@ -2,8 +2,9 @@
 
 * [Introduction](README.md)
     * [License Notice](license-notice.md)
+* [First Steps](first-steps/README.md)
+    * [First Steps](first-steps/first-steps.md)
 * [Oracle Database](oracle/README.md)
-    * [First Steps](oracle/first-steps.md)
     * [String Manipulation](oracle/string-manipulation.md)
     * [Data Analytics](oracle/data-analytics.md)
     * [Graphs and Trees](oracle/graphs-and-trees.md)

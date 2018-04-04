@@ -1,6 +1,7 @@
 README.md
+first-steps/README.md
+first-steps/first-steps.md
 oracle/README.md
-oracle/first-steps.md
 oracle/string-manipulation.md
 oracle/data-analytics.md
 oracle/graphs-and-trees.md
