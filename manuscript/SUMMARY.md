@@ -4,6 +4,7 @@
     * [License Notice](license-notice.md)
 * [First Steps](first-steps/README.md)
     * [First Steps](first-steps/first-steps.md)
+    * [Storing Objects](first-steps/storing-objects.md)
 * [Oracle Database](oracle/README.md)
     * [String Manipulation](oracle/string-manipulation.md)
     * [Data Analytics](oracle/data-analytics.md)

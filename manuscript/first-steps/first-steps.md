@@ -68,22 +68,6 @@
         day;
 
 
-### List the top-n largest segments
-
-*Keywords*: limiting query result, physical storage
-
-    SELECT * FROM
-    (
-        SELECT
-            owner,
-            segment_name         AS segment,
-            segment_type         AS type,
-            tablespace_name      AS tablespace,
-            bytes / 1024 / 1024  AS mib_total
-        FROM dba_segments ORDER BY bytes DESC
-    ) WHERE ROWNUM <= &n;
-
-
 ### Show the total, used, and free space database-wise
 
 *Keywords*: subqueries, physical storage
