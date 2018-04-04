@@ -4,7 +4,7 @@ Working as a DBA requires improving skills in at least two key areas: SQL and da
 
 Solved exercises can be found at https://github.com/robertoreale/virtuosodba/blob/master/EXERCISES.md.
 
-# Oracle Database
+# First Steps
 
 
 ## First Steps
@@ -609,6 +609,9 @@ IEC prefixes are used.
 ### Exercises
 
 * List foreign constraints associated to their reference columns.
+
+# Oracle Database
+
 
 ## String Manipulation
 
