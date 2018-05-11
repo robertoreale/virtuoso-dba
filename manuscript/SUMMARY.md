@@ -18,6 +18,3 @@
     * [Enter Imperative Thinking](oracle/enter-imperative-thinking.md)
     * [The MODEL Clause](oracle/model-clause.md)
     * [A Stochastic World](oracle/stochastic-world.md)
-    * [Internals](oracle/internals.md)
-* [Working with R](r.md)
-* [A non-relational Database](mongodb.md)

@@ -15,6 +15,3 @@ oracle/xml-database-101.md
 oracle/enter-imperative-thinking.md
 oracle/model-clause.md
 oracle/stochastic-world.md
-oracle/internals.md
-r.md
-mongodb.md
