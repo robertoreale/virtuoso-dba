@@ -1,1 +1,0 @@
-select USERNAME, SERVER, OSUSER, MACHINE, STATUS from gv$session

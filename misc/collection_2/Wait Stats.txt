@@ -1,6 +1,0 @@
-select   CLASS,
-                COUNT,
-                TIME
-from      v$waitstat
-order    by CLASS
-/

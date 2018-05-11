@@ -1,1 +1,0 @@
-select trunc(sum(BYTES/1024/1024)), SEGMENT_TYPE from dba_segments where TABLESPACE_NAME='TSD_GDI_OWN' group by SEGMENT_TYPE;

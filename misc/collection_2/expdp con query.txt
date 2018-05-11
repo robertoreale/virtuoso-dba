@@ -1,5 +1,0 @@
-dumpfile=paonessa03.dmp
-logfile=paonessa_03n.log
-tables=STST_APPPRD.STROWTB003N
-query="where dta_esecuz>='01jan2010'"
-directory=EXP_VIX

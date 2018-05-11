@@ -1,7 +1,0 @@
-SELECT s.saddr, s.sid, s.serial#, s.username,
- s.osuser, s.machine, s.program, s.logon_time, s.status, 
- p.program, p.spid
-FROM gv$session s, gv$process p
-WHERE s.paddr = p.addr
-AND p.spid IN (30270);
-

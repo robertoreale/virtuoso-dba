@@ -1,1 +1,0 @@
-select sid from v$mystat
