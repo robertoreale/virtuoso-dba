@@ -1,3 +1,0 @@
-# Manual of Style
-
-Work in progress...
