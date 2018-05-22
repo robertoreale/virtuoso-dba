@@ -1474,13 +1474,6 @@ December 31, 9999 CE, one second to midnight.
 
 ## Numerical Recipes
 
-### Calculate the sum of a geometric series
-
-*Keywords*: CONNECT BY, numerical recipes
-
-    SELECT SUM(POWER(2, -level)) sum FROM dual CONNECT BY level < &n;
-
-
 ### Solve Besel's problem
 
 *Keywords*: CONNECT BY, numerical recipes
