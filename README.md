@@ -638,21 +638,6 @@ MariaDB, on the other hand, lacks the concept of segments. Information about an 
 
 ## String Manipulation
 
-### Calculate the edit distance between a table name and the names of dependent indexes
-
-*Keywords*: edit distance for strings
-
-    SELECT
-        owner,
-        table_name,
-        index_name,
-        UTL_MATCH.EDIT_DISTANCE(table_name, index_name) edit_distance
-    FROM
-        dba_indexes
-    WHERE
-        generated = 'N';
-
-
 ### Calculate the minimum, median, and maximum edit distances between a table's name and the names of its indexes
 
 *Keywords*: edit distance for strings, ROLLUP
