@@ -638,20 +638,6 @@ MariaDB, on the other hand, lacks the concept of segments. Information about an 
 
 ## String Manipulation
 
-### Count the client sessions with a FQDN
-
-*Keywords*: regular expressions, dynamic views
-
-Assume a FQDN has the form N_1.N_2.....N_t, where t > 1 and each N_i can contain lowercase letters, numbers and the dash.
- 
-    SELECT
-        machine
-    FROM
-        gv$session
-    WHERE
-        REGEXP_LIKE(machine, '^([[:alnum:]]+\.)+[[:alnum:]-]+$');
-
-
 ### Calculate the edit distance between a table name and the names of dependent indexes
 
 *Keywords*: edit distance for strings
@@ -695,9 +681,6 @@ Assume a FQDN has the form N_1.N_2.....N_t, where t > 1 and each N_i can contain
       LPAD(tw, MAX(LENGTH(tw)+2) OVER (), '.') total_waits_per_event_type
     FROM
         se;
-
-
-### Exercises
 
 ## Data Analytics
 
