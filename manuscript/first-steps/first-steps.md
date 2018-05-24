@@ -1,25 +1,5 @@
 ## First Steps
 
-### Calculate the average number of redo log switches per hour
-
-*Keywords*: dynamic views, aggregate functions
-
-    SELECT
-        inst_id,
-        thread##,
-        TRUNC(first_time)              AS day,
-        COUNT(*)                       AS switches,
-        COUNT(*) / 24                  AS avg_switches_per_hour
-    FROM
-        gv$loghist
-    GROUP BY
-        inst_id,
-        thread##,
-        TRUNC(first_time)
-    ORDER BY
-        day;
-
-
 ### Show the total, used, and free space database-wise
 
 *Keywords*: subqueries, physical storage
