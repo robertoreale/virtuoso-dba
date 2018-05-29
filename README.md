@@ -445,21 +445,6 @@ IEC prefixes are used.
         segment_name;
 
 
-### Sort the object types by their average name length
-
-*Keywords*: aggregate functions, string functions
-
-    SELECT
-        object_type,
-        AVG(LENGTH(object_name)) avg_name_length
-    FROM
-        dba_objects
-    GROUP BY
-        object_type
-    ORDER BY
-        AVG(LENGTH(object_name)) DESC;
-
-
 ### Count memory resize operations, by component and type
 
 *Keywords*: DECODE, dynamic views
