@@ -917,26 +917,6 @@ We use percentiles to exclude outliers.
         nr <= &m;
 
 
-### Show how much is tablespace usage growing
-
-*Keywords*: regression models, dynamic views, logical storage
-
-    SELECT
-        d.name db,
-        t.name tablespace_name,
-        REGR_SLOPE(tablespace_usedsize, snap_id) usage_growth
-    FROM
-        dba_hist_tbspc_space_usage h=
-        JOIN gv$database d USING(dbid)
-        JOIN gv$tablespace t ON (h.tablespace_id = t.ts##)
-    GROUP BY
-        d.name, t.name
-    ORDER BY
-        db, tablespace_name;
-
-
-### Exercises
-
 ## Graphs and Trees
 
 ### List all users to which a given role is granted, even indirectly
