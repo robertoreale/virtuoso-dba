@@ -11,7 +11,6 @@ oracle/drawing.md
 oracle/time-functions.md
 oracle/row-generation.md
 oracle/numerical-recipes.md
-oracle/xml-database-101.md
 oracle/enter-imperative-thinking.md
 oracle/model-clause.md
 oracle/stochastic-world.md

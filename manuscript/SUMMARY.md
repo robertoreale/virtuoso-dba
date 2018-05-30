@@ -14,7 +14,6 @@
     * [Time Functions](oracle/time-functions.md)
     * [Row Generation](oracle/row-generation.md)
     * [Numerical Recipes](oracle/numerical-recipes.md)
-    * [XML Database 101](oracle/xml-database-101.md)
     * [Enter Imperative Thinking](oracle/enter-imperative-thinking.md)
     * [The MODEL Clause](oracle/model-clause.md)
     * [A Stochastic World](oracle/stochastic-world.md)
