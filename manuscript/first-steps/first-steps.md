@@ -31,23 +31,6 @@
         name = 'db_block_size';
     
 
-### List user Data Pump jobs
-
-*Keywords*: LIKE, data pump
-
-    SELECT
-        owner_name,
-        job_name,
-        operation,
-        job_mode,
-        state,
-        attached_sessions
-    FROM
-        dba_datapump_jobs
-    WHERE
-        job_name NOT LIKE 'BIN$%';
-
-
 ### Calculate the average number of redo log switches per hour
 
 *Keywords*: dynamic views, aggregate functions
@@ -153,30 +136,6 @@
         gv$lock l1 JOIN gv$lock l2 USING (id1, id2)
     WHERE
         l1.block = 1 AND l2.request > 0;
-
-
-### Show basic info about log files
-
-*Keywords*: self join, redo logs
-
-*Reference*: http://dba.stackexchange.com/questions/21805/
-
-    SELECT
-        lg.group##             AS group#,
-        lg.thread##            AS thread#,
-        lg.sequence##          AS sequence#,
-        lg.archived           AS archived,
-        lg.status             AS status,
-        lf.member             AS file_name,
-        lg.bytes / 1048576    AS file_size
-    FROM
-        gv$log lg
-    JOIN
-        gv$logfile lf
-    ON
-        lg.group## = lf.group# 
-    ORDER BY
-        lg.group## ASC;
 
 
 ### Calculate the size of the temporary tablespaces
@@ -294,41 +253,6 @@
         ROUND(lh.archived## * lg.avg_size)             AS daily_avg_size
     FROM
         lh, lg;
-
-
-### Calculate a fragmentation factor for tablespaces
-
-*Keywords*: aggregate functions, logical storage
-
-The fragmentation column gives an overall score with respect to how badly a
-tablespace is fragmented; a 100% score indicates no fragmentation at all.
-
-It is calculated according to the following formula:
-
-                ___________      
-              \/max(blocks)      
-                         
-    1 - ------------------------ 
-                         
-                    =====        
-         4_______   \            
-        \/blocks##    >    blocks 
-                    /            
-                    =====        
- 
-Cf. the book *Oracle Performance Troubleshooting*, by Robin Schumacher.
-
-    SELECT
-        tablespace_name               AS tablespace,
-        COUNT(*)                      AS free_chunks,
-        NVL(MAX(bytes) / 1048576, 0)  AS largest_chunk,
-        100 * (
-            1 - NVL(SQRT(MAX(blocks) / (SQRT(SQRT(COUNT(blocks))) * SUM(blocks))), 0)
-        )                             AS fragmentation
-    FROM
-        dba_free_space
-    GROUP BY
-        tablespace_name;
 
 
 ### Count number of segments for each order of magnitude
