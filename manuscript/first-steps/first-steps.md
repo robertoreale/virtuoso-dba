@@ -1,36 +1,5 @@
 ## First Steps
 
-### Show database role (primary, standby, etc.)
-
-*Keywords*: dynamic views, data guard
-
-    SELECT database_role FROM gv$database;
-
-
-### Get local host name and local IP address of the database server
-
-*Keywords*: UTL_* api
-
-    SELECT
-        UTL_INADDR.GET_HOST_NAME    hostname,
-        UTL_INADDR.GET_HOST_ADDRESS ip_addr
-    FROM
-        dual;
-
-
-### Show database block size
-
-*Keywords*: dynamic views, parameters
-
-    SELECT
-        inst_id,
-        TO_NUMBER(value)  AS db_block_size
-    FROM
-        gv$parameter
-    WHERE
-        name = 'db_block_size';
-    
-
 ### Calculate the average number of redo log switches per hour
 
 *Keywords*: dynamic views, aggregate functions
@@ -489,9 +458,5 @@ IEC prefixes are used.
     JOIN
         gv$instance i ON UPPER(ctx.instance_name) = UPPER(i.instance_name);
 
-
-### Exercises
-
-* List foreign constraints associated to their reference columns.
 
 <!-- vim: set fenc=utf-8 spell spl=en ts=4 sw=4 et filetype=markdown : -->

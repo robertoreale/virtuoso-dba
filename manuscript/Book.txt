@@ -1,7 +1,6 @@
 README.md
 first-steps/README.md
 first-steps/first-steps.md
-first-steps/storing-objects.md
 oracle/README.md
 oracle/string-manipulation.md
 oracle/data-analytics.md
