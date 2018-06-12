@@ -8,7 +8,6 @@
     * [String Manipulation](oracle/string-manipulation.md)
     * [Data Analytics](oracle/data-analytics.md)
     * [Graphs and Trees](oracle/graphs-and-trees.md)
-    * [Grouping and Reporting](oracle/grouping-reporting.md)
     * [Drawing](oracle/drawing.md)
     * [Time Functions](oracle/time-functions.md)
     * [Row Generation](oracle/row-generation.md)

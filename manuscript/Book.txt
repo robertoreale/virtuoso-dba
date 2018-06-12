@@ -5,7 +5,6 @@ oracle/README.md
 oracle/string-manipulation.md
 oracle/data-analytics.md
 oracle/graphs-and-trees.md
-oracle/grouping-reporting.md
 oracle/drawing.md
 oracle/time-functions.md
 oracle/row-generation.md
