@@ -609,127 +609,6 @@ We use percentiles to exclude outliers.
     ORDER BY owner;
 
 
-### List statspack snapshots
-
-*Keywords*: analytics functions, statspack
-
-    SELECT
-        dbid                                                             AS dbid,
-        instance_number                                                  AS instance_number,
-        trunc(snap_time, 'DAY')                                          AS snap_day,
-        snap_id                                                          AS start_snap,
-        LEAD(snap_id) OVER (ORDER BY snap_time)                          AS stop_snap,
-        TO_CHAR(snap_time, 'HH24:MI')                                    AS start_time,
-        LEAD(TO_CHAR(snap_time, 'HH24:MI')) OVER (ORDER BY snap_time)    AS stop_time
-    FROM
-        stats$snapshot;
-
-
-### List top-10 CPU-intensive queries
-
-*References*: https://community.oracle.com/thread/1101381
-
-    WITH
-        snaps AS
-            (
-                SELECT
-                    dbid                                                             AS dbid,
-                    instance_number                                                  AS instance_number,
-                    trunc(snap_time, 'DAY')                                          AS snap_day,
-                    snap_id                                                          AS start_snap,
-                    LEAD(snap_id) OVER (ORDER BY snap_time)                          AS stop_snap,
-                    TO_CHAR(snap_time, 'HH24:MI')                                    AS start_time,
-                    LEAD(TO_CHAR(snap_time, 'HH24:MI')) OVER (ORDER BY snap_time)    AS stop_time
-                FROM
-                    stats$snapshot
-            ),
-        work AS
-            (
-                SELECT 
-                    s.snap_day                                              AS snap_day,
-                    s.start_snap                                            AS start_snap,
-                    s.stop_snap                                             AS stop_snap,
-                    s.start_time                                            AS start_time,
-                    s.stop_time                                             AS stop_time,
-                    ss1.hash_value                                          AS hash_value,
-                    ss1.module                                              AS module,
-                    ss1.text_subset                                         AS text_subset,
-                    SUM(ss1.buffer_gets    - NVL(ss2.buffer_gets, 0))       AS bg,
-                    SUM(ss1.executions     - NVL(ss2.executions, 0))        AS ex,
-                    SUM(ss1.cpu_time       - NVL(ss2.cpu_time, 0))          AS ct,
-                    SUM(ss1.elapsed_time   - NVL(ss2.elapsed_time, 0))      AS et,
-                    SUM(ss1.rows_processed - NVL(ss2.rows_processed, 0))    AS rp,
-                    SUM(ss1.disk_reads     - NVL(ss2.disk_reads, 0))        AS dr,
-                    SUM(ss1.parse_calls    - NVL(ss2.parse_calls, 0))       AS pc,
-                    SUM(ss1.invalidations  - NVL(ss2.invalidations, 0))     AS iv,
-                    SUM(ss1.loads          - NVL(ss2.loads, 0))             AS ld
-                FROM
-                    snaps s
-                JOIN
-                    stats$sql_summary ss1
-                ON
-                           ss1.snap_id         = s.stop_snap
-                    AND    ss1.dbid            = s.dbid
-                    AND    ss1.instance_number = s.instance_number
-                JOIN
-                    stats$sql_summary ss2
-                ON
-                           ss2.snap_id         = s.start_snap
-                    AND    ss2.dbid            = ss1.dbid
-                    AND    ss2.instance_number = ss1.instance_number
-                    AND    ss2.hash_value      = ss1.hash_value
-                    AND    ss2.address         = ss1.address
-                    AND    ss2.text_subset     = ss1.text_subset
-                    AND    ss1.executions      > NVL(ss2.executions, 0)
-                WHERE
-                    s.stop_snap IS NOT NULL
-                GROUP BY 
-                    s.snap_day,
-                    s.start_snap,
-                    s.stop_snap,
-                    s.start_time,
-                    s.stop_time,
-                    ss1.hash_value,
-                    ss1.module,
-                    ss1.text_subset
-            ),
-        top_n AS
-            (
-                SELECT
-                    w.*,
-                    bg / ex    AS gpe,
-                    ROW_NUMBER() OVER
-                        (
-                            PARTITION BY start_snap ORDER BY ct DESC
-                        )      AS nr
-                FROM
-                    work w
-            )
-    SELECT
-        snap_day,
-        start_snap,
-        stop_snap,
-        start_time,
-        stop_time,
-        hash_value,
-        module,
-        text_subset,
-        bg      buffer_gets,
-        ex      executions,
-        ct      cpu_time,
-        et      elapsed_time,
-        rp      rows_processed,
-        dr      disk_reads,
-        pc      parse_calls,
-        iv      invalidations,
-        ld      loads,
-        gpe     gets_per_execs
-    FROM
-        top_n
-    WHERE
-        nr <= &m;
-
-
 ## Graphs and Trees
 
 ### List all users to which a given role is granted, even indirectly
@@ -1454,6 +1333,537 @@ Verify the law of large numbers by rolling a die n times, with n >> 0
         dba_segments
     GROUP BY
         tablespace_name;
+
+
+### Exercises
+
+# SQL Server
+
+
+## First Steps
+
+### Show blocked sessions
+
+*Keywords*: system tables
+
+    USE master
+    GO
+
+    SELECT *
+        FROM sys.sysprocesses
+        WHERE blocked > 0;
+
+
+### Show how many physical and logical cpus are available on the system
+
+*Keywords*: system tables
+
+    USE master
+    GO
+
+    SELECT
+        cpu_count / hyperthread_ratio   [Physical CPUs],
+        cpu_count                       [Logical CPUs]
+    FROM sys.dm_os_sys_info;
+
+
+### Show staleness of index statistics
+
+*Keywords*: system tables, join, statistics
+
+    SELECT
+        tbl.name                                   [Table Name],
+        idx.name                                   [Index Name],
+        STATS_DATE(idx.object_id, idx.index_id)    [Last Updated]
+    FROM 
+        sys.indexes idx
+    INNER JOIN 
+        sys.tables  tbl
+    ON idx.object_id = tbl.object_id;
+
+
+### Show active sessions per user
+
+*Keywords*: system tables, group by
+
+    USE master
+    GO
+
+    SELECT 
+        DB_NAME(dbid)  [Database],
+        loginame       [Login Name],
+        COUNT(dbid)    [Session Count]
+    FROM
+        sys.sysprocesses
+    WHERE 
+        dbid > 0
+    GROUP BY 
+        dbid, loginame;
+
+
+### Correlate sessions with connections
+
+*Keywords*: system tables, JOIN
+
+    USE master
+    GO
+
+    SELECT
+        conn.session_id,
+        sess.loginame,
+        sess.login_time,
+        sess.hostname,
+        conn.client_net_address,
+        conn.client_tcp_port,
+        conn.local_net_address,
+        conn.local_tcp_port,
+        sess.program_name,
+        sess.net_library,
+        conn.encrypt_option
+    FROM
+        sys.sysprocesses         sess
+    INNER JOIN
+        sys.dm_exec_connections  conn
+    ON
+        sess.spid = conn.session_id;
+
+
+### Show sizes of tables
+
+*Keywords*: aggregate functions
+
+    SELECT
+        tbl.name                                            [Table Name],
+        scm.name                                            [Schema Name],
+        prt.rows                                            [Row Counts],
+        8 *  SUM(alu.total_pages)                           [Total Size (KiB)],
+        8 *  SUM(alu.used_pages)                            [Used Size (KiB)],
+        8 * (SUM(alu.total_pages) - SUM(alu.used_pages))    [Free Size (KiB)]
+    FROM
+        sys.tables tbl
+    INNER JOIN
+        sys.indexes idx ON tbl.object_id = idx.object_id
+    INNER JOIN
+        sys.partitions prt
+        ON idx.object_id = prt.object_id AND idx.index_id = prt.index_id
+    INNER JOIN
+        sys.allocation_units alu ON prt.partition_id = alu.container_id
+    LEFT OUTER JOIN
+        sys.schemas scm ON tbl.schema_id = scm.schema_id
+    GROUP BY
+        tbl.name, scm.name, prt.rows;
+
+
+### Show the sizes of every object in a database
+
+*Keywords*: aggregate functions
+
+*Reference*: http://stackoverflow.com/questions/2094436/
+
+
+    SELECT
+        t.name                            [Table Name],
+        i.name                            [Index Name],
+        SUM(p.rows)                       [Row Count],
+        SUM(au.total_pages)               [Total Pages], 
+        SUM(au.used_pages)                [Used Pages], 
+        SUM(au.data_pages)                [Data Pages],
+        SUM(au.total_pages) * 8 / 1024    [TotalSpace (MiB)], 
+        SUM(au.used_pages)  * 8 / 1024    [UsedSpace (MiB)], 
+        SUM(au.data_pages)  * 8 / 1024    [DataSpace (MiB)]
+    FROM 
+        sys.tables t
+    INNER JOIN      
+        sys.indexes i           ON t.object_id = i.object_id
+    INNER JOIN 
+        sys.partitions p        ON i.object_id = p.object_id AND i.index_id = p.index_id
+    INNER JOIN 
+        sys.allocation_units au ON p.partition_id = au.container_id
+    GROUP BY 
+        t.name, i.object_id, i.index_id, i.name 
+    ORDER BY 
+        OBJECT_NAME(i.object_id);
+
+
+### Show transaction isolation level for each session
+
+*Keywords*: CASE
+
+    USE master
+    GO
+
+    SELECT
+        session_id                         [Session ID],
+        CASE transaction_isolation_level
+            WHEN 0 THEN 'Unspecified'
+            WHEN 1 THEN 'ReadUncommitted'
+            WHEN 2 THEN 'ReadCommitted'
+            WHEN 3 THEN 'Repeatable'
+            WHEN 4 THEN 'Serializable'
+            WHEN 5 THEN 'Snapshot'
+        END                                [Transaction Isolation Level]
+    FROM sys.dm_exec_sessions;
+
+
+### Show database files as stored in the master database
+
+*Keywords*: CASE
+
+    USE master
+    GO
+
+    SELECT
+        DB_NAME(database_id)                          [Database],
+        name                                          [Logical Name],
+        physical_name                                 [Physical Name],
+        CAST((size) / 8192.0 AS DECIMAL(18,2))        [Size (MiB)],
+        CASE
+            WHEN type_desc = 'ROWS' THEN 'Data File(s)'
+            WHEN type_desc = 'LOG'  THEN 'Log File(s)'
+            ELSE type_desc
+        END                                           [Type],
+        state_desc                                    [Online State]
+    FROM
+        sys.master_files;
+
+
+### Show auto-growth settings for data and log files
+
+*Keywords*: CASE
+
+*Reference*: http://www.handsonsqlserver.com/how-to-view-the-database-auto-growth-settings-and-correct-them/
+
+    USE master
+    GO
+
+    SELECT
+        --  database name
+        DB_NAME(database_id)                          [Database],
+        --  file logical name
+        name                                          [Logical Name],
+        --  file type
+        CASE
+            WHEN type_desc = 'ROWS' THEN 'Data File(s)'
+            WHEN type_desc = 'LOG'  THEN 'Log File(s)'
+            ELSE type_desc
+        END                                           [Type],
+        --  online state
+        state_desc                                    [Online State],
+        --  file size
+        CONVERT(DECIMAL, size) / 128                  [File Size (MiB)],
+        --  is file growth a percentage?
+        CASE is_percent_growth
+            WHEN 1 THEN 'YES' ELSE 'NO'
+        END                                           [File Growth is %],
+        --  file growth increment
+        CASE is_percent_growth
+            WHEN 1 THEN CONVERT(VARCHAR, growth) + '%'
+         -- WHEN 0 THEN CONVERT(VARCHAR, growth / 128) + ' MiB'
+        END AS                                        [Auto-growth Increment],
+        --  file auto-growth increment
+        CASE is_percent_growth
+            WHEN 1 THEN (((CONVERT(DECIMAL, size) * growth) / 100) * 8) / 1024
+            WHEN 0 THEN (CONVERT(DECIMAL, growth) * 8) / 1024
+        END AS                                        [Auto-growth Increment (Mib)],
+        --  file maximum size
+        CASE max_size
+            WHEN  0 THEN 'No growth is allowed'
+            WHEN -1 THEN 'File will grow until the disk is full'
+            ELSE CONVERT(VARCHAR, max_size)
+        END AS                                        [File Max Size],
+        --  file physical name
+        physical_name                                 [File Physical Name]
+    FROM
+        sys.master_files;
+
+
+### Exercises
+
+
+## Data Analytics
+
+### Show info about the last restore operation, for each database
+
+*Keywords*: analytical functions
+
+*Reference*: dba.stackexchange.com/questions/33703
+
+    USE master
+    GO
+
+    WITH LastRestores AS
+        (
+            SELECT
+                db.name,
+                db.create_date,
+                rhist.restore_date,
+                rhist.destination_database_name,
+                rhist.backup_set_id,
+                rhist.restore_history_id,
+                rownum = ROW_NUMBER() OVER (
+                    PARTITION BY db.name ORDER BY rhist.restore_date DESC
+                )
+            FROM
+                sys.databases db
+            LEFT OUTER JOIN
+                msdb.dbo.restorehistory rhist
+            ON rhist.destination_database_name = db.name
+        )
+    SELECT
+        name                         [Database],
+        create_date                  [Creation Date],
+        restore_date                 [Restore Date],
+        destination_database_name    [Destination],
+        backup_set_id                [Backup Set ID],
+        restore_history_id           [Restore History ID]
+    FROM LastRestores
+        WHERE rownum = 1;
+
+
+### Identife database growth rates from backups
+
+*Keywords*: analytical functions
+
+*Reference*: https://www.mssqltips.com/sqlservertip/3690/
+
+    USE master
+    GO
+
+    SELECT DISTINCT
+        hist.database_name                                    [Database Name],
+        AVG(hist.[Backup Size (MiB)] - hist.[Previous Backup Size (MiB)]) OVER
+            (
+                PARTITION BY hist.database_name
+            )                                                 [Avg Size Diff From Previous (MiB)],
+        MAX(hist.[Backup Size (MiB)] - hist.[Previous Backup Size (MiB)]) OVER
+            (
+                PARTITION BY hist.database_name
+            )                                                 [Max Size Diff From Previous (MiB)],
+        MIN(hist.[Backup Size (MiB)] - hist.[Previous Backup Size (MiB)]) OVER
+            (
+                PARTITION BY hist.database_name
+            )                                                 [Min Size Diff From Previous (MiB)],
+        hist.[Sample Size]                                    [Sample Size]
+    FROM 
+        (
+            SELECT
+                database_name,
+                COUNT(*) OVER (PARTITION BY database_name)    [Sample Size],
+                CAST((backup_size / 1048576) AS INT)          [Backup Size (MiB)],
+                CAST ((LAG(backup_size) OVER
+                    (
+                        PARTITION BY database_name ORDER BY backup_start_date
+                    ) / 1048576) AS INT)                      [Previous Backup Size (MiB)]
+            FROM 
+                msdb..backupset
+            WHERE
+                type = 'D'  --full backup
+        ) AS hist
+    ORDER BY
+        [Avg Size Diff From Previous (MiB)] DESC;
+
+
+### Exercises
+
+
+## Time Functions
+
+### Show database growth from backups
+
+*Keywords*: time functions, aggregate functions
+
+*Reference*: http://www.sqlskills.com/blogs/erin/trending-database-growth-from-backups/
+
+    USE master
+    GO
+
+    SELECT
+        database_name                                [Database],
+        DATEPART(year, backup_start_date)            [Year],
+        DATEPART(month, backup_start_date)           [Month],
+        AVG(backup_size / 1048576)                   [Backup Size MiB],
+        AVG(compressed_backup_size / 1048576)        [Compressed Backup Size MiB],
+        AVG(backup_size / compressed_backup_size)    [Compression Ratio]
+    FROM
+        msdb.dbo.backupset
+    WHERE
+        type = 'D'
+    GROUP BY
+        database_name,
+        DATEPART(year,  backup_start_date),
+        DATEPART(month, backup_start_date)
+    ORDER BY
+        database_name,
+        DATEPART(year,  backup_start_date),
+        DATEPART(month, backup_start_date);
+
+
+### Exercises
+
+## Numerical Recipes
+
+### Generate Fibonacci sequence (OEIS A000045), recursive version
+
+*Reference*: http://stackoverflow.com/questions/21746100/
+
+    DECLARE @Nmax INT;
+    SET @Nmax = 1000000000;
+
+    WITH fibonacci(PrevN, N) AS
+        (
+            SELECT
+                0, 1
+            UNION ALL SELECT
+                N, PrevN + N
+            FROM
+                fibonacci
+            WHERE
+                N < @Nmax
+        )
+    SELECT PrevN [n-th Fibonacci number] FROM fibonacci
+    OPTION (MAXRECURSION 0);
+
+
+## Enter Imperative Thinking
+
+### Return information about each request that is executing within the database server, including the SQL text
+
+*Keywords*: CROSS APPLY
+
+    USE master
+    GO
+
+    SELECT
+        req.session_id            [Session ID],
+        req.status                [Status],
+        req.command               [Command],
+        req.cpu_time              [CPU Time],
+        req.total_elapsed_time    [Elapsed Time],
+        sqltext.text              [SQL Text]
+    FROM
+        sys.dm_exec_requests             req
+    CROSS APPLY
+        sys.dm_exec_sql_text(sql_handle) sqltext;
+
+
+### Show last execution time of all queries
+
+*Keywords*: CROSS APPLY
+
+    USE master
+    GO
+
+    SELECT
+        stats.last_execution_time    [Last Exec Time],
+        sql.text                     [Query Text],
+        DB_NAME(sql.dbid)            [Database]
+    FROM
+        sys.dm_exec_query_stats stats
+    CROSS APPLY
+        sys.dm_exec_sql_text(stats.sql_handle) sql;
+
+
+### Show last executed queries by session
+
+*Keywords*: JOIN, CROSS APPLY
+
+    USE master
+    GO
+
+    SELECT
+        conn.session_id    [Session ID],
+        sql.text           [Query Text],
+        sess.login_name    [Login Name],
+        sess.login_time    [Login Time],
+        sess.status        [Session Status]
+    FROM
+        sys.dm_exec_connections conn
+    INNER JOIN
+        sys.dm_exec_sessions    sess 
+    ON
+        conn.session_id = sess.session_id
+    CROSS APPLY
+        sys.dm_exec_sql_text(most_recent_sql_handle) sql;
+
+
+### Show basic aggregate performance statistics for cached query plans
+
+*Keywords*: JOIN, CROSS APPLY, time functions
+
+    USE master
+    GO
+
+    SELECT DISTINCT TOP 10
+        sql.text                                                         [Query Text],
+        stats.execution_count                                            [Execution Count],
+        stats.max_elapsed_time                                           [Max Elapsed Time],
+        ISNULL(stats.total_elapsed_time
+               / stats.execution_count, 0)                               [Avg Elapsed Time],
+        stats.creation_time                                              [Plan Compiled On],
+        ISNULL(stats.execution_count
+               / DATEDIFF(second, stats.creation_time, GETDATE()), 0)    [Frequency]
+    FROM
+        sys.dm_exec_query_stats stats
+    CROSS APPLY
+        sys.dm_exec_sql_text(stats.sql_handle) sql
+    ORDER BY
+        stats.max_elapsed_time DESC;
+
+
+### Capture object deletion events
+
+*Keywords*: cross apply
+
+*Reference*: Robert Pearl, Healthy SQL, p. 350
+
+    USE master
+    GO
+
+    SELECT
+        [LoginName],
+        [HostName],
+        [StartTime],
+        [ObjectName],
+        [TextData]
+    FROM
+        sys.trace_events te
+    JOIN
+        ::fn_trace_gettable((SELECT path FROM sys.traces WHERE is_default = 1), DEFAULT)
+    ON
+        te.trace_event_id = eventclass
+    WHERE
+        te.name = 'Object:Deleted'
+    ORDER BY
+        [StartTime] DESC;
+
+
+### Show auto grow and auto shrink events
+
+*Keywords*: cross apply
+
+*Reference*: http://www.sqldbadiaries.com/2010/11/18/how-many-times-did-my-database-auto-grow/
+
+    USE master
+    GO
+
+    SELECT
+        DB_NAME(databaseid)         [Database],
+        filename                    [File Name],
+        te.name                     [Event Type],
+        SUM(integerdata / 128)      [Growth (MiB)],
+        duration / 1000             [Duration (sec)]
+    FROM
+        sys.trace_events te
+    JOIN
+        ::fn_trace_gettable((SELECT path FROM sys.traces WHERE is_default = 1), DEFAULT)
+    ON
+        te.trace_event_id = eventclass
+    WHERE
+        te.name LIKE '%Auto Shrink%' OR te.name LIKE '%Auto Grow%'
+    GROUP BY
+        starttime, databaseid, filename, name, integerdata, duration
+    ORDER BY
+        starttime DESC;
 
 
 ### Exercises
