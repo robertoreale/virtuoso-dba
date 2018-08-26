@@ -13,7 +13,6 @@
     * [Row Generation](oracle/row-generation.md)
     * [Numerical Recipes](oracle/numerical-recipes.md)
     * [Enter Imperative Thinking](oracle/enter-imperative-thinking.md)
-    * [The MODEL Clause](oracle/model-clause.md)
     * [A Stochastic World](oracle/stochastic-world.md)
 * [SQL Server](sqlserver/README.md)
     * [First Steps](sqlserver/first-steps.md)

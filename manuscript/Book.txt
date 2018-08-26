@@ -10,7 +10,6 @@ oracle/time-functions.md
 oracle/row-generation.md
 oracle/numerical-recipes.md
 oracle/enter-imperative-thinking.md
-oracle/model-clause.md
 oracle/stochastic-world.md
 sqlserver/README.md
 sqlserver/first-steps.md

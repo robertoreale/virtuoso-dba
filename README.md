@@ -1221,31 +1221,6 @@ A fixed point is a point x_0 such that x_0 = cos(x_0).
 
 ### Exercises
 
-## The MODEL Clause
-
-### Generate the even integers between -100 and 100, inclusive
-
-*Keywords*: MODEL
-
-*Reference*: http://www.orafaq.com/wiki/Oracle_Row_Generator_Techniques
-
-    SELECT
-        n
-    FROM
-        dual
-    WHERE
-        1 = 2
-    MODEL
-        DIMENSION BY (0 AS key)
-        MEASURES     (0 AS n)
-        RULES UPSERT 
-        (
-            n [FOR key FROM -100 TO 100 INCREMENT 2] = CV(key)
-        );
-
-
-### Exercises
-
 ## A Stochastic World
 
 ### Verify the law of large numbers
