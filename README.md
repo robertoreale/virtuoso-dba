@@ -111,43 +111,6 @@
         inst_id, ts.name, tmpf.block_size;
 
 
-### Calculate the high-water and excess allocated size for datafiles
-
-*Keywords*: WITH clause, NVL, aggregate functions, physical storage
-
-    WITH
-        pars AS
-            (
-                -- block size in MiB
-                SELECT
-                    TO_NUMBER(value) / 1024 / 1024  AS block_size_mib
-                FROM
-                -- no need to use gv$parameter here
-                    v$parameter
-                WHERE
-                    name = 'db_block_size'
-            )
-    SELECT
-        file_name,
-        blocks                 * pars.block_size_mib  AS file_size,
-        NVL(hwm, 1)            * pars.block_size_mib  AS high_water_mark,
-        (blocks - NVL(hwm, 1)) * pars.block_size_mib  AS excess
-    FROM
-        pars,
-        dba_data_files df
-    JOIN
-        (
-            SELECT
-                file_id,
-                MAX(block_id + blocks - 1)  AS hwm
-            FROM
-                dba_extents
-            GROUP BY
-                file_id
-        ) ext
-    USING (file_id);
-
-
 ### Display parent-child pairs between tables, based on reference constraints
 
 *Keywords*: WITH clause, constraints
