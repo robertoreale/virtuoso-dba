@@ -172,32 +172,6 @@
         lh, lg;
 
 
-### Count number of segments for each order of magnitude
-
-*Keywords*: DECODE function, analytic functions
-
-IEC prefixes are used.
-
-    SELECT
-    DECODE(
-        TRUNC(LOG(1024, bytes)), 
-        -- 0, 'bytes',
-        1, 'KiB' ,
-        2, 'MiB',
-        3, 'GiB',
-        4, 'TiB',
-        5, 'PiB',
-        6, 'EiB',
-        7, 'ZiB',
-        8, 'YiB',
-        'UNKNOWN') AS order_of_magnitude,
-        count(*) count
-    FROM
-        dba_segments
-    GROUP BY TRUNC(LOG(1024, bytes))
-    ORDER BY TRUNC(LOG(1024, bytes));
-
-
 ## Show locked objects
 
 *Keywords*: DECODE
