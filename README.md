@@ -227,30 +227,6 @@
         object_type = 'INDEX';
 
 
-### Give basic info about lob segments
-
-*Keywords*: aggregate functions, lobs
-
-    SELECT
-        lob.owner,
-        lob.table_name,
-        lob.column_name,
-        segment_name,
-        SUM(seg.bytes) / 1024  AS segment_size
-    FROM
-        dba_segments seg
-    JOIN
-        dba_lobs     lob
-    USING (segment_name)
-    WHERE
-        segment_name LIKE 'SYS_LOB%'
-    GROUP BY
-        lob.owner,
-        lob.table_name,
-        lob.column_name,
-        segment_name;
-
-
 ### Count memory resize operations, by component and type
 
 *Keywords*: DECODE, dynamic views
